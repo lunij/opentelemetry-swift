@@ -9,6 +9,7 @@ import XCTest
 extension DataUploadStatus: EquatableInTests {}
 
 class DataUploaderTests: XCTestCase {
+    #if !os(watchOS)
     func testWhenUploadCompletesWithSuccess_itReturnsExpectedUploadStatus() {
         // Given
         let randomResponse: HTTPURLResponse = .mockResponseWith(statusCode: (100 ... 599).randomElement()!)
@@ -53,4 +54,5 @@ class DataUploaderTests: XCTestCase {
         XCTAssertEqual(uploadStatus, expectedUploadStatus)
         server.waitFor(requestsCompletion: 1)
     }
+    #endif
 }

@@ -36,6 +36,7 @@ class DataUploadWorkerTests: XCTestCase {
 
     // MARK: - Data Uploads
 
+    #if !os(watchOS)
     func testItUploadsAllData() {
         let server = ServerMock(delivery: .success(response: .mockResponseWith(statusCode: 200)))
         let dataUploader = DataUploader(
@@ -67,6 +68,7 @@ class DataUploadWorkerTests: XCTestCase {
 
         XCTAssertEqual(try temporaryDirectory.files().count, 0)
     }
+    #endif
 
     func testGivenDataToUpload_whenUploadFinishesAndDoesNotNeedToBeRetried_thenDataIsDeleted() {
         let startUploadExpectation = self.expectation(description: "Upload has started")
@@ -154,6 +156,7 @@ class DataUploadWorkerTests: XCTestCase {
         worker.cancelSynchronously()
     }
 
+    #if !os(watchOS)
     func testWhenBatchFails_thenIntervalIncreases() {
         let delayChangeExpectation = expectation(description: "Upload delay is increased")
         let mockDelay = MockDelay { command in
@@ -217,6 +220,7 @@ class DataUploadWorkerTests: XCTestCase {
         waitForExpectations(timeout: 2, handler: nil)
         worker.cancelSynchronously()
     }
+    #endif
 
     // MARK: - Tearing Down
 
@@ -244,6 +248,7 @@ class DataUploadWorkerTests: XCTestCase {
         server.waitFor(requestsCompletion: 0)
     }
 
+    #if !os(watchOS)
     func testItFlushesAllData() {
         let server = ServerMock(delivery: .success(response: .mockResponseWith(statusCode: 200)))
         let dataUploader = DataUploader(
@@ -277,6 +282,7 @@ class DataUploadWorkerTests: XCTestCase {
 
         worker.cancelSynchronously()
     }
+    #endif
 }
 
 struct MockDelay: Delay {

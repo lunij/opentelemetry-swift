@@ -194,6 +194,7 @@ class URLSessionInstrumentationTests: XCTestCase {
         XCTAssertTrue(URLSessionInstrumentationTests.checker.receivedResponseCalled)
     }
 
+    #if !os(watchOS)
     public func testConfigurationCallbacksCalledWhenForbidden() {
         let request = URLRequest(url: URL(string: "http://localhost:33333/forbidden")!)
         let task = URLSession.shared.dataTask(with: request) { data, _, _ in
@@ -215,6 +216,7 @@ class URLSessionInstrumentationTests: XCTestCase {
         XCTAssertTrue(URLSessionInstrumentationTests.checker.receivedResponseCalled)
         XCTAssertFalse(URLSessionInstrumentationTests.checker.receivedErrorCalled)
     }
+    #endif
 
     public func testConfigurationCallbacksCalledWhenError() {
         let request = URLRequest(url: URL(string: "http://localhost:33333/error")!)

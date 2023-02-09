@@ -26,6 +26,7 @@ class HTTPClientTests: XCTestCase {
         server.waitFor(requestsCompletion: 1)
     }
 
+    #if !os(watchOS)
     func testWhenRequestIsNotDelivered_itReturnsHTTPRequestDeliveryError() {
         let mockError = NSError(domain: "network", code: 999, userInfo: [NSLocalizedDescriptionKey: "no internet connection"])
         let server = ServerMock(delivery: .failure(error: mockError))
@@ -45,4 +46,5 @@ class HTTPClientTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
         server.waitFor(requestsCompletion: 1)
     }
+    #endif
 }
