@@ -23,7 +23,7 @@ public class DefaultMeterProvider: MeterProvider {
     }
 
     public func get(instrumentationName: String, instrumentationVersion: String? = nil) -> Meter {
-        DefaultMeterProvider.initialized ? DefaultMeterProvider.instance.get(instrumentationName: instrumentationName, instrumentationVersion: instrumentationVersion) : DefaultMeterProvider.proxyMeter
+        Self.initialized ? Self.instance.get(instrumentationName: instrumentationName, instrumentationVersion: instrumentationVersion) : Self.proxyMeter
     }
 
     internal static func reset() {

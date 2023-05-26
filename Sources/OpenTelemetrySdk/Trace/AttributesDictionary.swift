@@ -28,10 +28,10 @@ public struct AttributesDictionary {
             attributes[key]
         }
         set {
-            if newValue == nil {
-                _ = removeValueForKey(key: key)
+            if let newValue {
+                _ = updateValue(value: newValue, forKey: key)
             } else {
-                _ = updateValue(value: newValue!, forKey: key)
+                _ = removeValueForKey(key: key)
             }
         }
     }
@@ -39,13 +39,13 @@ public struct AttributesDictionary {
     @discardableResult public mutating func updateValue(value: AttributeValue, forKey key: String) -> AttributeValue? {
         var attributedValue = value
         switch value {
-        case let .string(v):
-            if v.count > valueLengthLimit {
-                attributedValue = AttributeValue.string(String(v.prefix(valueLengthLimit)))
+        case let .string(value):
+            if value.count > valueLengthLimit {
+                attributedValue = AttributeValue.string(String(value.prefix(valueLengthLimit)))
             }
-        case let .stringArray(v):
+        case let .stringArray(value):
             var strArr = [String]()
-            v.forEach { string in
+            value.forEach { string in
                 strArr.append(String(string.prefix(valueLengthLimit)))
             }
             attributedValue = AttributeValue.stringArray(strArr)

@@ -29,7 +29,7 @@ public class HistogramAggregator<T: SignedNumeric & Comparable>: Aggregator<T> {
         10_000
     ]
 
-    public init(explicitBoundaries: [T]? = nil) throws {
+    public init(explicitBoundaries: [T]? = nil) {
         if let explicitBoundaries = explicitBoundaries, explicitBoundaries.count > 0 {
             // we need to an ordered set to be able to correctly compute count for each
             // boundary since we'll iterate on each in order.
@@ -47,11 +47,9 @@ public class HistogramAggregator<T: SignedNumeric & Comparable>: Aggregator<T> {
             self.histogram.count += 1
             self.histogram.sum += value
 
-            for i in 0 ..< self.boundaries.count {
-                if value < self.boundaries[i] {
-                    self.histogram.buckets.counts[i] += 1
-                    return
-                }
+            for index in 0 ..< self.boundaries.count where value < self.boundaries[index] {
+                self.histogram.buckets.counts[index] += 1
+                return
             }
             // value is above all observed boundaries
             self.histogram.buckets.counts[self.boundaries.count] += 1

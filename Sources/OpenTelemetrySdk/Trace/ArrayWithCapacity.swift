@@ -32,7 +32,7 @@ extension ArrayWithCapacity: MutableCollection {
         set { array[index] = newValue }
     }
 
-    public func index(after i: Int) -> Int {
-        array.index(after: i)
+    public func index(after index: Int) -> Int {
+        array.index(after: index)
     }
 }

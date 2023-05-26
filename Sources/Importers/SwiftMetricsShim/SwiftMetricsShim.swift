@@ -21,8 +21,8 @@ public class OpenTelemetrySwiftMetrics: MetricsFactory {
     /// restart. For example, you can use a counter to represent the number of requests served, tasks completed, or errors.
     public func makeCounter(label: String, dimensions: [(String, String)]) -> CounterHandler {
         lock.withLock {
-            if let existing = metrics[.init(name: label, type: .counter)] {
-                return existing as! CounterHandler
+            if let existing = metrics[.init(name: label, type: .counter)] as? CounterHandler {
+                return existing
             }
 
             let metric = SwiftCounterMetric(name: label, labels: dimensions.dictionary, meter: meter)
@@ -40,12 +40,12 @@ public class OpenTelemetrySwiftMetrics: MetricsFactory {
     /// Recorder with a sample size of 1 that does not perform any aggregation.
     public func makeRecorder(label: String, dimensions: [(String, String)], aggregate: Bool) -> RecorderHandler {
         lock.withLock {
-            if let existing = metrics[.init(name: label, type: .histogram)] {
-                return existing as! RecorderHandler
+            if let existing = metrics[.init(name: label, type: .histogram)] as? RecorderHandler {
+                return existing
             }
 
-            if let existing = metrics[.init(name: label, type: .gauge)] {
-                return existing as! RecorderHandler
+            if let existing = metrics[.init(name: label, type: .gauge)] as? RecorderHandler {
+                return existing
             }
 
             let metric: SwiftMetric & RecorderHandler = aggregate ?
@@ -61,8 +61,8 @@ public class OpenTelemetrySwiftMetrics: MetricsFactory {
     /// for example min, max and various quantiles. It is similar to a Recorder but specialized for values that represent durations.
     public func makeTimer(label: String, dimensions: [(String, String)]) -> TimerHandler {
         lock.withLock {
-            if let existing = metrics[.init(name: label, type: .summary)] {
-                return existing as! TimerHandler
+            if let existing = metrics[.init(name: label, type: .summary)] as? TimerHandler {
+                return existing
             }
 
             let metric = SwiftSummaryMetric(name: label, labels: dimensions.dictionary, meter: meter)

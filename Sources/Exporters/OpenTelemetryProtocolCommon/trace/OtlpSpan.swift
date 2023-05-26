@@ -11,13 +11,13 @@ public struct OtlpSpan: Codable {
 
     struct ResourceSpan: Codable {
         var resource: Resource?
-        var scopeSpans: [scopeSpan]?
+        var scopeSpans: [ScopeSpan]?
 
         struct Resource: Codable {
             var attributes: [Attribute]?
         }
 
-        struct scopeSpan: Codable {
+        struct ScopeSpan: Codable {
             var instrumentationScope: InstrumentationScope?
             var spans: [Span]?
 

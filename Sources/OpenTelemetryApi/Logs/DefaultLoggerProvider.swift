@@ -26,26 +26,26 @@ private class NoopLoggerBuilder: LoggerBuilder {
         self.hasDomain = hasDomain
     }
 
-    public func setEventDomain(_ eventDomain: String) -> Self {
+    public func setEventDomain(_ eventDomain: String) -> LoggerBuilder {
         if eventDomain.isEmpty {
-            return DefaultLoggerProvider.noopBuilderNoDomain as! Self
+            return DefaultLoggerProvider.noopBuilderNoDomain
         }
-        return DefaultLoggerProvider.noopBuilderWithDomain as! Self
+        return DefaultLoggerProvider.noopBuilderWithDomain
     }
 
-    public func setSchemaUrl(_: String) -> Self {
+    public func setSchemaUrl(_: String) -> LoggerBuilder {
         self
     }
 
-    public func setInstrumentationVersion(_: String) -> Self {
+    public func setInstrumentationVersion(_: String) -> LoggerBuilder {
         self
     }
 
-    public func setIncludeTraceContext(_: Bool) -> Self {
+    public func setIncludeTraceContext(_: Bool) -> LoggerBuilder {
         self
     }
 
-    public func setAttributes(_: [String: AttributeValue]) -> Self {
+    public func setAttributes(_: [String: AttributeValue]) -> LoggerBuilder {
         self
     }
 

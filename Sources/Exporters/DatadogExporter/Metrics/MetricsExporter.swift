@@ -66,22 +66,22 @@ internal class MetricsExporter {
             tags.append(contentsOf: MetricUtils.getTags(labels: labels))
             switch metric.aggregationType {
             case .doubleSum:
-                let sum = metricData as! SumData<Double>
+                let sum = metricData as! SumData<Double> // swiftlint:disable:this force_cast
                 return DDMetricPoint(timestamp: metricData.timestamp, value: sum.sum)
             case .intSum:
-                let sum = metricData as! SumData<Int>
+                let sum = metricData as! SumData<Int> // swiftlint:disable:this force_cast
                 return DDMetricPoint(timestamp: metricData.timestamp, value: Double(sum.sum))
             case .doubleSummary, .doubleGauge:
-                let summary = metricData as! SummaryData<Double>
+                let summary = metricData as! SummaryData<Double> // swiftlint:disable:this force_cast
                 return DDMetricPoint(timestamp: metricData.timestamp, value: summary.sum)
             case .intSummary, .intGauge:
-                let summary = metricData as! SummaryData<Int>
+                let summary = metricData as! SummaryData<Int> // swiftlint:disable:this force_cast
                 return DDMetricPoint(timestamp: metricData.timestamp, value: Double(summary.sum))
             case .intHistogram:
-                let histogram = metricData as! HistogramData<Int>
+                let histogram = metricData as! HistogramData<Int> // swiftlint:disable:this force_cast
                 return DDMetricPoint(timestamp: metricData.timestamp, value: Double(histogram.sum))
             case .doubleHistogram:
-                let histogram = metricData as! HistogramData<Double>
+                let histogram = metricData as! HistogramData<Double> // swiftlint:disable:this force_cast
                 return DDMetricPoint(timestamp: metricData.timestamp, value: histogram.sum)
             }
         }

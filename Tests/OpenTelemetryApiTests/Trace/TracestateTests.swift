@@ -93,12 +93,12 @@ final class TraceStateTests: XCTestCase {
 
     func testAllAllowedValueCharacters() {
         var validCharacters = String()
-        for i in 0x20 ... 0x7E {
-            let char = Character(UnicodeScalar(i)!)
+        for code in 0x20 ... 0x7E {
+            let char = Character(UnicodeScalar(code)!)
             if char == "," || char == "=" {
                 continue
             }
-            validCharacters.append(Character(UnicodeScalar(i)!))
+            validCharacters.append(Character(UnicodeScalar(code)!))
         }
         let result = TraceState().setting(key: first_key, value: validCharacters)
         XCTAssertEqual(result.get(key: first_key), validCharacters)

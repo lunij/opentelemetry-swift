@@ -71,7 +71,10 @@ class PropagatedSpan: Span {
         get {
             Status.ok
         }
-        set {}
+        // swiftlint:disable:next unused_setter_value
+        set {
+            // noop
+        }
     }
 
     var description: String {

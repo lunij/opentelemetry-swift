@@ -75,13 +75,11 @@ public class URLSessionInstrumentation {
             guard let methodList = class_copyMethodList(theClass, &methodCount) else { return }
             defer { free(methodList) }
 
-            for j in 0 ..< selectorsCount {
-                for i in 0 ..< Int(methodCount) {
-                    if method_getName(methodList[i]) == selectors[j] {
-                        selectorFound = true
-                        injectIntoDelegateClass(cls: theClass)
-                        break
-                    }
+            for selectorIndex in 0 ..< selectorsCount {
+                for methodIndex in 0 ..< Int(methodCount) where method_getName(methodList[methodIndex]) == selectors[selectorIndex] {
+                    selectorFound = true
+                    injectIntoDelegateClass(cls: theClass)
+                    break
                 }
                 if selectorFound {
                     break

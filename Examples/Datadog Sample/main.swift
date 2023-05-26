@@ -39,7 +39,7 @@ let exporterConfiguration = ExporterConfiguration(
     hostName: hostName
 )
 
-let datadogExporter = try! DatadogExporter(config: exporterConfiguration)
+let datadogExporter = try DatadogExporter(config: exporterConfiguration)
 
 testTraces()
 testMetrics()
@@ -54,7 +54,7 @@ func testTraces() {
             .add(spanProcessor: spanProcessor)
             .build()
     )
-    tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: instrumentationScopeName, instrumentationVersion: instrumentationScopeVersion) as! TracerSdk
+    tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: instrumentationScopeName, instrumentationVersion: instrumentationScopeVersion)
 
     simpleSpan()
     childSpan()

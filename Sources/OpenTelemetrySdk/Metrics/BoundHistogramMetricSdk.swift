@@ -10,7 +10,7 @@ internal class BoundHistogramMetricSdk<T: SignedNumeric & Comparable>: BoundHist
     private var histogramAggregator: HistogramAggregator<T>
 
     override init(explicitBoundaries: [T]? = nil) {
-        histogramAggregator = try! HistogramAggregator(explicitBoundaries: explicitBoundaries)
+        histogramAggregator = HistogramAggregator(explicitBoundaries: explicitBoundaries)
         super.init(explicitBoundaries: explicitBoundaries)
     }
 

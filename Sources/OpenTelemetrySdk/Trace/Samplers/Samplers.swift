@@ -107,11 +107,9 @@ class TraceIdRatioBased: Sampler {
             return Samplers.alwaysOnDecision
         }
 
-        for link in parentLinks {
-            /// If any parent link is sampled keep the sampling decision.
-            if link.context.traceFlags.sampled {
-                return Samplers.alwaysOnDecision
-            }
+        /// If any parent link is sampled keep the sampling decision.
+        for link in parentLinks where link.context.traceFlags.sampled {
+            return Samplers.alwaysOnDecision
         }
         /// Always sample if we are within probability range. This is true even for child spans (that
         /// may have had a different sampling decision made) to allow for different sampling policies,

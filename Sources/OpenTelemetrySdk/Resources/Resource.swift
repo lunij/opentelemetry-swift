@@ -57,10 +57,8 @@ public struct Resource: Equatable, Hashable, Codable {
     }
 
     private static func checkAttributes(attributes: [String: AttributeValue]) -> Bool {
-        for entry in attributes {
-            if !isValidAndNotEmpty(name: entry.key) {
-                return false
-            }
+        for entry in attributes where !isValidAndNotEmpty(name: entry.key) {
+            return false
         }
         return true
     }

@@ -20,7 +20,6 @@ let sampleValue = "sampleValue"
 let instrumentationScopeName = "SimpleExporter"
 let instrumentationScopeVersion = "semver:0.1.0"
 
-var tracer: TracerSdk
 let jaegerCollectorAdress = "localhost"
 let jaegerExporter = JaegerSpanExporter(serviceName: "SimpleExporter", collectorAddress: jaegerCollectorAdress)
 let stdoutExporter = StdoutExporter()
@@ -39,7 +38,7 @@ OpenTelemetry.registerTracerProvider(tracerProvider:
         .build()
 )
 
-tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: instrumentationScopeName, instrumentationVersion: instrumentationScopeVersion) as! TracerSdk
+let tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: instrumentationScopeName, instrumentationVersion: instrumentationScopeVersion)
 
 if #available(iOS 12.0, macOS 10.14, *) {
     let tracerProviderSDK = OpenTelemetry.instance.tracerProvider as? TracerProviderSdk

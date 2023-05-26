@@ -27,7 +27,7 @@ struct ZipkinConversionExtension {
 
     struct AttributeEnumerationState {
         var tags = [String: String]()
-        var RemoteEndpointServiceName: String?
+        var remoteEndpointServiceName: String?
         var remoteEndpointServiceNamePriority: Int?
         var serviceName: String?
         var serviceNamespace: String?
@@ -60,11 +60,11 @@ struct ZipkinConversionExtension {
         }
 
         var remoteEndpoint: ZipkinEndpoint?
-        if otelSpan.kind == .client || otelSpan.kind == .producer, attributeEnumerationState.RemoteEndpointServiceName != nil {
-            remoteEndpoint = remoteEndpointCache[attributeEnumerationState.RemoteEndpointServiceName!]
+        if otelSpan.kind == .client || otelSpan.kind == .producer, attributeEnumerationState.remoteEndpointServiceName != nil {
+            remoteEndpoint = remoteEndpointCache[attributeEnumerationState.remoteEndpointServiceName!]
             if remoteEndpoint == nil {
-                remoteEndpoint = ZipkinEndpoint(serviceName: attributeEnumerationState.RemoteEndpointServiceName!)
-                remoteEndpointCache[attributeEnumerationState.RemoteEndpointServiceName!] = remoteEndpoint!
+                remoteEndpoint = ZipkinEndpoint(serviceName: attributeEnumerationState.remoteEndpointServiceName!)
+                remoteEndpointCache[attributeEnumerationState.remoteEndpointServiceName!] = remoteEndpoint!
             }
         }
 
@@ -78,26 +78,28 @@ struct ZipkinConversionExtension {
 
         let annotations = otelSpan.events.map { processEvents(event: $0) }
 
-        return ZipkinSpan(traceId: ZipkinConversionExtension.EncodeTraceId(traceId: otelSpan.traceId, useShortTraceIds: useShortTraceIds),
-                          parentId: parentId,
-                          id: ZipkinConversionExtension.EncodeSpanId(spanId: otelSpan.spanId),
-                          kind: ZipkinConversionExtension.toSpanKind(otelSpan: otelSpan),
-                          name: otelSpan.name,
-                          timestamp: otelSpan.startTime.timeIntervalSince1970.toMicroseconds,
-                          duration: otelSpan.endTime.timeIntervalSince(otelSpan.startTime).toMicroseconds,
-                          localEndpoint: localEndpoint,
-                          remoteEndpoint: remoteEndpoint,
-                          annotations: annotations,
-                          tags: attributeEnumerationState.tags,
-                          debug: nil,
-                          shared: nil)
+        return ZipkinSpan(
+            traceId: ZipkinConversionExtension.encodeTraceId(traceId: otelSpan.traceId, useShortTraceIds: useShortTraceIds),
+            parentId: parentId,
+            id: ZipkinConversionExtension.encodeSpanId(spanId: otelSpan.spanId),
+            kind: ZipkinConversionExtension.toSpanKind(otelSpan: otelSpan),
+            name: otelSpan.name,
+            timestamp: otelSpan.startTime.timeIntervalSince1970.toMicroseconds,
+            duration: otelSpan.endTime.timeIntervalSince(otelSpan.startTime).toMicroseconds,
+            localEndpoint: localEndpoint,
+            remoteEndpoint: remoteEndpoint,
+            annotations: annotations,
+            tags: attributeEnumerationState.tags,
+            debug: nil,
+            shared: nil
+        )
     }
 
-    static func EncodeSpanId(spanId: SpanId) -> String {
+    static func encodeSpanId(spanId: SpanId) -> String {
         spanId.hexString
     }
 
-    private static func EncodeTraceId(traceId: TraceId, useShortTraceIds: Bool) -> String {
+    private static func encodeTraceId(traceId: TraceId, useShortTraceIds: Bool) -> String {
         if useShortTraceIds {
             return String(format: "%016llx", traceId.rawLowerLong)
         } else {
@@ -126,8 +128,8 @@ struct ZipkinConversionExtension {
 
     private static func processAttributes(state: inout AttributeEnumerationState, key: String, value: AttributeValue) {
         if case let .string(val) = value, let priority = remoteEndpointServiceNameKeyResolution[key] {
-            if state.RemoteEndpointServiceName == nil || priority < state.remoteEndpointServiceNamePriority ?? 5 {
-                state.RemoteEndpointServiceName = val
+            if state.remoteEndpointServiceName == nil || priority < state.remoteEndpointServiceNamePriority ?? 5 {
+                state.remoteEndpointServiceName = val
                 state.remoteEndpointServiceNamePriority = priority
             }
             state.tags[key] = val

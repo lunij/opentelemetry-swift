@@ -56,10 +56,8 @@ public class DefaultBaggageBuilder: BaggageBuilder {
 
         var combined = entries
         if let parent = parentCopy {
-            for entry in parent.getEntries() {
-                if combined[entry.key] == nil {
-                    combined[entry.key] = entry
-                }
+            for entry in parent.getEntries() where combined[entry.key] == nil {
+                combined[entry.key] = entry
             }
         }
         return entries.isEmpty ? EmptyBaggage.instance : DefaultBaggage(entries: combined)

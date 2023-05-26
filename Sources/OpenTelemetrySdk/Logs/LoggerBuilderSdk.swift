@@ -19,27 +19,27 @@ public class LoggerBuilderSdk: LoggerBuilder {
         self.instrumentationScopeName = instrumentationScopeName
     }
 
-    public func setEventDomain(_ eventDomain: String) -> Self {
+    public func setEventDomain(_ eventDomain: String) -> LoggerBuilder {
         self.eventDomain = eventDomain
         return self
     }
 
-    public func setSchemaUrl(_ schemaUrl: String) -> Self {
+    public func setSchemaUrl(_ schemaUrl: String) -> LoggerBuilder {
         self.schemaUrl = schemaUrl
         return self
     }
 
-    public func setInstrumentationVersion(_ instrumentationVersion: String) -> Self {
+    public func setInstrumentationVersion(_ instrumentationVersion: String) -> LoggerBuilder {
         instrumentationScopeVersion = instrumentationVersion
         return self
     }
 
-    public func setIncludeTraceContext(_ includeTraceContext: Bool) -> Self {
+    public func setIncludeTraceContext(_ includeTraceContext: Bool) -> LoggerBuilder {
         self.includeTraceContext = includeTraceContext
         return self
     }
 
-    public func setAttributes(_: [String: OpenTelemetryApi.AttributeValue]) -> Self {
+    public func setAttributes(_: [String: OpenTelemetryApi.AttributeValue]) -> LoggerBuilder {
         self
     }
 

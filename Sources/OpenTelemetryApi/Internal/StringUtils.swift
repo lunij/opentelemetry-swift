@@ -10,10 +10,8 @@ public enum StringUtils {
     /// Determines whether the String contains only printable characters.
     /// - Parameter string: the String to be validated.
     public static func isPrintableString(_ string: String) -> Bool {
-        for char in string.unicodeScalars {
-            if !isPrintableChar(char) {
-                return false
-            }
+        for char in string.unicodeScalars where !isPrintableChar(char) {
+            return false
         }
         return true
     }

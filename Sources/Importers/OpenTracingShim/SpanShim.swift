@@ -124,10 +124,9 @@ public class SpanShim: OTSpan, BaseShimProtocol {
 
     static func convertToAttributes(fields: [String: NSObject]) -> [String: AttributeValue] {
         let attributes: [String: AttributeValue] = fields.mapValues { value in
-            if (value as? NSString) != nil {
-                return AttributeValue.string(value as! String)
-            } else if (value as? NSNumber) != nil {
-                let number = value as! NSNumber
+            if let value = value as? String {
+                return AttributeValue.string(value)
+            } else if let number = value as? NSNumber {
                 let numberType = CFNumberGetType(number)
 
                 switch numberType {

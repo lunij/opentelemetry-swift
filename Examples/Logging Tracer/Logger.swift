@@ -12,8 +12,8 @@ class Logger {
         print("TimeSinceStart | ThreadId | API")
     }
 
-    static func log(_ s: String) {
-        let output = String(format: "%.9f | %@ | %@", timeSinceStart(), Thread.current.description, s)
+    static func log(_ message: String) {
+        let output = String(format: "%.9f | %@ | %@", timeSinceStart(), Thread.current.description, message)
         print(output)
     }
 

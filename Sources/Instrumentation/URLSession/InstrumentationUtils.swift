@@ -18,8 +18,8 @@ enum InstrumentationUtils {
         let actualClassCount: Int32 = ObjectiveC.objc_getClassList(autoreleasingAllClasses, expectedClassCount)
 
         var classes = [AnyClass]()
-        for i in 0 ..< actualClassCount {
-            classes.append(allClasses[Int(i)])
+        for index in 0 ..< actualClassCount {
+            classes.append(allClasses[Int(index)])
         }
         allClasses.deallocate()
         return classes
@@ -34,8 +34,8 @@ enum InstrumentationUtils {
             }
             defer { free(methodList) }
             if methodCount > 0 {
-                enumerateCArray(array: methodList, count: methodCount) { _, m in
-                    let sel = method_getName(m)
+                enumerateCArray(array: methodList, count: methodCount) { _, method in
+                    let sel = method_getName(method)
                     if sel == selector {
                         implements = true
                         return
@@ -46,18 +46,18 @@ enum InstrumentationUtils {
         return implements
     }
 
-    private static func enumerateCArray<T>(array: UnsafePointer<T>, count: UInt32, f: (UInt32, T) -> Void) {
+    private static func enumerateCArray<T>(array: UnsafePointer<T>, count: UInt32, function: (UInt32, T) -> Void) {
         var ptr = array
-        for i in 0 ..< count {
-            f(i, ptr.pointee)
+        for index in 0 ..< count {
+            function(index, ptr.pointee)
             ptr = ptr.successor()
         }
     }
 
     static var usesUndocumentedAsyncAwaitMethods: Bool = {
         #if os(macOS)
-        let os = ProcessInfo.processInfo.operatingSystemVersion
-        if os.majorVersion >= 13 {
+        let version = ProcessInfo.processInfo.operatingSystemVersion
+        if version.majorVersion >= 13 {
             return true
         }
         #elseif os(watchOS)
