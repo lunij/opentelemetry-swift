@@ -1,0 +1,9 @@
+--commas inline
+--decimalgrouping 3,3
+--exclude .derivedData, DerivedData
+--exclude Sources/Exporters/OpenTelemetryProtocolCommon/proto
+--ifdef no-indent
+--indent 4
+--importgrouping testable-bottom
+--wrapcollections before-first
+--wrapparameters before-first
