@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import DatadogExporter
+@testable import OpenTelemetrySdk
 
 class SpansExporterTests: XCTestCase {
     override func setUp() {
@@ -18,9 +18,9 @@ class SpansExporterTests: XCTestCase {
     }
 
     func testWhenExportSpanIsCalled_thenTraceIsUploaded() throws {
-#if os(watchOS)
+        #if os(watchOS)
         throw XCTSkip("Test is flaky on watchOS")
-#endif
+        #endif
 
         var tracesSent = false
         let expec = expectation(description: "traces received")
@@ -50,7 +50,8 @@ class SpansExporterTests: XCTestCase {
                                                   endpoint: Endpoint.custom(
                                                       tracesURL: URL(string: "http://localhost:33333/traces")!,
                                                       logsURL: URL(string: "http://localhost:33333/logs")!,
-                                                      metricsURL: URL(string: "http://localhost:33333/metrics")!),
+                                                      metricsURL: URL(string: "http://localhost:33333/metrics")!
+                                                  ),
                                                   uploadCondition: { true })
 
         let spansExporter = try SpansExporter(config: configuration)
@@ -71,16 +72,16 @@ class SpansExporterTests: XCTestCase {
     }
 
     private func createBasicSpan() -> SpanData {
-        return SpanData(traceId: TraceId(),
-                        spanId: SpanId(),
-                        traceFlags: TraceFlags(),
-                        traceState: TraceState(),
-                        resource: Resource(),
-                        instrumentationScope: InstrumentationScopeInfo(),
-                        name: "spanName",
-                        kind: .server,
-                        startTime: Date(timeIntervalSinceReferenceDate: 3000),
-                        endTime: Date(timeIntervalSinceReferenceDate: 3001),
-                        hasRemoteParent: false)
+        SpanData(traceId: TraceId(),
+                 spanId: SpanId(),
+                 traceFlags: TraceFlags(),
+                 traceState: TraceState(),
+                 resource: Resource(),
+                 instrumentationScope: InstrumentationScopeInfo(),
+                 name: "spanName",
+                 kind: .server,
+                 startTime: Date(timeIntervalSinceReferenceDate: 3_000),
+                 endTime: Date(timeIntervalSinceReferenceDate: 3_001),
+                 hasRemoteParent: false)
     }
 }

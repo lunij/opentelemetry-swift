@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import XCTest
+@testable import DatadogExporter
 
 class FileTests: XCTestCase {
     private let fileManager = FileManager.default
@@ -39,7 +39,7 @@ class FileTests: XCTestCase {
                 [
                     0x41, 0x41, 0x41, 0x41, 0x41,
                     0x42, 0x42, 0x42, 0x42, 0x42,
-                    0x41, 0x41, 0x41, 0x41, 0x41,
+                    0x41, 0x41, 0x41, 0x41, 0x41
                 ]
             )
         )

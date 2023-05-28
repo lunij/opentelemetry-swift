@@ -4,14 +4,14 @@
  */
 
 import Foundation
-import Logging
 import GRPC
+import Logging
 import NIO
 import OpenTelemetryApi
 import OpenTelemetryProtocolExporterCommon
+import XCTest
 @testable import OpenTelemetryProtocolExporterGrpc
 @testable import OpenTelemetrySdk
-import XCTest
 
 class OtlpMetricExproterTests: XCTestCase {
     var fakeCollector: FakeMetricCollector!
@@ -67,7 +67,7 @@ class OtlpMetricExproterTests: XCTestCase {
     }
 
     func testConfigHeadersAreSet_whenInitCalledWithCustomConfig() throws {
-        let config: OtlpConfiguration = OtlpConfiguration(timeout: TimeInterval(10), headers: [("FOO", "BAR")])
+        let config = OtlpConfiguration(timeout: TimeInterval(10), headers: [("FOO", "BAR")])
         let exporter = OtlpMetricExporter(channel: channel, config: config)
         XCTAssertNotNil(exporter.config.headers)
         XCTAssertEqual(exporter.config.headers?[0].0, "FOO")
@@ -143,11 +143,9 @@ class OtlpMetricExproterTests: XCTestCase {
         // Start the server and print its address once it has started.
         let server = Server.insecure(group: serverGroup)
             .withServiceProviders([fakeCollector])
-            .bind(host: "localhost", port: 4317)
+            .bind(host: "localhost", port: 4_317)
 
-        server.map {
-            $0.channel.localAddress
-        }.whenSuccess { address in
+        server.map(\.channel.localAddress).whenSuccess { address in
             print("server started on port \(address!.port!)")
         }
         return server
@@ -155,7 +153,7 @@ class OtlpMetricExproterTests: XCTestCase {
 
     func startChannel() -> ClientConnection {
         let channel = ClientConnection.insecure(group: channelGroup)
-            .connect(host: "localhost", port: 4317)
+            .connect(host: "localhost", port: 4_317)
         return channel
     }
 
@@ -185,7 +183,6 @@ class OtlpMetricExproterTests: XCTestCase {
         }
         XCTFail("User-Agent header was not set correctly")
     }
-
 }
 
 class FakeMetricCollector: Opentelemetry_Proto_Collector_Metrics_V1_MetricsServiceProvider {

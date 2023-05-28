@@ -24,7 +24,7 @@ public protocol DoubleObserverMetric {
 public struct NoopDoubleObserverMetric: DoubleObserverMetric {
     public init() {}
 
-    public func observe(value: Double, labelset: LabelSet) {}
+    public func observe(value _: Double, labelset _: LabelSet) {}
 
-    public func observe(value: Double, labels: [String: String]) {}
+    public func observe(value _: Double, labels _: [String: String]) {}
 }

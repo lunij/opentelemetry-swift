@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class W3CTraceContextPropagatorTest: XCTestCase {
     let traceState_default = TraceState()

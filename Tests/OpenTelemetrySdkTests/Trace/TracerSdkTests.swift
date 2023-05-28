@@ -4,8 +4,8 @@
  */
 
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 class TracerSdkTests: XCTestCase {
     let spanName = "span_name"

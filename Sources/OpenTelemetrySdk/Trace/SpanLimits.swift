@@ -13,11 +13,11 @@ public struct SpanLimits: Equatable {
 
     /// The global default max number of attributes perSpan.
     public private(set) var attributeCountLimit: Int = 128
-     ///  the global default max number of Events per Span.
+    ///  the global default max number of Events per Span.
     public private(set) var eventCountLimit: Int = 128
-     /// the global default max number of Link entries per Span.
+    /// the global default max number of Link entries per Span.
     public private(set) var linkCountLimit: Int = 128
-     /// the global default max number of attributes per Event.
+    /// the global default max number of attributes per Event.
     public private(set) var attributePerEventCountLimit: Int = 128
     /// the global default max number of attributes per Link.
     public private(set) var attributePerLinkCountLimit: Int = 128
@@ -55,7 +55,7 @@ public struct SpanLimits: Equatable {
     }
 
     public static func == (lhs: SpanLimits, rhs: SpanLimits) -> Bool {
-        return lhs.attributeCountLimit == rhs.attributeCountLimit &&
+        lhs.attributeCountLimit == rhs.attributeCountLimit &&
             lhs.eventCountLimit == rhs.eventCountLimit &&
             lhs.linkCountLimit == rhs.linkCountLimit &&
             lhs.attributePerEventCountLimit == rhs.attributePerEventCountLimit &&

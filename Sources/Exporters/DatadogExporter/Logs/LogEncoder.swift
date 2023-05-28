@@ -70,38 +70,38 @@ internal struct DDLog: Encodable {
             TracingAttributes.spanID: "\(span.spanId.rawValue)"
         ]
 
-        self.date = event.timestamp
-        self.status = Status(rawValue: event.attributes["status"]?.description ?? "info") ?? .info
-        self.message = attributes.removeValue(forKey: "message")?.description ?? "Span event"
-        self.serviceName = configuration.serviceName
-        self.environment = configuration.environment
-        self.loggerName = attributes.removeValue(forKey: "loggerName")?.description ?? "logger"
-        self.loggerVersion = "1.0" // loggerVersion
-        self.threadName = attributes.removeValue(forKey: "threadName")?.description ?? "unkown"
-        self.applicationVersion = configuration.version
+        date = event.timestamp
+        status = Status(rawValue: event.attributes["status"]?.description ?? "info") ?? .info
+        message = attributes.removeValue(forKey: "message")?.description ?? "Span event"
+        serviceName = configuration.serviceName
+        environment = configuration.environment
+        loggerName = attributes.removeValue(forKey: "loggerName")?.description ?? "logger"
+        loggerVersion = "1.0" // loggerVersion
+        threadName = attributes.removeValue(forKey: "threadName")?.description ?? "unkown"
+        applicationVersion = configuration.version
 
         let userAttributes: [String: Encodable] = attributes.mapValues {
             switch $0 {
-                case let .string(value):
-                    return value
-                case let .bool(value):
-                    return value
-                case let .int(value):
-                    return value
-                case let .double(value):
-                    return value
-                case let .stringArray(value):
-                    return value
-                case let .boolArray(value):
-                    return value
-                case let .intArray(value):
-                    return value
-                case let .doubleArray(value):
-                    return value
+            case let .string(value):
+                return value
+            case let .bool(value):
+                return value
+            case let .int(value):
+                return value
+            case let .double(value):
+                return value
+            case let .stringArray(value):
+                return value
+            case let .boolArray(value):
+                return value
+            case let .intArray(value):
+                return value
+            case let .doubleArray(value):
+                return value
             }
         }
         self.attributes = LogAttributes(userAttributes: userAttributes, internalAttributes: internalAttributes)
-        self.tags = nil // tags
+        tags = nil // tags
     }
 }
 
@@ -131,8 +131,8 @@ internal struct LogEncoder {
         var stringValue: String
         var intValue: Int?
         init?(stringValue: String) { self.stringValue = stringValue }
-        init?(intValue: Int) { return nil }
-        init(_ string: String) { self.stringValue = string }
+        init?(intValue _: Int) { nil }
+        init(_ string: String) { stringValue = string }
     }
 
     func encode(_ log: DDLog, to encoder: Encoder) throws {

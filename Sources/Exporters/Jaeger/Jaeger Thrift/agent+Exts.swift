@@ -11,261 +11,227 @@ import Foundation
 
 import Thrift
 
+private final class Agent_emitZipkinBatch_args {
+    fileprivate var spans: TList<Span>
 
-fileprivate final class Agent_emitZipkinBatch_args {
-
-  fileprivate var spans: TList<Span>
-
-
-  fileprivate init(spans: TList<Span>) {
-    self.spans = spans
-  }
-
+    fileprivate init(spans: TList<Span>) {
+        self.spans = spans
+    }
 }
 
-fileprivate func ==(lhs: Agent_emitZipkinBatch_args, rhs: Agent_emitZipkinBatch_args) -> Bool {
-  return
-    (lhs.spans == rhs.spans)
+private func == (lhs: Agent_emitZipkinBatch_args, rhs: Agent_emitZipkinBatch_args) -> Bool {
+    lhs.spans == rhs.spans
 }
 
-extension Agent_emitZipkinBatch_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (spans.hashValue)
-    return result
-  }
-
+extension Agent_emitZipkinBatch_args: Hashable {
+    fileprivate var hashValue: Int {
+        let prime = 31
+        var result = 1
+        result = prime &* result &+ (spans.hashValue)
+        return result
+    }
 }
 
-extension Agent_emitZipkinBatch_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["spans": 1, ]
-  }
-
-  fileprivate static var structName: String { return "Agent_emitZipkinBatch_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Agent_emitZipkinBatch_args {
-    _ = try proto.readStructBegin()
-    var spans: TList<Span>!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .list):            spans = try TList<Span>.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
+extension Agent_emitZipkinBatch_args: TStruct {
+    fileprivate static var fieldIds: [String: Int32] {
+        ["spans": 1]
     }
 
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(spans, named: "spans")
+    fileprivate static var structName: String { "Agent_emitZipkinBatch_args" }
 
-    return Agent_emitZipkinBatch_args(spans: spans)
-  }
+    fileprivate static func read(from proto: TProtocol) throws -> Agent_emitZipkinBatch_args {
+        _ = try proto.readStructBegin()
+        var spans: TList<Span>!
 
+        fields: while true {
+            let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+            switch (fieldID, fieldType) {
+            case (_, .stop): break fields
+            case (1, .list): spans = try TList<Span>.read(from: proto)
+            case let (_, unknownType): try proto.skip(type: unknownType)
+            }
+
+            try proto.readFieldEnd()
+        }
+
+        try proto.readStructEnd()
+        // Required fields
+        try proto.validateValue(spans, named: "spans")
+
+        return Agent_emitZipkinBatch_args(spans: spans)
+    }
 }
 
+private final class Agent_emitBatch_args {
+    fileprivate var batch: Batch
 
-
-fileprivate final class Agent_emitBatch_args {
-
-  fileprivate var batch: Batch
-
-
-  fileprivate init(batch: Batch) {
-    self.batch = batch
-  }
-
+    fileprivate init(batch: Batch) {
+        self.batch = batch
+    }
 }
 
-fileprivate func ==(lhs: Agent_emitBatch_args, rhs: Agent_emitBatch_args) -> Bool {
-  return
-    (lhs.batch == rhs.batch)
+private func == (lhs: Agent_emitBatch_args, rhs: Agent_emitBatch_args) -> Bool {
+    lhs.batch == rhs.batch
 }
 
-extension Agent_emitBatch_args : Hashable {
-
-  fileprivate var hashValue : Int {
-    let prime = 31
-    var result = 1
-    result = prime &* result &+ (batch.hashValue)
-    return result
-  }
-
+extension Agent_emitBatch_args: Hashable {
+    fileprivate var hashValue: Int {
+        let prime = 31
+        var result = 1
+        result = prime &* result &+ (batch.hashValue)
+        return result
+    }
 }
 
-extension Agent_emitBatch_args : TStruct {
-
-  fileprivate static var fieldIds: [String: Int32] {
-    return ["batch": 1, ]
-  }
-
-  fileprivate static var structName: String { return "Agent_emitBatch_args" }
-
-  fileprivate static func read(from proto: TProtocol) throws -> Agent_emitBatch_args {
-    _ = try proto.readStructBegin()
-    var batch: Batch!
-
-    fields: while true {
-
-      let (_, fieldType, fieldID) = try proto.readFieldBegin()
-
-      switch (fieldID, fieldType) {
-        case (_, .stop):            break fields
-        case (1, .struct):           batch = try Batch.read(from: proto)
-        case let (_, unknownType):  try proto.skip(type: unknownType)
-      }
-
-      try proto.readFieldEnd()
+extension Agent_emitBatch_args: TStruct {
+    fileprivate static var fieldIds: [String: Int32] {
+        ["batch": 1]
     }
 
-    try proto.readStructEnd()
-    // Required fields
-    try proto.validateValue(batch, named: "batch")
+    fileprivate static var structName: String { "Agent_emitBatch_args" }
 
-    return Agent_emitBatch_args(batch: batch)
-  }
+    fileprivate static func read(from proto: TProtocol) throws -> Agent_emitBatch_args {
+        _ = try proto.readStructBegin()
+        var batch: Batch!
 
+        fields: while true {
+            let (_, fieldType, fieldID) = try proto.readFieldBegin()
+
+            switch (fieldID, fieldType) {
+            case (_, .stop): break fields
+            case (1, .struct): batch = try Batch.read(from: proto)
+            case let (_, unknownType): try proto.skip(type: unknownType)
+            }
+
+            try proto.readFieldEnd()
+        }
+
+        try proto.readStructEnd()
+        // Required fields
+        try proto.validateValue(batch, named: "batch")
+
+        return Agent_emitBatch_args(batch: batch)
+    }
 }
 
+extension AgentClient: Agent {
+    private func send_emitZipkinBatch(spans: TList<Span>) throws {
+        try outProtocol.writeMessageBegin(name: "emitZipkinBatch", type: .oneway, sequenceID: 0)
+        let args = Agent_emitZipkinBatch_args(spans: spans)
+        try args.write(to: outProtocol)
+        try outProtocol.writeMessageEnd()
+    }
 
+    public func emitZipkinBatch(spans: TList<Span>) throws {
+        try send_emitZipkinBatch(spans: spans)
+        try outProtocol.transport.flush()
+    }
 
-extension AgentClient : Agent {
+    private func send_emitBatch(batch: Batch) throws {
+        try outProtocol.writeMessageBegin(name: "emitBatch", type: .oneway, sequenceID: 0)
+        let args = Agent_emitBatch_args(batch: batch)
+        try args.write(to: outProtocol)
+        try outProtocol.writeMessageEnd()
+    }
 
-  private func send_emitZipkinBatch(spans: TList<Span>) throws {
-    try outProtocol.writeMessageBegin(name: "emitZipkinBatch", type: .oneway, sequenceID: 0)
-    let args = Agent_emitZipkinBatch_args(spans: spans)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  public func emitZipkinBatch(spans: TList<Span>) throws {
-    try send_emitZipkinBatch(spans: spans)
-    try outProtocol.transport.flush()
-  }
-
-  private func send_emitBatch(batch: Batch) throws {
-    try outProtocol.writeMessageBegin(name: "emitBatch", type: .oneway, sequenceID: 0)
-    let args = Agent_emitBatch_args(batch: batch)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  public func emitBatch(batch: Batch) throws {
-    try send_emitBatch(batch: batch)
-    try outProtocol.transport.flush()
-  }
-
+    public func emitBatch(batch: Batch) throws {
+        try send_emitBatch(batch: batch)
+        try outProtocol.transport.flush()
+    }
 }
 
-extension AgentAsyncClient : AgentAsync {
-
-  private func send_emitZipkinBatch(on outProtocol: TProtocol, spans: TList<Span>) throws {
-    try outProtocol.writeMessageBegin(name: "emitZipkinBatch", type: .oneway, sequenceID: 0)
-    let args = Agent_emitZipkinBatch_args(spans: spans)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
-
-  public func emitZipkinBatch(spans: TList<Span>, completion: @escaping (TAsyncResult<Void>) -> Void) {
-
-    let transport   = factory.newTransport()
-    let proto = Protocol(on: transport)
-
-    do {
-      try send_emitZipkinBatch(on: proto, spans: spans)
-    } catch let error {
-      completion(.error(error))
+extension AgentAsyncClient: AgentAsync {
+    private func send_emitZipkinBatch(on outProtocol: TProtocol, spans: TList<Span>) throws {
+        try outProtocol.writeMessageBegin(name: "emitZipkinBatch", type: .oneway, sequenceID: 0)
+        let args = Agent_emitZipkinBatch_args(spans: spans)
+        try args.write(to: outProtocol)
+        try outProtocol.writeMessageEnd()
     }
 
-    transport.flush {
-      (trans, error) in
+    public func emitZipkinBatch(spans: TList<Span>, completion: @escaping (TAsyncResult<Void>) -> Void) {
+        let transport = factory.newTransport()
+        let proto = Protocol(on: transport)
 
-      if let error = error {
-        completion(.error(error))
-      }
-      completion(.success(Void()))
-    }
-  }
-  private func send_emitBatch(on outProtocol: TProtocol, batch: Batch) throws {
-    try outProtocol.writeMessageBegin(name: "emitBatch", type: .oneway, sequenceID: 0)
-    let args = Agent_emitBatch_args(batch: batch)
-    try args.write(to: outProtocol)
-    try outProtocol.writeMessageEnd()
-  }
+        do {
+            try send_emitZipkinBatch(on: proto, spans: spans)
+        } catch {
+            completion(.error(error))
+        }
 
-  public func emitBatch(batch: Batch, completion: @escaping (TAsyncResult<Void>) -> Void) {
+        transport.flush {
+            _, error in
 
-    let transport   = factory.newTransport()
-    let proto = Protocol(on: transport)
-
-    do {
-      try send_emitBatch(on: proto, batch: batch)
-    } catch let error {
-      completion(.error(error))
+            if let error = error {
+                completion(.error(error))
+            }
+            completion(.success(()))
+        }
     }
 
-    transport.flush {
-      (trans, error) in
-
-      if let error = error {
-        completion(.error(error))
-      }
-      completion(.success(Void()))
+    private func send_emitBatch(on outProtocol: TProtocol, batch: Batch) throws {
+        try outProtocol.writeMessageBegin(name: "emitBatch", type: .oneway, sequenceID: 0)
+        let args = Agent_emitBatch_args(batch: batch)
+        try args.write(to: outProtocol)
+        try outProtocol.writeMessageEnd()
     }
-  }
+
+    public func emitBatch(batch: Batch, completion: @escaping (TAsyncResult<Void>) -> Void) {
+        let transport = factory.newTransport()
+        let proto = Protocol(on: transport)
+
+        do {
+            try send_emitBatch(on: proto, batch: batch)
+        } catch {
+            completion(.error(error))
+        }
+
+        transport.flush {
+            _, error in
+
+            if let error = error {
+                completion(.error(error))
+            }
+            completion(.success(()))
+        }
+    }
 }
 
-extension AgentProcessor : TProcessor {
+extension AgentProcessor: TProcessor {
+    static let processorHandlers: ProcessorHandlerDictionary = {
+        var processorHandlers = ProcessorHandlerDictionary()
 
-  static let processorHandlers: ProcessorHandlerDictionary = {
+        processorHandlers["emitZipkinBatch"] = { _, inProtocol, _, _ in
 
-    var processorHandlers = ProcessorHandlerDictionary()
+            let args = try Agent_emitZipkinBatch_args.read(from: inProtocol)
 
-    processorHandlers["emitZipkinBatch"] = { sequenceID, inProtocol, outProtocol, handler in
+            try inProtocol.readMessageEnd()
+        }
+        processorHandlers["emitBatch"] = { _, inProtocol, _, _ in
 
-      let args = try Agent_emitZipkinBatch_args.read(from: inProtocol)
+            let args = try Agent_emitBatch_args.read(from: inProtocol)
 
-      try inProtocol.readMessageEnd()
+            try inProtocol.readMessageEnd()
+        }
+        return processorHandlers
+    }()
 
+    public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
+        let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
+
+        if let processorHandler = AgentProcessor.processorHandlers[messageName] {
+            do {
+                try processorHandler(sequenceID, inProtocol, outProtocol, service)
+            } catch let error as TApplicationError {
+                try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
+            }
+        } else {
+            try inProtocol.skip(type: .struct)
+            try inProtocol.readMessageEnd()
+            let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
+            try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
+        }
     }
-    processorHandlers["emitBatch"] = { sequenceID, inProtocol, outProtocol, handler in
-
-      let args = try Agent_emitBatch_args.read(from: inProtocol)
-
-      try inProtocol.readMessageEnd()
-
-    }
-    return processorHandlers
-  }()
-
-  public func process(on inProtocol: TProtocol, outProtocol: TProtocol) throws {
-
-    let (messageName, _, sequenceID) = try inProtocol.readMessageBegin()
-
-    if let processorHandler = AgentProcessor.processorHandlers[messageName] {
-      do {
-        try processorHandler(sequenceID, inProtocol, outProtocol, service)
-      }
-      catch let error as TApplicationError {
-        try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: error)
-      }
-    }
-    else {
-      try inProtocol.skip(type: .struct)
-      try inProtocol.readMessageEnd()
-      let ex = TApplicationError(error: .unknownMethod(methodName: messageName))
-      try outProtocol.writeException(messageName: messageName, sequenceID: sequenceID, ex: ex)
-    }
-  }
 }
 
 #endif

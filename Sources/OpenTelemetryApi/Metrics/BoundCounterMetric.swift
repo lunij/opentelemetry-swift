@@ -12,7 +12,7 @@ open class BoundCounterMetric<T> {
     /// Adds the given value to the bound counter metric.
     /// - Parameters:
     ///   - value: value by which the bound counter metric should be added
-    open func add(value: T) {
+    open func add(value _: T) {
         fatalError()
     }
 }

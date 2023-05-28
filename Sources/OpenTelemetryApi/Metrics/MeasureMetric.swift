@@ -61,11 +61,11 @@ public struct AnyMeasureMetric<T>: MeasureMetric {
 public struct NoopMeasureMetric<T>: MeasureMetric {
     public init() {}
 
-    public func bind(labelset: LabelSet) -> BoundMeasureMetric<T> {
+    public func bind(labelset _: LabelSet) -> BoundMeasureMetric<T> {
         BoundMeasureMetric<T>()
     }
 
-    public func bind(labels: [String: String]) -> BoundMeasureMetric<T> {
+    public func bind(labels _: [String: String]) -> BoundMeasureMetric<T> {
         BoundMeasureMetric<T>()
     }
 }

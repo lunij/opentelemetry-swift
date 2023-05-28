@@ -17,12 +17,12 @@ public struct OpenTelemetryContextProvider {
 
     /// Returns the Span from the current context
     public var activeSpan: Span? {
-        return contextManager.getCurrentContextValue(forKey: .span) as? Span
+        contextManager.getCurrentContextValue(forKey: .span) as? Span
     }
 
     /// Returns the Baggage from the current context
     public var activeBaggage: Baggage? {
-        return contextManager.getCurrentContextValue(forKey: OpenTelemetryContextKeys.baggage) as? Baggage
+        contextManager.getCurrentContextValue(forKey: OpenTelemetryContextKeys.baggage) as? Baggage
     }
 
     /// Sets the span as the activeSpan for the current context

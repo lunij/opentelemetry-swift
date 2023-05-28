@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import XCTest
+@testable import PersistenceExporter
 
 class DirectoryTests: XCTestCase {
     private let uniqueSubdirectoryName = UUID().uuidString

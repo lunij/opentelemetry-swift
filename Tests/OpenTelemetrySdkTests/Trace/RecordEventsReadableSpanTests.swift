@@ -4,14 +4,14 @@
  */
 
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 class RecordEventsReadableSpanTest: XCTestCase {
     let spanName = "MySpanName"
     let spanNewName = "NewName"
-    let nanosPerSecond: Int64 = 1000000000
-    let millisPerSecond: Int64 = 1000
+    let nanosPerSecond: Int64 = 1_000_000_000
+    let millisPerSecond: Int64 = 1_000
     let idGenerator: IdGenerator = RandomIdGenerator()
     var traceId: TraceId!
     var spanId: SpanId!
@@ -187,7 +187,7 @@ class RecordEventsReadableSpanTest: XCTestCase {
         span.setAttribute(key: "EmptyStringkey", value: "")
         span.setAttribute(key: "NilAttributeValue", value: nil)
         span.setAttribute(key: "EmptyStringAttributeValue", value: AttributeValue.string(""))
-        span.setAttribute(key: "LongKey", value: 1000)
+        span.setAttribute(key: "LongKey", value: 1_000)
         span.setAttribute(key: "DoubleKey", value: 10.0)
         span.setAttribute(key: "BooleanKey", value: false)
         span.setAttribute(key: "ArrayStringKey", value: AttributeValue.stringArray(["StringVal", "", "StringVal2"]))
@@ -243,7 +243,6 @@ class RecordEventsReadableSpanTest: XCTestCase {
 
         XCTAssertEqual(attributes.count, span.totalAttributeCount, "total attributes not counted properly")
         XCTAssertEqual(span.toSpanData().attributes.count, span.totalAttributeCount, "total attributes not counted properly")
-
     }
 
     func testRemovingAttributes() {
@@ -408,11 +407,11 @@ class RecordEventsReadableSpanTest: XCTestCase {
     }
 
     private func createTestRootSpan() -> RecordEventsReadableSpan {
-        return createTestSpan(kind: .internal, config: SpanLimits(), parentContext: nil, attributes: [String: AttributeValue]())
+        createTestSpan(kind: .internal, config: SpanLimits(), parentContext: nil, attributes: [String: AttributeValue]())
     }
 
     private func createTestSpan(attributes: [String: AttributeValue]) -> RecordEventsReadableSpan {
-        return createTestSpan(kind: .internal, config: SpanLimits(), parentContext: nil, attributes: attributes)
+        createTestSpan(kind: .internal, config: SpanLimits(), parentContext: nil, attributes: attributes)
     }
 
     private func createTestSpan(kind: SpanKind) -> RecordEventsReadableSpan {
@@ -424,7 +423,7 @@ class RecordEventsReadableSpanTest: XCTestCase {
     }
 
     private func createTestSpan(config: SpanLimits) -> RecordEventsReadableSpan {
-        return createTestSpan(kind: .internal, config: config, parentContext: nil, attributes: [String: AttributeValue]())
+        createTestSpan(kind: .internal, config: config, parentContext: nil, attributes: [String: AttributeValue]())
     }
 
     private func createTestSpan(kind: SpanKind, config: SpanLimits, parentContext: SpanContext?, attributes: [String: AttributeValue]) -> RecordEventsReadableSpan {
@@ -462,15 +461,17 @@ class RecordEventsReadableSpanTest: XCTestCase {
         span.status = status
     }
 
-    private func verifySpanData(spanData: SpanData,
-                                attributes: [String: AttributeValue],
-                                events: [SpanData.Event],
-                                links: [SpanData.Link], spanName: String,
-                                startTime: Date,
-                                endTime: Date,
-                                status: Status,
-                                hasEnded: Bool)
-    {
+    private func verifySpanData(
+        spanData: SpanData,
+        attributes: [String: AttributeValue],
+        events: [SpanData.Event],
+        links: [SpanData.Link],
+        spanName: String,
+        startTime: Date,
+        endTime: Date,
+        status: Status,
+        hasEnded: Bool
+    ) {
         XCTAssertEqual(spanData.traceId, traceId)
         XCTAssertEqual(spanData.spanId, spanId)
         XCTAssertEqual(spanData.parentSpanId, parentSpanId)

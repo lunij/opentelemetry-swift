@@ -16,6 +16,6 @@ public protocol TracerProvider {
 
 extension TracerProvider {
     func get(instrumentationName: String) -> Tracer {
-        return get(instrumentationName: instrumentationName, instrumentationVersion: nil)
+        get(instrumentationName: instrumentationName, instrumentationVersion: nil)
     }
 }

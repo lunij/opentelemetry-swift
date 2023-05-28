@@ -14,10 +14,10 @@ public class DefaultBaggageManager: BaggageManager {
     public static var instance = DefaultBaggageManager()
 
     public func baggageBuilder() -> BaggageBuilder {
-        return DefaultBaggageBuilder()
+        DefaultBaggageBuilder()
     }
 
     public func getCurrentBaggage() -> Baggage? {
-        return OpenTelemetry.instance.contextProvider.activeBaggage
+        OpenTelemetry.instance.contextProvider.activeBaggage
     }
 }

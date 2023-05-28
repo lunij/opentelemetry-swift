@@ -16,7 +16,7 @@ struct NetworkRequestState {
     }
 
     mutating func setData(_ data: URLRequest) {
-        self.request = data
+        request = data
     }
 }
 
@@ -44,11 +44,11 @@ public class URLSessionInstrumentation {
     public init(configuration: URLSessionInstrumentationConfiguration) {
         self.configuration = configuration
         tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: "NSURLSession", instrumentationVersion: "0.0.1")
-        self.injectInNSURLClasses()
+        injectInNSURLClasses()
     }
 
     private func injectInNSURLClasses() {
-#if swift(<5.7)
+        #if swift(<5.7)
         let selectors = [
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didReceive:)),
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didReceive:completionHandler:)),
@@ -56,7 +56,7 @@ public class URLSessionInstrumentation {
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didBecome:)! as (URLSessionDataDelegate) -> (URLSession, URLSessionDataTask, URLSessionDownloadTask) -> Void),
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didBecome:)! as (URLSessionDataDelegate) -> (URLSession, URLSessionDataTask, URLSessionStreamTask) -> Void)
         ]
-#else
+        #else
         let selectors = [
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didReceive:)),
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didReceive:completionHandler:)),
@@ -64,7 +64,7 @@ public class URLSessionInstrumentation {
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didBecome:) as (URLSessionDataDelegate) -> ((URLSession, URLSessionDataTask, URLSessionDownloadTask) -> Void)?),
             #selector(URLSessionDataDelegate.urlSession(_:dataTask:didBecome:) as (URLSessionDataDelegate) -> ((URLSession, URLSessionDataTask, URLSessionStreamTask) -> Void)?)
         ]
-#endif
+        #endif
         let classes = configuration.delegateClassesToInstrument ?? InstrumentationUtils.objc_getClassList()
         let selectorsCount = selectors.count
         DispatchQueue.concurrentPerform(iterations: classes.count) { iteration in
@@ -75,8 +75,8 @@ public class URLSessionInstrumentation {
             guard let methodList = class_copyMethodList(theClass, &methodCount) else { return }
             defer { free(methodList) }
 
-            for j in 0..<selectorsCount {
-                for i in 0..<Int(methodCount) {
+            for j in 0 ..< selectorsCount {
+                for i in 0 ..< Int(methodCount) {
                     if method_getName(methodList[i]) == selectors[j] {
                         selectorFound = true
                         injectIntoDelegateClass(cls: theClass)
@@ -471,11 +471,11 @@ public class URLSessionInstrumentation {
     }
 
     private func injectDataTaskDidBecomeDownloadTaskIntoDelegateClass(cls: AnyClass) {
-#if swift(<5.7)
+        #if swift(<5.7)
         let selector = #selector(URLSessionDataDelegate.urlSession(_:dataTask:didBecome:)! as (URLSessionDataDelegate) -> (URLSession, URLSessionDataTask, URLSessionDownloadTask) -> Void)
-#else
+        #else
         let selector = #selector(URLSessionDataDelegate.urlSession(_:dataTask:didBecome:) as (URLSessionDataDelegate) -> ((URLSession, URLSessionDataTask, URLSessionDownloadTask) -> Void)?)
-#endif
+        #endif
         guard let original = class_getInstanceMethod(cls, selector) else {
             return
         }
@@ -498,7 +498,7 @@ public class URLSessionInstrumentation {
     private func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         guard configuration.shouldRecordPayload?(session) ?? false else { return }
         let dataCopy = data
-        let taskId = self.idKeyForTask(dataTask)
+        let taskId = idKeyForTask(dataTask)
         queue.sync {
             if (requestMap[taskId]?.request) != nil {
                 createRequestState(for: taskId)
@@ -510,9 +510,9 @@ public class URLSessionInstrumentation {
         }
     }
 
-    private func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+    private func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler _: @escaping (URLSession.ResponseDisposition) -> Void) {
         guard configuration.shouldRecordPayload?(session) ?? false else { return }
-        let taskId = self.idKeyForTask(dataTask)
+        let taskId = idKeyForTask(dataTask)
         queue.sync {
             if (requestMap[taskId]?.request) != nil {
                 createRequestState(for: taskId)
@@ -525,8 +525,8 @@ public class URLSessionInstrumentation {
         }
     }
 
-    private func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        let taskId = self.idKeyForTask(task)
+    private func urlSession(_: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        let taskId = idKeyForTask(task)
         var requestState: NetworkRequestState?
         queue.sync {
             requestState = requestMap[taskId]
@@ -542,14 +542,14 @@ public class URLSessionInstrumentation {
         }
     }
 
-    private func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didBecome downloadTask: URLSessionDownloadTask) {
-        let id = self.idKeyForTask(dataTask)
-        self.setIdKey(value: id, for: downloadTask)
+    private func urlSession(_: URLSession, dataTask: URLSessionDataTask, didBecome downloadTask: URLSessionDownloadTask) {
+        let id = idKeyForTask(dataTask)
+        setIdKey(value: id, for: downloadTask)
     }
 
-    private func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
-        let taskId = self.idKeyForTask(task)
-        if (self.requestMap[taskId]?.request) != nil {
+    private func urlSession(_: URLSession, task: URLSessionTask, didFinishCollecting _: URLSessionTaskMetrics) {
+        let taskId = idKeyForTask(task)
+        if (requestMap[taskId]?.request) != nil {
             /// Code for instrumenting colletion should be written here
             var requestState: NetworkRequestState?
             queue.sync {
@@ -568,7 +568,7 @@ public class URLSessionInstrumentation {
     }
 
     private func urlSessionTaskWillResume(_ task: URLSessionTask) {
-        let taskId = self.idKeyForTask(task)
+        let taskId = idKeyForTask(task)
         if let request = task.currentRequest {
             queue.sync {
                 if requestMap[taskId] == nil {
@@ -619,5 +619,5 @@ public class URLSessionInstrumentation {
 }
 
 class FakeDelegate: NSObject, URLSessionTaskDelegate {
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {}
+    func urlSession(_: URLSession, task _: URLSessionTask, didCompleteWithError _: Error?) {}
 }

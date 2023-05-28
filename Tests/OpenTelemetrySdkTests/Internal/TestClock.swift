@@ -19,7 +19,7 @@ class TestClock: Clock {
     /// Creates a clock with the given time.
     /// - Parameter nanos: the initial time in nanos since epoch.
     init(nanos: UInt64) {
-        currentTimeInterval = Double(nanos) / 1000000000
+        currentTimeInterval = Double(nanos) / 1_000_000_000
     }
 
     /// Creates a clock initialized to a constant non-zero time
@@ -52,6 +52,6 @@ class TestClock: Clock {
     }
 
     var now: Date {
-        return Date(timeIntervalSince1970: currentTimeInterval)
+        Date(timeIntervalSince1970: currentTimeInterval)
     }
 }

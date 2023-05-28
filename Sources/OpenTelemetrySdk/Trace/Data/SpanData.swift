@@ -76,7 +76,7 @@ public struct SpanData: Equatable, Codable {
     public private(set) var totalAttributeCount: Int = 0
 
     public static func == (lhs: SpanData, rhs: SpanData) -> Bool {
-        return lhs.traceId == rhs.traceId &&
+        lhs.traceId == rhs.traceId &&
             lhs.spanId == rhs.spanId &&
             lhs.traceFlags == rhs.traceFlags &&
             lhs.traceState == rhs.traceState &&
@@ -234,9 +234,9 @@ public extension SpanData {
 }
 
 public func == (lhs: SpanData.Link, rhs: SpanData.Link) -> Bool {
-    return lhs.context == rhs.context && lhs.attributes == rhs.attributes
+    lhs.context == rhs.context && lhs.attributes == rhs.attributes
 }
 
 public func == (lhs: [SpanData.Link], rhs: [SpanData.Link]) -> Bool {
-    return lhs.elementsEqual(rhs) { $0.context == $1.context && $0.attributes == $1.attributes }
+    lhs.elementsEqual(rhs) { $0.context == $1.context && $0.attributes == $1.attributes }
 }

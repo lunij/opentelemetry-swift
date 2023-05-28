@@ -1,19 +1,17 @@
 //
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
-// 
+//
 
 import Foundation
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
-
-class DefaultLoggerProviderTests : XCTestCase {
-     
+class DefaultLoggerProviderTests: XCTestCase {
     func testDefaultLoggerProvider() {
-       let logger = DefaultLoggerProvider().get(instrumentationScopeName: "test")
+        let logger = DefaultLoggerProvider().get(instrumentationScopeName: "test")
         XCTAssertIdentical(logger as AnyObject, DefaultLoggerProvider().get(instrumentationScopeName: "other") as AnyObject)
-        
+
         let loggerWithDomain = DefaultLoggerProvider()
             .loggerBuilder(instrumentationScopeName: "Scope")
             .setEventDomain("Domain")
@@ -22,7 +20,7 @@ class DefaultLoggerProviderTests : XCTestCase {
             .setAttributes([:])
             .setInstrumentationVersion("1.0.0")
             .build()
-        
+
         let loggerWithoutDomain = DefaultLoggerProvider()
             .loggerBuilder(instrumentationScopeName: "Scope")
             .setEventDomain("")
@@ -32,7 +30,5 @@ class DefaultLoggerProviderTests : XCTestCase {
             .setInstrumentationVersion("1.0.0")
             .build()
         XCTAssertNotIdentical(loggerWithDomain as AnyObject, loggerWithoutDomain as AnyObject)
-        
     }
-    
 }

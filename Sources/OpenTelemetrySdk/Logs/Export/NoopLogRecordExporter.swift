@@ -5,16 +5,14 @@
 
 import Foundation
 
-public class NoopLogRecordExporter : LogRecordExporter {
+public class NoopLogRecordExporter: LogRecordExporter {
     public static let instance = NoopLogRecordExporter()
 
-    public func export(logRecords: [ReadableLogRecord]) -> ExportResult {
+    public func export(logRecords _: [ReadableLogRecord]) -> ExportResult {
         .success
     }
 
-    public func shutdown() {
-
-    }
+    public func shutdown() {}
 
     public func forceFlush() -> ExportResult {
         .success

@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class ActivityContextManagerTests: XCTestCase {
     let defaultTracer = DefaultTracer.instance
@@ -265,8 +265,8 @@ class ActivityContextManagerTests: XCTestCase {
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, *)
     func testActiveSpanIsKeptPerTask() {
-        let expectation1 = self.expectation(description: "firstSpan created")
-        let expectation2 = self.expectation(description: "secondSpan created")
+        let expectation1 = expectation(description: "firstSpan created")
+        let expectation2 = expectation(description: "secondSpan created")
 
         let parent = defaultTracer.spanBuilder(spanName: "testStartAndEndSpanInAsyncTaskTwice").startSpan()
         ActivityContextManager.instance.setCurrentContextValue(forKey: .span, value: parent)
@@ -294,8 +294,8 @@ class ActivityContextManagerTests: XCTestCase {
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, *)
     func testActiveSpanIsKeptPerTaskAsync() async {
-        let expectation1 = self.expectation(description: "firstSpan created")
-        let expectation2 = self.expectation(description: "secondSpan created")
+        let expectation1 = expectation(description: "firstSpan created")
+        let expectation2 = expectation(description: "secondSpan created")
 
         let parent = defaultTracer.spanBuilder(spanName: "testStartAndEndSpanInAsyncTaskTwice").startSpan()
         ActivityContextManager.instance.setCurrentContextValue(forKey: .span, value: parent)

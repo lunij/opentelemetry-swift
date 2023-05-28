@@ -43,27 +43,27 @@ class PropagatedSpanBuilder: SpanBuilder {
         return self
     }
 
-    @discardableResult public func addLink(spanContext: SpanContext) -> Self {
-        return self
+    @discardableResult public func addLink(spanContext _: SpanContext) -> Self {
+        self
     }
 
-    @discardableResult public func addLink(spanContext: SpanContext, attributes: [String: AttributeValue]) -> Self {
-        return self
+    @discardableResult public func addLink(spanContext _: SpanContext, attributes _: [String: AttributeValue]) -> Self {
+        self
     }
 
-    @discardableResult public func setSpanKind(spanKind: SpanKind) -> Self {
-        return self
+    @discardableResult public func setSpanKind(spanKind _: SpanKind) -> Self {
+        self
     }
 
-    @discardableResult public func setStartTime(time: Date) -> Self {
-        return self
+    @discardableResult public func setStartTime(time _: Date) -> Self {
+        self
     }
 
-    public func setAttribute(key: String, value: AttributeValue) -> Self {
-        return self
+    public func setAttribute(key _: String, value _: AttributeValue) -> Self {
+        self
     }
 
-    func setActive(_ active: Bool) -> Self {
-        return self
+    func setActive(_: Bool) -> Self {
+        self
     }
 }

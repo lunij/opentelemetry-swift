@@ -7,12 +7,12 @@ import Foundation
 import OpenTelemetryApi
 
 public class TracerProviderBuilder {
-    public private(set) var clock : Clock = MillisClock()
-    public private(set) var idGenerator : IdGenerator = RandomIdGenerator()
-    public private(set) var resource : Resource = Resource()
-    public private(set) var spanLimits : SpanLimits = SpanLimits()
-    public private(set) var sampler : Sampler = Samplers.parentBased(root: Samplers.alwaysOn)
-    public private(set) var spanProcessors : [SpanProcessor] = []
+    public private(set) var clock: Clock = MillisClock()
+    public private(set) var idGenerator: IdGenerator = RandomIdGenerator()
+    public private(set) var resource: Resource = .init()
+    public private(set) var spanLimits: SpanLimits = .init()
+    public private(set) var sampler: Sampler = Samplers.parentBased(root: Samplers.alwaysOn)
+    public private(set) var spanProcessors: [SpanProcessor] = []
 
     public init() {}
 
@@ -30,6 +30,7 @@ public class TracerProviderBuilder {
         self.resource = resource
         return self
     }
+
     public func with(spanLimits: SpanLimits) -> Self {
         self.spanLimits = spanLimits
         return self
@@ -51,6 +52,6 @@ public class TracerProviderBuilder {
     }
 
     public func build() -> TracerProviderSdk {
-        return TracerProviderSdk(clock: clock, idGenerator: idGenerator, resource: resource, spanLimits: spanLimits, sampler: sampler, spanProcessors: spanProcessors)
+        TracerProviderSdk(clock: clock, idGenerator: idGenerator, resource: resource, spanLimits: spanLimits, sampler: sampler, spanProcessors: spanProcessors)
     }
 }

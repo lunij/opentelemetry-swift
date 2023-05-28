@@ -45,7 +45,8 @@ public struct W3CBaggagePropagator: TextMapBaggagePropagator {
     public func extract<G>(carrier: [String: String], getter: G) -> Baggage? where G: Getter {
         guard let baggageHeaderCollection = getter.get(carrier: carrier,
                                                        key: W3CBaggagePropagator.headerBaggage),
-            let baggageHeader = baggageHeaderCollection.first else {
+            let baggageHeader = baggageHeaderCollection.first
+        else {
             return nil
         }
         let builder = OpenTelemetry.instance.baggageManager.baggageBuilder()
@@ -65,7 +66,8 @@ public struct W3CBaggagePropagator: TextMapBaggagePropagator {
                 return
             }
             if let key = EntryKey(name: String(keyValue[0])),
-                let value = EntryValue(string: String(keyValue[1])) {
+               let value = EntryValue(string: String(keyValue[1]))
+            {
                 builder.put(key: key, value: value, metadata: EntryMetadata(metadata: metadata))
             }
         }

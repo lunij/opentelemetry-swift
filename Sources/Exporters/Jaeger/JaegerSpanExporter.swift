@@ -28,11 +28,10 @@ public class JaegerSpanExporter: SpanExporter {
     }
 
     public func flush() -> SpanExporterResultCode {
-        return .success
+        .success
     }
 
-    public func shutdown() {
-    }
+    public func shutdown() {}
 }
 
 #endif

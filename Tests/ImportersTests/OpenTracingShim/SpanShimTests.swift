@@ -4,9 +4,9 @@
  */
 
 import OpenTelemetryApi
+import XCTest
 @testable import OpenTelemetrySdk
 @testable import OpenTracingShim
-import XCTest
 
 class SpanShimTests: XCTestCase {
     let tracerProviderSdk = TracerProviderSdk()

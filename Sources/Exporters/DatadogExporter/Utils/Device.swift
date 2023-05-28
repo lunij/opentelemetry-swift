@@ -23,19 +23,20 @@ internal class Device {
     init(
         model: String,
         osName: String,
-        osVersion: String)
-    {
+        osVersion: String
+    ) {
         self.model = model
         self.osName = osName
         self.osVersion = osVersion
     }
 
     #if os(iOS) || targetEnvironment(macCatalyst)
-    convenience init(uiDevice: UIDevice, processInfo: ProcessInfo) {
+    convenience init(uiDevice: UIDevice, processInfo _: ProcessInfo) {
         self.init(
             model: uiDevice.model,
             osName: uiDevice.systemName,
-            osVersion: uiDevice.systemVersion)
+            osVersion: uiDevice.systemVersion
+        )
     }
 
     #elseif os(macOS)
@@ -43,7 +44,8 @@ internal class Device {
         self.init(
             model: "Mac",
             osName: processInfo.hostName,
-            osVersion: processInfo.operatingSystemVersionString)
+            osVersion: processInfo.operatingSystemVersionString
+        )
     }
     #endif
 
@@ -60,13 +62,15 @@ internal class Device {
         return Device(
             model: UIDevice.current.model,
             osName: UIDevice.current.systemName,
-            osVersion: UIDevice.current.systemVersion)
+            osVersion: UIDevice.current.systemVersion
+        )
         #elseif os(watchOS)
         let device = WKInterfaceDevice.current()
         return Device(
             model: device.model,
             osName: device.systemName,
-            osVersion: device.systemVersion)
+            osVersion: device.systemVersion
+        )
         #endif
     }
 }

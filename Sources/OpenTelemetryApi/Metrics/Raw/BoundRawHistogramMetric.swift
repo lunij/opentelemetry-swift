@@ -7,13 +7,12 @@ import Foundation
 
 open class BoundRawHistogramMetric<T> {
     public init() {}
-    
+
     /// record a raw histogarm metric
     /// - Parameters:
     ///     - explicitBoundaries: Array of boundies
     ///     - counts: Array of counts in each bucket
     ///     - startDate: the start of the time range of the histogram
     ///     - endDate : the end of the time range of the histogram
-    open func record(explicitBoundaries: Array<T>, counts: Array<Int>, startDate: Date, endDate: Date, count: Int, sum: T) {}
-    
+    open func record(explicitBoundaries _: [T], counts _: [Int], startDate _: Date, endDate _: Date, count _: Int, sum _: T) {}
 }

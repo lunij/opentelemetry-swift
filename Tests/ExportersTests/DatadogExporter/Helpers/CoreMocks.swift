@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import Foundation
+@testable import DatadogExporter
 
 // MARK: - PerformancePreset Mocks
 
@@ -56,7 +56,7 @@ struct UploadPerformanceMock: UploadPerformancePreset {
 
 extension DataFormat {
     static func mockAny() -> DataFormat {
-        return mockWith()
+        mockWith()
     }
 
     static func mockWith(
@@ -64,7 +64,7 @@ extension DataFormat {
         suffix: String = .mockAny(),
         separator: String = .mockAny()
     ) -> DataFormat {
-        return DataFormat(
+        DataFormat(
             prefix: prefix,
             suffix: suffix,
             separator: separator
@@ -113,7 +113,7 @@ class RelativeDateProvider: DateProvider {
 
 extension RequestBuilder: AnyMockable {
     static func mockAny() -> RequestBuilder {
-        return mockWith()
+        mockWith()
     }
 
     static func mockWith(
@@ -121,19 +121,19 @@ extension RequestBuilder: AnyMockable {
         queryItems: [QueryItem] = [],
         headers: [HTTPHeader] = []
     ) -> RequestBuilder {
-        return RequestBuilder(url: url, queryItems: queryItems, headers: headers)
+        RequestBuilder(url: url, queryItems: queryItems, headers: headers)
     }
 }
 
 extension HTTPClient {
     static func mockAny() -> HTTPClient {
-        return HTTPClient(session: URLSession(configuration: URLSessionConfiguration.default))
+        HTTPClient(session: URLSession(configuration: URLSessionConfiguration.default))
     }
 }
 
 extension Device {
     static func mockAny() -> Device {
-        return .mockWith()
+        .mockWith()
     }
 
     static func mockWith(
@@ -141,7 +141,7 @@ extension Device {
         osName: String = .mockAny(),
         osVersion: String = .mockAny()
     ) -> Device {
-        return Device(
+        Device(
             model: model,
             osName: osName,
             osVersion: osVersion
@@ -152,9 +152,9 @@ extension Device {
 struct DataUploaderMock: DataUploaderType {
     let uploadStatus: DataUploadStatus
 
-    var onUpload: (() -> Void)? = nil
+    var onUpload: (() -> Void)?
 
-    func upload(data: Data) -> DataUploadStatus {
+    func upload(data _: Data) -> DataUploadStatus {
         onUpload?()
         return uploadStatus
     }
@@ -168,8 +168,8 @@ extension DataUploadStatus: RandomMockable {
 
     static func mockWith(
         needsRetry: Bool = .mockAny(),
-        accepted: Bool = true
+        accepted _: Bool = true
     ) -> DataUploadStatus {
-        return DataUploadStatus(needsRetry: needsRetry)
+        DataUploadStatus(needsRetry: needsRetry)
     }
 }

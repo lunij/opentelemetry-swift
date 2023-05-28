@@ -14,15 +14,15 @@ class SpanDataEventTests: XCTestCase {
     static let attributes2 = ["attribute2": AttributeValue.string("value2")]
 
     func testRawTimedEventWithName() {
-        let event = SpanData.Event(name: SpanDataEventTests.eventName, timestamp: Date(timeIntervalSince1970: 1000))
-        XCTAssertEqual(event.timestamp, Date(timeIntervalSince1970: 1000))
+        let event = SpanData.Event(name: SpanDataEventTests.eventName, timestamp: Date(timeIntervalSince1970: 1_000))
+        XCTAssertEqual(event.timestamp, Date(timeIntervalSince1970: 1_000))
         XCTAssertEqual(event.name, SpanDataEventTests.eventName)
         XCTAssertEqual(event.attributes.count, 0)
     }
 
     func testRawTimedEventWithNameAndAttributes() {
-        let event = SpanData.Event(name: SpanDataEventTests.eventName, timestamp: Date(timeIntervalSince1970: 2000), attributes: SpanDataEventTests.attributes)
-        XCTAssertEqual(event.timestamp, Date(timeIntervalSince1970: 2000))
+        let event = SpanData.Event(name: SpanDataEventTests.eventName, timestamp: Date(timeIntervalSince1970: 2_000), attributes: SpanDataEventTests.attributes)
+        XCTAssertEqual(event.timestamp, Date(timeIntervalSince1970: 2_000))
         XCTAssertEqual(event.name, SpanDataEventTests.eventName)
         XCTAssertEqual(event.attributes, SpanDataEventTests.attributes)
     }

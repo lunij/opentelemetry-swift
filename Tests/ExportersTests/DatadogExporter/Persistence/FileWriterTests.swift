@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import XCTest
+@testable import DatadogExporter
 
 class FileWriterTests: XCTestCase {
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
@@ -39,13 +39,13 @@ class FileWriterTests: XCTestCase {
         XCTAssertEqual(try temporaryDirectory.files().count, 1)
         XCTAssertEqual(
             try temporaryDirectory.files()[0].read(),
-            #"{"key1":"value1"},{"key2":"value3"},{"key3":"value3"}"# .utf8Data
+            #"{"key1":"value1"},{"key2":"value3"},{"key3":"value3"}"#.utf8Data
         )
     }
 
     func testGivenErrorVerbosity_whenIndividualDataExceedsMaxWriteSize_itDropsDataAndPrintsError() throws {
-        let expectation1 = self.expectation(description: "write completed")
-        let expectation2 = self.expectation(description: "second write completed")
+        let expectation1 = expectation(description: "write completed")
+        let expectation2 = expectation(description: "second write completed")
 
         let writer = FileWriter(
             dataFormat: .mockWith(prefix: "[", suffix: "]"),
@@ -68,13 +68,13 @@ class FileWriterTests: XCTestCase {
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation1)
         wait(for: [expectation1], timeout: 1)
-        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"# .utf8Data)
+        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"#.utf8Data)
 
         writer.write(value: ["key2": "value3 that makes it exceed 17 bytes"]) // will be dropped
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation2)
         wait(for: [expectation2], timeout: 1)
-        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"# .utf8Data) // same content as before
+        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"#.utf8Data) // same content as before
     }
 
     /// NOTE: Test added after incident-4797

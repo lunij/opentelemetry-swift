@@ -6,8 +6,8 @@
 import OpenTelemetryApi
 import OpenTelemetrySdk
 import Opentracing
-@testable import OpenTracingShim
 import XCTest
+@testable import OpenTracingShim
 
 class TracerShimTests: XCTestCase {
     let tracerProviderSdk = TracerProviderSdk()

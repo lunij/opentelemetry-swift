@@ -14,9 +14,9 @@ public protocol SpanExporter: AnyObject {
     /// - Parameter spans: the list of sampled Spans to be exported.
     @discardableResult func export(spans: [SpanData]) -> SpanExporterResultCode
 
-    ///Exports the collection of sampled Spans that have not yet been exported.
+    /// Exports the collection of sampled Spans that have not yet been exported.
     func flush() -> SpanExporterResultCode
-    
+
     /// Called when TracerSdkFactory.shutdown()} is called, if this SpanExporter is registered
     ///  to a TracerSdkFactory object.
     func shutdown()
@@ -29,7 +29,6 @@ public enum SpanExporterResultCode {
 
     /// The export operation finished with an error.
     case failure
-
 
     /// Merges the current result code with other result code
     /// - Parameter newResultCode: the result code to merge with

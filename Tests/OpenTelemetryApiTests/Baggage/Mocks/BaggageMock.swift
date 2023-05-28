@@ -8,14 +8,14 @@ import Foundation
 
 class BaggageMock: Baggage {
     static func baggageBuilder() -> BaggageBuilder {
-        return EmptyBaggageBuilder()
+        EmptyBaggageBuilder()
     }
 
     func getEntries() -> [Entry] {
-        return [Entry]()
+        [Entry]()
     }
 
-    func getEntryValue(key: EntryKey) -> EntryValue? {
-        return nil
+    func getEntryValue(key _: EntryKey) -> EntryValue? {
+        nil
     }
 }

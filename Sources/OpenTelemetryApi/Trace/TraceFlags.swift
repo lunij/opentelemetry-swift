@@ -24,12 +24,12 @@ public struct TraceFlags: Equatable, CustomStringConvertible, Codable {
 
     /// Returns the one byte representation of the TraceFlags.
     public var byte: UInt8 {
-        return options
+        options
     }
 
     /// Returns the lowercase base16 encoding of this TraceFlags
     public var hexString: String {
-        return String(format: "%02x", options)
+        String(format: "%02x", options)
     }
 
     /// Creates the default TraceFlags
@@ -49,7 +49,8 @@ public struct TraceFlags: Equatable, CustomStringConvertible, Codable {
         let firstIndex = hex.index(hex.startIndex, offsetBy: offset)
         let secondIndex = hex.index(firstIndex, offsetBy: 2)
         guard hex.count >= 2 + offset,
-            let byte = UInt8(hex[firstIndex ..< secondIndex], radix: 16) else {
+              let byte = UInt8(hex[firstIndex ..< secondIndex], radix: 16)
+        else {
             self.init()
             return
         }
@@ -59,7 +60,7 @@ public struct TraceFlags: Equatable, CustomStringConvertible, Codable {
     /// A boolean indicating whether this Span  is part of a sampled trace and data
     /// should be exported to a persistent store.
     public var sampled: Bool {
-        return options & TraceFlags.isSampled != 0
+        options & TraceFlags.isSampled != 0
     }
 
     /// Sets the sampling bit in the options.

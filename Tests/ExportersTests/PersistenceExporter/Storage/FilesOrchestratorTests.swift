@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import XCTest
+@testable import PersistenceExporter
 
 class FilesOrchestratorTests: XCTestCase {
     private let performance: PersistencePerformancePreset = .default
@@ -22,7 +22,7 @@ class FilesOrchestratorTests: XCTestCase {
 
     /// Configures `FilesOrchestrator` under tests.
     private func configureOrchestrator(using dateProvider: DateProvider) -> FilesOrchestrator {
-        return FilesOrchestrator(
+        FilesOrchestrator(
             directory: temporaryDirectory,
             performance: performance,
             dateProvider: dateProvider
@@ -55,7 +55,7 @@ class FilesOrchestratorTests: XCTestCase {
         var nextFile: WritableFile
 
         // use file maximum number of times
-        for _ in (0..<performance.maxObjectsInFile).dropLast() { // skip first use
+        for _ in (0 ..< performance.maxObjectsInFile).dropLast() { // skip first use
             nextFile = try orchestrator.getWritableFile(writeSize: 1)
             XCTAssertEqual(nextFile.name, previousFile.name) // assert it uses same file
             previousFile = nextFile
@@ -117,7 +117,7 @@ class FilesOrchestratorTests: XCTestCase {
     }
 
     func testWhenFilesDirectorySizeIsBig_itKeepsItUnderLimit_byRemovingOldestFilesFirst() throws {
-        let oneMB: UInt64 = 1024 * 1024
+        let oneMB: UInt64 = 1_024 * 1_024
 
         let orchestrator = FilesOrchestrator(
             directory: temporaryDirectory,
@@ -189,7 +189,7 @@ class FilesOrchestratorTests: XCTestCase {
     func testGivenDefaultReadConditions_whenThereAreSeveralFiles_itReturnsTheOldestOne() throws {
         let dateProvider = RelativeDateProvider(advancingBySeconds: 1)
         let orchestrator = configureOrchestrator(using: dateProvider)
-        let fileNames = (0..<4).map { _ in dateProvider.currentDate().toFileName }
+        let fileNames = (0 ..< 4).map { _ in dateProvider.currentDate().toFileName }
         try fileNames.forEach { fileName in _ = try temporaryDirectory.createFile(named: fileName) }
 
         dateProvider.advance(bySeconds: 1 + performance.minFileAgeForRead)
@@ -207,13 +207,13 @@ class FilesOrchestratorTests: XCTestCase {
     func testGivenDefaultReadConditions_whenThereAreSeveralFiles_itExcludesGivenFileNames() throws {
         let dateProvider = RelativeDateProvider(advancingBySeconds: 1)
         let orchestrator = configureOrchestrator(using: dateProvider)
-        let fileNames = (0..<4).map { _ in dateProvider.currentDate().toFileName }
+        let fileNames = (0 ..< 4).map { _ in dateProvider.currentDate().toFileName }
         try fileNames.forEach { fileName in _ = try temporaryDirectory.createFile(named: fileName) }
 
         dateProvider.advance(bySeconds: 1 + performance.minFileAgeForRead)
 
         XCTAssertEqual(
-            orchestrator.getReadableFile(excludingFilesNamed: Set(fileNames[0...2]))?.name,
+            orchestrator.getReadableFile(excludingFilesNamed: Set(fileNames[0 ... 2]))?.name,
             fileNames[3]
         )
     }
@@ -247,15 +247,15 @@ class FilesOrchestratorTests: XCTestCase {
     // swiftlint:disable number_separator
     func testItTurnsFileNameIntoFileCreationDate() {
         XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 0)), "0")
-        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123456)), "123456000")
-        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123456.7)), "123456700")
-        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123456.78)), "123456780")
-        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123456.789)), "123456789")
+        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123_456)), "123456000")
+        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123_456.7)), "123456700")
+        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123_456.78)), "123456780")
+        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123_456.789)), "123456789")
 
         // microseconds rounding
-        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123456.1111)), "123456111")
-        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123456.1115)), "123456112")
-        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123456.1119)), "123456112")
+        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123_456.1111)), "123456111")
+        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123_456.1115)), "123456112")
+        XCTAssertEqual(fileNameFrom(fileCreationDate: Date(timeIntervalSinceReferenceDate: 123_456.1119)), "123456112")
 
         // overflows
         let maxDate = Date(timeIntervalSinceReferenceDate: TimeInterval.greatestFiniteMagnitude)
@@ -266,10 +266,10 @@ class FilesOrchestratorTests: XCTestCase {
 
     func testItTurnsFileCreationDateIntoFileName() {
         XCTAssertEqual(fileCreationDateFrom(fileName: "0"), Date(timeIntervalSinceReferenceDate: 0))
-        XCTAssertEqual(fileCreationDateFrom(fileName: "123456000"), Date(timeIntervalSinceReferenceDate: 123456))
-        XCTAssertEqual(fileCreationDateFrom(fileName: "123456700"), Date(timeIntervalSinceReferenceDate: 123456.7))
-        XCTAssertEqual(fileCreationDateFrom(fileName: "123456780"), Date(timeIntervalSinceReferenceDate: 123456.78))
-        XCTAssertEqual(fileCreationDateFrom(fileName: "123456789"), Date(timeIntervalSinceReferenceDate: 123456.789))
+        XCTAssertEqual(fileCreationDateFrom(fileName: "123456000"), Date(timeIntervalSinceReferenceDate: 123_456))
+        XCTAssertEqual(fileCreationDateFrom(fileName: "123456700"), Date(timeIntervalSinceReferenceDate: 123_456.7))
+        XCTAssertEqual(fileCreationDateFrom(fileName: "123456780"), Date(timeIntervalSinceReferenceDate: 123_456.78))
+        XCTAssertEqual(fileCreationDateFrom(fileName: "123456789"), Date(timeIntervalSinceReferenceDate: 123_456.789))
 
         // ignores invalid names
         let invalidFileName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

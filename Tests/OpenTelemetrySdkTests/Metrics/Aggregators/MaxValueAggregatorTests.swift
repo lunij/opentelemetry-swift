@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 final class MaxValueAggregatorTests: XCTestCase {
     public func testAsyncSafety() {
@@ -14,17 +14,17 @@ final class MaxValueAggregatorTests: XCTestCase {
         XCTAssertEqual(sum.sum, 0)
 
         DispatchQueue.concurrentPerform(iterations: 10) { _ in
-            for i in 0 ..< 10000 {
+            for i in 0 ..< 10_000 {
                 agg.update(value: i)
             }
         }
 
-        agg.update(value: 10001)
+        agg.update(value: 10_001)
 
         agg.checkpoint()
         sum = agg.toMetricData() as! SumData<Int>
 
-        XCTAssertEqual(sum.sum, 10001)
+        XCTAssertEqual(sum.sum, 10_001)
     }
 
     public func testMaxAggPeriod() {

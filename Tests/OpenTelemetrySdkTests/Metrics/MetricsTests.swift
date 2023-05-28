@@ -4,8 +4,8 @@
  */
 
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 final class MetricsTests: XCTestCase {
     func testCounterSendsAggregateToRegisteredProcessor() {
@@ -126,7 +126,6 @@ final class MetricsTests: XCTestCase {
         observerMetric.observe(value: 300, labels: labels2)
     }
 
-
     func testDoubleObserverSendsAggregateToRegisteredProcessor() {
         let testProcessor = TestMetricProcessor()
         let meter = MeterProviderSdk(metricProcessor: testProcessor, metricExporter: NoopMetricExporter()).get(instrumentationName: "scope1") as! MeterSdk
@@ -163,28 +162,25 @@ final class MetricsTests: XCTestCase {
         observerMetric.observe(value: 200, labels: labels2)
         observerMetric.observe(value: 300, labels: labels2)
     }
-    
+
     func testRawIntCounter() {
         let testProcessor = TestMetricProcessor()
         let meter = MeterProviderSdk(metricProcessor: testProcessor, metricExporter: NoopMetricExporter()).get(instrumentationName: "scope1") as! MeterSdk
         _ = meter.createRawIntCounter(name: "testRaw")
-        
+
         meter.collect()
         XCTAssertEqual(testProcessor.metrics.count, 1)
 
         let metric = testProcessor.metrics[0]
         XCTAssertEqual("testRaw", metric.name)
         XCTAssertEqual("scope1", metric.namespace)
-
-        
-        
     }
-    
+
     func testRawDoubleCounter() {
         let testProcessor = TestMetricProcessor()
         let meter = MeterProviderSdk(metricProcessor: testProcessor, metricExporter: NoopMetricExporter()).get(instrumentationName: "scope1") as! MeterSdk
         _ = meter.createRawDoubleCounter(name: "testRaw")
-        
+
         meter.collect()
         XCTAssertEqual(testProcessor.metrics.count, 1)
 
@@ -192,12 +188,12 @@ final class MetricsTests: XCTestCase {
         XCTAssertEqual("testRaw", metric.name)
         XCTAssertEqual("scope1", metric.namespace)
     }
-    
+
     func testRawDoubleHitsogram() {
         let testProcessor = TestMetricProcessor()
         let meter = MeterProviderSdk(metricProcessor: testProcessor, metricExporter: NoopMetricExporter()).get(instrumentationName: "scope1") as! MeterSdk
         _ = meter.createRawDoubleHistogram(name: "testRaw")
-        
+
         meter.collect()
         XCTAssertEqual(testProcessor.metrics.count, 1)
 
@@ -205,12 +201,12 @@ final class MetricsTests: XCTestCase {
         XCTAssertEqual("testRaw", metric.name)
         XCTAssertEqual("scope1", metric.namespace)
     }
-    
+
     func testRawIntHitsogram() {
         let testProcessor = TestMetricProcessor()
         let meter = MeterProviderSdk(metricProcessor: testProcessor, metricExporter: NoopMetricExporter()).get(instrumentationName: "scope1") as! MeterSdk
         _ = meter.createRawIntHistogram(name: "testRaw")
-        
+
         meter.collect()
         XCTAssertEqual(testProcessor.metrics.count, 1)
 

@@ -10,7 +10,8 @@ public struct EntryMetadata: Equatable {
 
     public init?(metadata: String?) {
         guard let metadata = metadata?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines),
-              metadata.count > 0 else {
+              metadata.count > 0
+        else {
             return nil
         }
         self.metadata = metadata

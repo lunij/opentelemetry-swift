@@ -18,7 +18,8 @@ class PushMetricController {
         metricPushTimer.setEventHandler { [weak self] in
             autoreleasepool {
                 guard let self = self,
-                      let meterProvider = self.meterProvider else {
+                      let meterProvider = self.meterProvider
+                else {
                     return
                 }
                 if shouldCancel?() ?? false {

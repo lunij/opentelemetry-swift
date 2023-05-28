@@ -6,7 +6,7 @@ import Foundation
 import OpenTelemetryApi
 import OpenTelemetrySdk
 
-public struct MetricsAdapter {
+public enum MetricsAdapter {
     public static func toProtoResourceMetrics(metricDataList: [Metric]) -> [Opentelemetry_Proto_Metrics_V1_ResourceMetrics] {
         let resourceAndScopeMap = groupByResouceAndScope(metricDataList: metricDataList)
         var resourceMetrics = [Opentelemetry_Proto_Metrics_V1_ResourceMetrics]()
@@ -15,7 +15,7 @@ public struct MetricsAdapter {
             var instrumentationScopeMetrics = [Opentelemetry_Proto_Metrics_V1_ScopeMetrics]()
             resMap.value.forEach { instScope in
                 var protoInst =
-                Opentelemetry_Proto_Metrics_V1_ScopeMetrics()
+                    Opentelemetry_Proto_Metrics_V1_ScopeMetrics()
                 protoInst.scope =
                     CommonAdapter.toProtoInstrumentationScope(instrumentationScopeInfo: instScope.key)
                 instScope.value.forEach {
@@ -179,14 +179,14 @@ public struct MetricsAdapter {
                 protoDataPoint.timeUnixNano = histogramData.timestamp.timeIntervalSince1970.toNanoseconds
                 protoDataPoint.explicitBounds = histogramData.buckets.boundaries.map { Double($0) }
                 protoDataPoint.bucketCounts = histogramData.buckets.counts.map { UInt64($0) }
-                
+
                 histogramData.labels.forEach {
                     var kvp = Opentelemetry_Proto_Common_V1_KeyValue()
                     kvp.key = $0.key
                     kvp.value.stringValue = $0.value
                     protoDataPoint.attributes.append(kvp)
                 }
-                
+
                 protoMetric.histogram.aggregationTemporality = .cumulative
                 protoMetric.histogram.dataPoints.append(protoDataPoint)
             case .doubleHistogram:
@@ -200,14 +200,14 @@ public struct MetricsAdapter {
                 protoDataPoint.timeUnixNano = histogramData.timestamp.timeIntervalSince1970.toNanoseconds
                 protoDataPoint.explicitBounds = histogramData.buckets.boundaries.map { Double($0) }
                 protoDataPoint.bucketCounts = histogramData.buckets.counts.map { UInt64($0) }
-                
+
                 histogramData.labels.forEach {
                     var kvp = Opentelemetry_Proto_Common_V1_KeyValue()
                     kvp.key = $0.key
                     kvp.value.stringValue = $0.value
                     protoDataPoint.attributes.append(kvp)
                 }
-                
+
                 protoMetric.histogram.aggregationTemporality = .cumulative
                 protoMetric.histogram.dataPoints.append(protoDataPoint)
             }

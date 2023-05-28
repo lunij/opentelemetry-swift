@@ -11,7 +11,7 @@ import Thrift
 
 public class Sender {
     private let host: String
-    private let port = 6832
+    private let port = 6_832
 
     lazy var address: sockaddr_storage? = {
         guard let addresses = try? addressesFor(host: host, port: port) else {
@@ -36,7 +36,7 @@ public class Sender {
             return false
         }
 
-        guard let address = self.address else {
+        guard let address = address else {
             return false
         }
 
@@ -49,7 +49,7 @@ public class Sender {
         }
 
         let sendResult = transport.writeBuffer.withUnsafeBytes { (rawBufferPointer: UnsafeRawBufferPointer) -> Int in
-            address.withSockAddr { (sa, saLen) -> Int in
+            address.withSockAddr { sa, saLen -> Int in
                 sendto(fd, rawBufferPointer.baseAddress, transport.writeBuffer.count, 0, sa, saLen)
             }
         }

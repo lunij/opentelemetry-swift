@@ -13,7 +13,7 @@ internal class SpansExporter {
     let tracesUpload: FeatureUpload
 
     init(config: ExporterConfiguration) throws {
-        self.configuration = config
+        configuration = config
 
         let filesOrchestrator = FilesOrchestrator(
             directory: try Directory(withSubdirectoryPath: tracesDirectory),
@@ -48,7 +48,7 @@ internal class SpansExporter {
                 .ddAPIKeyHeader(apiKey: config.apiKey),
                 .ddEVPOriginHeader(source: configuration.source),
                 .ddEVPOriginVersionHeader(version: configuration.version),
-                .ddRequestIDHeader(),
+                .ddRequestIDHeader()
             ] + (configuration.payloadCompression ? [RequestBuilder.HTTPHeader.contentEncodingHeader(contentEncoding: .deflate)] : [])
         )
 

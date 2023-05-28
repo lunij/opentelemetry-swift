@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 final class DefaultMeterProviderTests: XCTestCase {
     override func setUp() {
@@ -60,69 +60,68 @@ final class DefaultMeterProviderTests: XCTestCase {
 
 class TestMeter: MeterProvider {
     func get(instrumentationName _: String, instrumentationVersion _: String?) -> Meter {
-        return TestNoopMeter()
+        TestNoopMeter()
     }
 }
 
 class TestNoopMeter: Meter {
-    func createRawDoubleHistogram(name: String) -> AnyRawHistogramMetric<Double> {
-        return AnyRawHistogramMetric<Double>(NoopRawHistogramMetric<Double>())
+    func createRawDoubleHistogram(name _: String) -> AnyRawHistogramMetric<Double> {
+        AnyRawHistogramMetric<Double>(NoopRawHistogramMetric<Double>())
     }
-    
-    func createRawIntHistogram(name: String) -> AnyRawHistogramMetric<Int> {
-        return AnyRawHistogramMetric<Int>(NoopRawHistogramMetric<Int>())
 
+    func createRawIntHistogram(name _: String) -> AnyRawHistogramMetric<Int> {
+        AnyRawHistogramMetric<Int>(NoopRawHistogramMetric<Int>())
     }
-    
-    func createRawDoubleCounter(name: String) -> AnyRawCounterMetric<Double> {
-            return AnyRawCounterMetric<Double>(NoopRawCounterMetric<Double>())
+
+    func createRawDoubleCounter(name _: String) -> AnyRawCounterMetric<Double> {
+        AnyRawCounterMetric<Double>(NoopRawCounterMetric<Double>())
     }
-    
-    func createRawIntCounter(name: String) -> AnyRawCounterMetric<Int> {
-        return AnyRawCounterMetric<Int>(NoopRawCounterMetric<Int>())
+
+    func createRawIntCounter(name _: String) -> AnyRawCounterMetric<Int> {
+        AnyRawCounterMetric<Int>(NoopRawCounterMetric<Int>())
     }
-    
+
     func createIntCounter(name _: String, monotonic _: Bool) -> AnyCounterMetric<Int> {
-        return AnyCounterMetric<Int>(NoopCounterMetric<Int>())
+        AnyCounterMetric<Int>(NoopCounterMetric<Int>())
     }
 
     func createDoubleCounter(name _: String, monotonic _: Bool) -> AnyCounterMetric<Double> {
-        return AnyCounterMetric<Double>(NoopCounterMetric<Double>())
+        AnyCounterMetric<Double>(NoopCounterMetric<Double>())
     }
 
     func createIntMeasure(name _: String, absolute _: Bool) -> AnyMeasureMetric<Int> {
-        return AnyMeasureMetric<Int>(NoopMeasureMetric<Int>())
+        AnyMeasureMetric<Int>(NoopMeasureMetric<Int>())
     }
 
     func createDoubleMeasure(name _: String, absolute _: Bool) -> AnyMeasureMetric<Double> {
-        return AnyMeasureMetric<Double>(NoopMeasureMetric<Double>())
+        AnyMeasureMetric<Double>(NoopMeasureMetric<Double>())
     }
-    
-    func createIntHistogram(name: String, explicitBoundaries: Array<Int>? = nil, absolute: Bool) -> AnyHistogramMetric<Int> {
-        return AnyHistogramMetric<Int>(NoopHistogramMetric<Int>())
+
+    func createIntHistogram(name _: String, explicitBoundaries _: [Int]? = nil, absolute _: Bool) -> AnyHistogramMetric<Int> {
+        AnyHistogramMetric<Int>(NoopHistogramMetric<Int>())
     }
-    
-    func createDoubleHistogram(name: String, explicitBoundaries: Array<Double>? = nil, absolute: Bool) -> AnyHistogramMetric<Double> {
-        return AnyHistogramMetric<Double>(NoopHistogramMetric<Double>())
+
+    func createDoubleHistogram(name _: String, explicitBoundaries _: [Double]? = nil, absolute _: Bool) -> AnyHistogramMetric<Double> {
+        AnyHistogramMetric<Double>(NoopHistogramMetric<Double>())
     }
 
     func createIntObserver(name _: String, absolute _: Bool, callback _: @escaping (IntObserverMetric) -> Void) -> IntObserverMetric {
-        return NoopIntObserverMetric()
+        NoopIntObserverMetric()
     }
 
     func createDoubleObserver(name _: String, absolute _: Bool, callback _: @escaping (DoubleObserverMetric) -> Void) -> DoubleObserverMetric {
-        return NoopDoubleObserverMetric()
+        NoopDoubleObserverMetric()
     }
 
     func createIntObservableGauge(name _: String, callback _: @escaping (IntObserverMetric) -> Void) -> IntObserverMetric {
-        return NoopIntObserverMetric()
+        NoopIntObserverMetric()
     }
 
     func createDoubleObservableGauge(name _: String, callback _: @escaping (DoubleObserverMetric) -> Void) -> DoubleObserverMetric {
-        return NoopDoubleObserverMetric()
+        NoopDoubleObserverMetric()
     }
 
     func getLabelSet(labels _: [String: String]) -> LabelSet {
-        return LabelSet.empty
+        LabelSet.empty
     }
 }

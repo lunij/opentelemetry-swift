@@ -4,8 +4,8 @@
 //
 
 import Foundation
-import OpenTelemetrySdk
 import OpenTelemetryProtocolExporterCommon
+import OpenTelemetrySdk
 
 public func defaultOltpHttpTracesEndpoint() -> URL {
     URL(string: "http://localhost:4318/v1/traces")!
@@ -32,7 +32,7 @@ public class OtlpHttpTraceExporter: OtlpHttpExporterBase, SpanExporter {
             switch result {
             case .success:
                 break
-            case .failure(let error):
+            case let .failure(error):
                 self?.pendingSpans.append(contentsOf: sendingSpans)
                 print(error)
             }
@@ -53,7 +53,7 @@ public class OtlpHttpTraceExporter: OtlpHttpExporterBase, SpanExporter {
                 switch result {
                 case .success:
                     break
-                case .failure(let error):
+                case let .failure(error):
                     print(error)
                     resultValue = .failure
                 }

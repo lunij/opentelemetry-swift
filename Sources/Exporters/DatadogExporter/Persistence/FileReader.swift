@@ -28,7 +28,7 @@ internal final class FileReader {
     // MARK: - Reading batches
 
     func readNextBatch() -> Batch? {
-        if let file = orchestrator.getReadableFile(excludingFilesNamed: Set(filesRead.map { $0.name })) {
+        if let file = orchestrator.getReadableFile(excludingFilesNamed: Set(filesRead.map(\.name))) {
             do {
                 let fileData = try file.read()
                 let batchData = dataFormat.prefixData + fileData + dataFormat.suffixData
@@ -44,9 +44,9 @@ internal final class FileReader {
 
     /// This method  gets remaining files at once, and process each file after with the block passed.
     /// Currently called from flush method
-    func onRemainingBatches(process: (Batch) -> ()) -> Bool {
+    func onRemainingBatches(process: (Batch) -> Void) -> Bool {
         do {
-            try orchestrator.getAllFiles(excludingFilesNamed: Set(filesRead.map { $0.name }))?.forEach {
+            try orchestrator.getAllFiles(excludingFilesNamed: Set(filesRead.map(\.name)))?.forEach {
                 let fileData = try $0.read()
                 let batchData = dataFormat.prefixData + fileData + dataFormat.suffixData
                 process(Batch(data: batchData, file: $0))

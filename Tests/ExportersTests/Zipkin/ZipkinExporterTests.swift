@@ -5,8 +5,8 @@
 
 import Foundation
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 @testable import ZipkinExporter
 
 class ZipkinExporterTests: XCTestCase {
@@ -21,7 +21,7 @@ class ZipkinExporterTests: XCTestCase {
 
         let span = spans[0]
 
-        let timestamp = span.startTime.timeIntervalSince1970 * 1000000
+        let timestamp = span.startTime.timeIntervalSince1970 * 1_000_000
 
         var ipInformation = ""
         if let ipv4 = exporter.localEndPoint.ipv4 {

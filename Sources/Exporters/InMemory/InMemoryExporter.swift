@@ -13,7 +13,7 @@ public class InMemoryExporter: SpanExporter {
     public init() {}
 
     public func getFinishedSpanItems() -> [SpanData] {
-        return finishedSpanItems
+        finishedSpanItems
     }
 
     public func export(spans: [SpanData]) -> SpanExporterResultCode {

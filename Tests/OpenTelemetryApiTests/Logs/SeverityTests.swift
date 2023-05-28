@@ -1,20 +1,19 @@
 //
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
-// 
+//
 
 import Foundation
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
-
-class SeverityTests : XCTestCase {
+class SeverityTests: XCTestCase {
     func testSeverity() {
         XCTAssertGreaterThan(Severity.trace2, Severity.trace)
         XCTAssertGreaterThan(Severity.trace3, Severity.trace)
         XCTAssertGreaterThan(Severity.trace4, Severity.trace)
         XCTAssertGreaterThan(Severity.fatal, Severity.info)
-        
+
         XCTAssertEqual(Severity.trace.description, "TRACE")
         XCTAssertEqual(Severity.trace2.description, "TRACE2")
         XCTAssertEqual(Severity.trace3.description, "TRACE3")
@@ -39,6 +38,5 @@ class SeverityTests : XCTestCase {
         XCTAssertEqual(Severity.fatal2.description, "FATAL2")
         XCTAssertEqual(Severity.fatal3.description, "FATAL3")
         XCTAssertEqual(Severity.fatal4.description, "FATAL4")
-
     }
 }

@@ -11,12 +11,14 @@ struct ZipkinConversionExtension {
     static let statusCode = "otel.status_code"
     static let statusErrorDescription = "error"
 
-    static let remoteEndpointServiceNameKeyResolution = ["peer.service": 0,
-                                                         "net.peer.name": 1,
-                                                         "peer.hostname": 2,
-                                                         "peer.address": 2,
-                                                         "http.host": 3,
-                                                         "db.instance": 4]
+    static let remoteEndpointServiceNameKeyResolution = [
+        "peer.service": 0,
+        "net.peer.name": 1,
+        "peer.hostname": 2,
+        "peer.address": 2,
+        "http.host": 3,
+        "db.instance": 4
+    ]
 
     static var localEndpointCache = [String: ZipkinEndpoint]()
     static var remoteEndpointCache = [String: ZipkinEndpoint]()
@@ -92,7 +94,7 @@ struct ZipkinConversionExtension {
     }
 
     static func EncodeSpanId(spanId: SpanId) -> String {
-        return spanId.hexString
+        spanId.hexString
     }
 
     private static func EncodeTraceId(traceId: TraceId, useShortTraceIds: Bool) -> String {
@@ -119,7 +121,7 @@ struct ZipkinConversionExtension {
     }
 
     private static func processEvents(event: SpanData.Event) -> ZipkinAnnotation {
-        return ZipkinAnnotation(timestamp: event.timestamp.timeIntervalSince1970.toMicroseconds, value: event.name)
+        ZipkinAnnotation(timestamp: event.timestamp.timeIntervalSince1970.toMicroseconds, value: event.name)
     }
 
     private static func processAttributes(state: inout AttributeEnumerationState, key: String, value: AttributeValue) {

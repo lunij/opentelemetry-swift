@@ -15,9 +15,9 @@ internal struct RequestBuilder {
 
         var urlQueryItem: URLQueryItem {
             switch self {
-            case .ddsource(let source):
+            case let .ddsource(source):
                 return URLQueryItem(name: "ddsource", value: source)
-            case .ddtags(let tags):
+            case let .ddtags(tags):
                 return URLQueryItem(name: "ddtags", value: tags.joined(separator: ","))
             }
         }
@@ -29,7 +29,7 @@ internal struct RequestBuilder {
     }
 
     enum ContentEncoding: String {
-        case deflate = "deflate"
+        case deflate
     }
 
     struct HTTPHeader {
@@ -40,7 +40,6 @@ internal struct RequestBuilder {
         static let ddEVPOriginHeaderField = "DD-EVP-ORIGIN"
         static let ddEVPOriginVersionHeaderField = "DD-EVP-ORIGIN-VERSION"
         static let ddRequestIDHeaderField = "DD-REQUEST-ID"
-
 
         enum Value {
             /// If the header's value is constant.
@@ -56,12 +55,12 @@ internal struct RequestBuilder {
 
         /// Standard "Content-Type" header.
         static func contentTypeHeader(contentType: ContentType) -> HTTPHeader {
-            return HTTPHeader(field: contentTypeHeaderField, value: .constant(contentType.rawValue))
+            HTTPHeader(field: contentTypeHeaderField, value: .constant(contentType.rawValue))
         }
 
         /// Standard "User-Agent" header.
         static func userAgentHeader(appName: String, appVersion: String, device: Device) -> HTTPHeader {
-            return HTTPHeader(
+            HTTPHeader(
                 field: userAgentHeaderField,
                 value: .constant("\(appName)/\(appVersion) CFNetwork (\(device.model); \(device.osName)/\(device.osVersion))")
             )
@@ -69,29 +68,29 @@ internal struct RequestBuilder {
 
         /// Standard "Content-Encoding" header.
         static func contentEncodingHeader(contentEncoding: ContentEncoding) -> HTTPHeader {
-            return HTTPHeader(field: contentEncodingHeaderField, value: .constant(contentEncoding.rawValue))
+            HTTPHeader(field: contentEncodingHeaderField, value: .constant(contentEncoding.rawValue))
         }
 
         // MARK: - Datadog Headers
 
         /// Datadog request authentication header.
         static func ddAPIKeyHeader(apiKey: String) -> HTTPHeader {
-            return HTTPHeader(field: ddAPIKeyHeaderField, value: .constant(apiKey))
+            HTTPHeader(field: ddAPIKeyHeaderField, value: .constant(apiKey))
         }
 
         /// An observability and troubleshooting Datadog header for tracking the origin which is sending the request.
         static func ddEVPOriginHeader(source: String) -> HTTPHeader {
-            return HTTPHeader(field: ddEVPOriginHeaderField, value: .constant(source))
+            HTTPHeader(field: ddEVPOriginHeaderField, value: .constant(source))
         }
 
         /// An observability and troubleshooting Datadog header for tracking the origin which is sending the request.
         static func ddEVPOriginVersionHeader(version: String) -> HTTPHeader {
-            return HTTPHeader(field: ddEVPOriginVersionHeaderField, value: .constant(version))
+            HTTPHeader(field: ddEVPOriginVersionHeaderField, value: .constant(version))
         }
 
         /// An optional Datadog header for debugging Intake requests by their ID.
         static func ddRequestIDHeader() -> HTTPHeader {
-            return HTTPHeader(field: ddRequestIDHeaderField, value: .dynamic { UUID().uuidString })
+            HTTPHeader(field: ddRequestIDHeaderField, value: .dynamic { UUID().uuidString })
         }
     }
 
@@ -108,16 +107,16 @@ internal struct RequestBuilder {
         var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
 
         if !queryItems.isEmpty {
-            urlComponents?.queryItems = queryItems.map { $0.urlQueryItem }
+            urlComponents?.queryItems = queryItems.map(\.urlQueryItem)
         }
 
         var precomputedHeaders: [String: String] = [:]
         var computedHeaders: [String: () -> String] = [:]
         headers.forEach { header in
             switch header.value {
-            case .constant(let value):
+            case let .constant(value):
                 precomputedHeaders[header.field] = value
-            case .dynamic(let value):
+            case let .dynamic(value):
                 computedHeaders[header.field] = value
             }
         }

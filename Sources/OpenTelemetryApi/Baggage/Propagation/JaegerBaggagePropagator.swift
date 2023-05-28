@@ -24,7 +24,7 @@ public class JaegerBaggagePropagator: TextMapBaggagePropagator {
         }
     }
 
-    public func extract<G>(carrier: [String: String], getter: G) -> Baggage? where G: Getter {
+    public func extract<G>(carrier: [String: String], getter _: G) -> Baggage? where G: Getter {
         let builder = OpenTelemetry.instance.baggageManager.baggageBuilder()
 
         carrier.forEach {

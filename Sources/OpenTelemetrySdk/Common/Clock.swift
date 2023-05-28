@@ -13,9 +13,9 @@ public protocol Clock: AnyObject {
 }
 
 public extension Clock {
-    var nanoTime: UInt64 { return now.timeIntervalSince1970.toNanoseconds }
+    var nanoTime: UInt64 { now.timeIntervalSince1970.toNanoseconds }
 }
 
 public func == (lhs: Clock, rhs: Clock) -> Bool {
-    return lhs.now == rhs.now
+    lhs.now == rhs.now
 }

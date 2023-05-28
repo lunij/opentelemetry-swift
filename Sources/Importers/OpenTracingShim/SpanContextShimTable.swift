@@ -36,7 +36,7 @@ public class SpanContextShimTable {
     }
 
     public func create(spanShim: SpanShim) -> SpanContextShim {
-        return create(spanShim: spanShim, distContext: spanShim.telemetryInfo.emptyBaggage)
+        create(spanShim: spanShim, distContext: spanShim.telemetryInfo.emptyBaggage)
     }
 
     @discardableResult public func create(spanShim: SpanShim, distContext: Baggage?) -> SpanContextShim {

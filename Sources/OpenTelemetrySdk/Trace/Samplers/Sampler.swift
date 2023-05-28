@@ -15,12 +15,14 @@ public protocol Sampler: AnyObject, CustomStringConvertible {
     ///     the parentContext, unless this is a root span.
     ///   - name: he name of the new Span.
     ///   - parentLinks: the parentLinks associated with the new Span.
-    func shouldSample(parentContext: SpanContext?,
-                      traceId: TraceId,
-                      name: String,
-                      kind: SpanKind,
-                      attributes: [String:AttributeValue],
-                      parentLinks: [SpanData.Link]) -> Decision
+    func shouldSample(
+        parentContext: SpanContext?,
+        traceId: TraceId,
+        name: String,
+        kind: SpanKind,
+        attributes: [String: AttributeValue],
+        parentLinks: [SpanData.Link]
+    ) -> Decision
 }
 
 /// Sampling decision returned by Sampler.shouldSample(SpanContext, TraceId, SpanId, String, Array).

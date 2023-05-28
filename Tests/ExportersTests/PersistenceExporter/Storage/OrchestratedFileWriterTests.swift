@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import XCTest
+@testable import PersistenceExporter
 
 class OrchestratedFileWriterTests: XCTestCase {
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
@@ -30,15 +30,15 @@ class OrchestratedFileWriterTests: XCTestCase {
         )
 
         var data = Data()
-        
+
         var value = "value1"
         writer.write(data: value.utf8Data)
         data.append(value.utf8Data)
-        
+
         value = "value2"
         writer.write(data: value.utf8Data)
         data.append(value.utf8Data)
-        
+
         value = "value3"
         writer.write(data: value.utf8Data)
         data.append(value.utf8Data)
@@ -50,8 +50,8 @@ class OrchestratedFileWriterTests: XCTestCase {
     }
 
     func testGivenErrorVerbosity_whenIndividualDataExceedsMaxWriteSize_itDropsDataAndPrintsError() throws {
-        let expectation1 = self.expectation(description: "write completed")
-        let expectation2 = self.expectation(description: "second write completed")
+        let expectation1 = expectation(description: "write completed")
+        let expectation2 = expectation(description: "second write completed")
 
         let writer = OrchestratedFileWriter(
             orchestrator: FilesOrchestrator(

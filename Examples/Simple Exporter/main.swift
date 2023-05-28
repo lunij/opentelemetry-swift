@@ -41,12 +41,10 @@ OpenTelemetry.registerTracerProvider(tracerProvider:
 
 tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: instrumentationScopeName, instrumentationVersion: instrumentationScopeVersion) as! TracerSdk
 
-
 if #available(iOS 12.0, macOS 10.14, *) {
     let tracerProviderSDK = OpenTelemetry.instance.tracerProvider as? TracerProviderSdk
     tracerProviderSDK?.addSpanProcessor(SignPostIntegration())
 }
-
 
 func simpleSpan() {
     let span = tracer.spanBuilder(spanName: "SimpleSpan").setSpanKind(spanKind: .client).startSpan()

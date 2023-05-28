@@ -26,7 +26,7 @@ let instrumentationScopeName = "OTLPExporter"
 let instrumentationScopeVersion = "semver:0.1.0"
 
 let configuration = ClientConnection.Configuration.default(
-    target: .hostAndPort("localhost", 4317),
+    target: .hostAndPort("localhost", 4_317),
     eventLoopGroup: MultiThreadedEventLoopGroup(numberOfThreads: 1)
 )
 let client = ClientConnection(configuration: configuration)
@@ -44,7 +44,6 @@ OpenTelemetry.registerTracerProvider(tracerProvider:
 
 let tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: instrumentationScopeName, instrumentationVersion: instrumentationScopeVersion)
 
-
 if #available(macOS 10.14, *), #available(iOS 12.0, *) {
     let tracerProviderSDK = OpenTelemetry.instance.tracerProvider as? TracerProviderSdk
     tracerProviderSDK?.addSpanProcessor(SignPostIntegration())
@@ -54,7 +53,7 @@ func createSpans() {
     let parentSpan1 = tracer.spanBuilder(spanName: "Main").setSpanKind(spanKind: .client).startSpan()
     parentSpan1.setAttribute(key: sampleKey, value: sampleValue)
     OpenTelemetry.instance.contextProvider.setActiveSpan(parentSpan1)
-    for _ in 1...3 {
+    for _ in 1 ... 3 {
         doWork()
     }
     Thread.sleep(forTimeInterval: 0.5)
@@ -62,7 +61,7 @@ func createSpans() {
     let parentSpan2 = tracer.spanBuilder(spanName: "Another").setSpanKind(spanKind: .client).setActive(true).startSpan()
     parentSpan2.setAttribute(key: sampleKey, value: sampleValue)
     // do more Work
-    for _ in 1...3 {
+    for _ in 1 ... 3 {
         doWork()
     }
     Thread.sleep(forTimeInterval: 0.5)
@@ -88,7 +87,6 @@ let meterProvider = MeterProviderSdk(metricProcessor: processor, metricExporter:
 
 OpenTelemetry.registerMeterProvider(meterProvider: meterProvider)
 
-
 let labels1 = ["dim1": "value1"]
 
 var meter = meterProvider.get(instrumentationName: "otlp_example_meter'")
@@ -105,7 +103,7 @@ var exampleObserver = meter.createIntObserver(name: "otlp_example_observation") 
     observer.observe(value: Int(taskInfo.resident_size), labels: labels1)
 }
 
-for _ in 1...3000 {
+for _ in 1 ... 3_000 {
     exampleCounter.add(value: 1, labelset: meter.getLabelSet(labels: labels1))
     exampleMeasure.record(value: 100, labelset: meter.getLabelSet(labels: labels1))
     exampleMeasure.record(value: 500, labelset: meter.getLabelSet(labels: labels1))

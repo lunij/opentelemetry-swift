@@ -59,18 +59,19 @@ struct PrometheusMetric {
     }
 
     private static func getSafeMetricName(name: String) -> String {
-        return getSafeName(name: name, firstCharNameCharset: firstCharacterNameCharset, charNameCharset: nameCharset)
+        getSafeName(name: name, firstCharNameCharset: firstCharacterNameCharset, charNameCharset: nameCharset)
     }
 
     private static func getSafeLabelName(name: String) -> String {
-        return getSafeName(name: name, firstCharNameCharset: firstCharacterLabelCharset, charNameCharset: labelCharset)
+        getSafeName(name: name, firstCharNameCharset: firstCharacterLabelCharset, charNameCharset: labelCharset)
     }
 
     private static func getSafeName(name: String, firstCharNameCharset: CharacterSet, charNameCharset: CharacterSet) -> String {
         var output = name.replaceCharactersFromSet(characterSet: charNameCharset.inverted, replacementString: "_")
 
         if let first = output.unicodeScalars.first,
-            !firstCharNameCharset.contains(first) {
+           !firstCharNameCharset.contains(first)
+        {
             output = "_" + output.dropFirst()
         }
         return output
@@ -98,6 +99,6 @@ struct PrometheusValue {
 
 extension String {
     func replaceCharactersFromSet(characterSet: CharacterSet, replacementString: String = "") -> String {
-        return components(separatedBy: characterSet).joined(separator: replacementString)
+        components(separatedBy: characterSet).joined(separator: replacementString)
     }
 }

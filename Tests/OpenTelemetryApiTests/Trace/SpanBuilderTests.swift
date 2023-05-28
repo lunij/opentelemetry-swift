@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
-fileprivate func createRandomPropagatedSpan() -> PropagatedSpan {
-    return PropagatedSpan(context: SpanContext.create(traceId: TraceId.random(),
-                                                      spanId: SpanId.random(),
-                                                      traceFlags: TraceFlags(),
-                                                      traceState: TraceState()))
+private func createRandomPropagatedSpan() -> PropagatedSpan {
+    PropagatedSpan(context: SpanContext.create(traceId: TraceId.random(),
+                                               spanId: SpanId.random(),
+                                               traceFlags: TraceFlags(),
+                                               traceState: TraceState()))
 }
 
 class SpanBuilderTests: XCTestCase {
@@ -26,7 +26,7 @@ class SpanBuilderTests: XCTestCase {
         spanBuilder.addLink(spanContext: createRandomPropagatedSpan().context, attributes: [String: AttributeValue]())
         spanBuilder.addLink(spanContext: createRandomPropagatedSpan().context, attributes: [String: AttributeValue]())
         spanBuilder.setAttribute(key: "key", value: "value")
-        spanBuilder.setAttribute(key: "key", value: 12345)
+        spanBuilder.setAttribute(key: "key", value: 12_345)
         spanBuilder.setAttribute(key: "key", value: 0.12345)
         spanBuilder.setAttribute(key: "key", value: true)
         spanBuilder.setAttribute(key: "key", value: AttributeValue.string("value"))

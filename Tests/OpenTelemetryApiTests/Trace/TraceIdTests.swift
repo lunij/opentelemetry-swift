@@ -34,7 +34,7 @@ final class TraceIdTests: XCTestCase {
 
     func testGetHigherLong() {
         XCTAssertEqual(first.rawHigherLong, 0)
-        XCTAssertEqual(second.rawHigherLong, 0xFF00000000000000)
+        XCTAssertEqual(second.rawHigherLong, 0xFF00_0000_0000_0000)
     }
 
     func testGetLowerLong() {
@@ -94,11 +94,11 @@ final class TraceIdTests: XCTestCase {
         XCTAssertTrue(second.description.contains("ff000000000000000000000000000041"))
         XCTAssertTrue(short.description.contains("0000000000000062"))
     }
-    
+
     func testTraceId_Codable() throws {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-        
+
         XCTAssertEqual(TraceId.invalid, try decoder.decode(TraceId.self, from: try encoder.encode(TraceId.invalid)))
         XCTAssertEqual(first, try decoder.decode(TraceId.self, from: try encoder.encode(first)))
         XCTAssertEqual(second, try decoder.decode(TraceId.self, from: try encoder.encode(second)))
@@ -116,6 +116,6 @@ final class TraceIdTests: XCTestCase {
         ("testTraceId_CompareTo", testTraceId_CompareTo),
         ("testTraceId_EqualsAndHashCode", testTraceId_EqualsAndHashCode),
         ("testTraceId_ToString", testTraceId_ToString),
-        ("testTraceId_Codable", testTraceId_Codable),
+        ("testTraceId_Codable", testTraceId_Codable)
     ]
 }

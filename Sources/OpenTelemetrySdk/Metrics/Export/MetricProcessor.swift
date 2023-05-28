@@ -11,7 +11,7 @@ public protocol MetricProcessor {
     /// MetricProcessor can use this to clear its Metrics (in case of stateless).
     /// - Returns: The list of metrics from this cycle, which are to be exported.
     func finishCollectionCycle() -> [Metric]
-    
+
     /// Process the metric. This method is called once every collection interval.
     /// - Parameters:
     ///   - metric: the metric record.
@@ -20,9 +20,8 @@ public protocol MetricProcessor {
 
 struct NoopMetricProcessor: MetricProcessor {
     func finishCollectionCycle() -> [Metric] {
-        return [Metric]()
+        [Metric]()
     }
 
-    func process(metric: Metric) {
-    }
+    func process(metric _: Metric) {}
 }

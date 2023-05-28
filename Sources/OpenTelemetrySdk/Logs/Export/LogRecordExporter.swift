@@ -6,7 +6,6 @@
 import Foundation
 
 public protocol LogRecordExporter {
-
     func export(logRecords: [ReadableLogRecord]) -> ExportResult
 
     /// Shutdown the log exporter

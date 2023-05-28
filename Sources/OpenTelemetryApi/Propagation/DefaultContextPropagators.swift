@@ -67,25 +67,23 @@ public struct DefaultContextPropagators: ContextPropagators {
         }
     }
 
-
     struct NoopTextMapPropagator: TextMapPropagator {
         public var fields = Set<String>()
 
-        public func inject<S>(spanContext: SpanContext, carrier: inout [String: String], setter: S) where S: Setter {}
+        public func inject<S>(spanContext _: SpanContext, carrier _: inout [String: String], setter _: S) where S: Setter {}
 
-        public func extract<G>(carrier: [String: String], getter: G) -> SpanContext? where G: Getter {
-            return nil
+        public func extract<G>(carrier _: [String: String], getter _: G) -> SpanContext? where G: Getter {
+            nil
         }
     }
 
     struct NoopBaggagePropagator: TextMapBaggagePropagator {
-
         public var fields = Set<String>()
 
-        public func inject<S>(baggage: Baggage, carrier: inout [String: String], setter: S) where S: Setter {}
+        public func inject<S>(baggage _: Baggage, carrier _: inout [String: String], setter _: S) where S: Setter {}
 
-        public func extract<G>(carrier: [String: String], getter: G) -> Baggage? where G: Getter {
-            return nil
+        public func extract<G>(carrier _: [String: String], getter _: G) -> Baggage? where G: Getter {
+            nil
         }
     }
 }

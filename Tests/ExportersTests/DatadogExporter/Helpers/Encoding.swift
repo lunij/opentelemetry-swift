@@ -6,7 +6,7 @@
 
 extension EncodableValue: Equatable {
     public static func == (lhs: EncodableValue, rhs: EncodableValue) -> Bool {
-        return String(describing: lhs) == String(describing: rhs)
+        String(describing: lhs) == String(describing: rhs)
     }
 }
 

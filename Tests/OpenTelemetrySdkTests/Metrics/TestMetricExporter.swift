@@ -14,7 +14,7 @@ class TestMetricExporter: MetricExporter {
         self.onExport = onExport
     }
 
-    func export(metrics: [Metric], shouldCancel: (() -> Bool)? = nil) -> MetricExporterResultCode {
+    func export(metrics: [Metric], shouldCancel _: (() -> Bool)? = nil) -> MetricExporterResultCode {
         onExport()
         self.metrics.append(contentsOf: metrics)
         return .success

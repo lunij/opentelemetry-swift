@@ -40,7 +40,6 @@ public protocol SpanProcessor {
 
 extension SpanProcessor {
     func forceFlush() {
-        return forceFlush(timeout: nil)
+        forceFlush(timeout: nil)
     }
 }
-

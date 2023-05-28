@@ -12,7 +12,7 @@ class ReadableSpanMock: ReadableSpan {
     var latency: TimeInterval = 0
 
     var kind: SpanKind {
-        return .client
+        .client
     }
 
     var instrumentationScopeInfo = InstrumentationScopeInfo()
@@ -26,20 +26,20 @@ class ReadableSpanMock: ReadableSpan {
         OpenTelemetry.instance.contextProvider.removeContextForSpan(self)
     }
 
-    func end(time: Date) { end() }
+    func end(time _: Date) { end() }
 
     func toSpanData() -> SpanData {
-        return forcedReturnSpanData ?? SpanData(traceId: context.traceId,
-                                                spanId: context.spanId,
-                                                traceFlags: context.traceFlags,
-                                                traceState: TraceState(),
-                                                resource: Resource(attributes: [String: AttributeValue]()),
-                                                instrumentationScope: InstrumentationScopeInfo(),
-                                                name: "ReadableSpanMock",
-                                                kind: .client,
-                                                startTime: Date(timeIntervalSinceReferenceDate: 0),
-                                                endTime: Date(timeIntervalSinceReferenceDate: 0),
-                                                hasRemoteParent: false)
+        forcedReturnSpanData ?? SpanData(traceId: context.traceId,
+                                         spanId: context.spanId,
+                                         traceFlags: context.traceFlags,
+                                         traceState: TraceState(),
+                                         resource: Resource(attributes: [String: AttributeValue]()),
+                                         instrumentationScope: InstrumentationScopeInfo(),
+                                         name: "ReadableSpanMock",
+                                         kind: .client,
+                                         startTime: Date(timeIntervalSinceReferenceDate: 0),
+                                         endTime: Date(timeIntervalSinceReferenceDate: 0),
+                                         hasRemoteParent: false)
     }
 
     var context: SpanContext {
@@ -50,17 +50,17 @@ class ReadableSpanMock: ReadableSpan {
 
     var status: Status = .unset
 
-    func updateName(name: String) {}
+    func updateName(name _: String) {}
 
-    func setAttribute(key: String, value: AttributeValue?) {}
+    func setAttribute(key _: String, value _: AttributeValue?) {}
 
-    func addEvent(name: String) {}
+    func addEvent(name _: String) {}
 
-    func addEvent(name: String, attributes: [String: AttributeValue]) {}
+    func addEvent(name _: String, attributes _: [String: AttributeValue]) {}
 
-    func addEvent(name: String, timestamp: Date) {}
+    func addEvent(name _: String, timestamp _: Date) {}
 
-    func addEvent(name: String, attributes: [String: AttributeValue], timestamp: Date) {}
+    func addEvent(name _: String, attributes _: [String: AttributeValue], timestamp _: Date) {}
 
     var description: String = "ReadableSpanMock"
 }

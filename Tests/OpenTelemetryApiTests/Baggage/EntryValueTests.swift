@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class EntryValueTests: XCTestCase {
     func testMaxLength() {

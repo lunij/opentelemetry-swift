@@ -16,7 +16,7 @@ public class PrometheusExporter: MetricExporter {
         self.options = options
     }
 
-    public func export(metrics: [Metric], shouldCancel: (() -> Bool)?) -> MetricExporterResultCode {
+    public func export(metrics: [Metric], shouldCancel _: (() -> Bool)?) -> MetricExporterResultCode {
         metricsLock.withLockVoid {
             self.metrics.append(contentsOf: metrics)
         }

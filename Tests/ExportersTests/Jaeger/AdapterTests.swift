@@ -7,11 +7,11 @@
 
 import Foundation
 
+import Thrift
+import XCTest
 @testable import JaegerExporter
 @testable import OpenTelemetryApi
 @testable import OpenTelemetrySdk
-import Thrift
-import XCTest
 
 class AdapterTests: XCTestCase {
     static let linkTraceId = "00000000000000000000000000cba123"
@@ -20,7 +20,7 @@ class AdapterTests: XCTestCase {
     static let spanId = "0000000000def456"
     static let parentSpanId = "0000000000aef789"
 
-    let microsecondsInSecond: Double = 1000000
+    let microsecondsInSecond: Double = 1_000_000
 
     func testProtoSpans() {
         let duration = 900 // microseconds
@@ -127,7 +127,7 @@ class AdapterTests: XCTestCase {
         let valueS = AttributeValue.string("foobar")
         let valueArrayB = AttributeValue.boolArray([true, false])
         let valueArrayD = AttributeValue.doubleArray([1.2, 4.5])
-        let valueArrayI = AttributeValue.intArray([12345, 67890])
+        let valueArrayI = AttributeValue.intArray([12_345, 67_890])
         let valueArrayS = AttributeValue.stringArray(["foobar", "barfoo"])
 
         // test
@@ -205,8 +205,10 @@ class AdapterTests: XCTestCase {
     }
 
     func testSpanError() {
-        let attributes = ["error.type": AttributeValue.string(self.name),
-                          "error.message": AttributeValue.string("server error")]
+        let attributes = [
+            "error.type": AttributeValue.string(name),
+            "error.message": AttributeValue.string("server error")
+        ]
         let startMicroseconds = UInt64(Date().timeIntervalSince1970 * microsecondsInSecond)
         let endMicroseconds = startMicroseconds + 900
 
@@ -222,7 +224,7 @@ class AdapterTests: XCTestCase {
 
         let jaegerSpan = Adapter.toJaeger(span: span)
         let errorType = getTag(tagsList: jaegerSpan.tags, key: "error.type")
-        XCTAssertEqual(self.name, errorType?.vStr)
+        XCTAssertEqual(name, errorType?.vStr)
         let error = getTag(tagsList: jaegerSpan.tags, key: "error")
         XCTAssertNotNil(error)
         XCTAssertEqual(true, error?.vBool)
@@ -259,11 +261,11 @@ class AdapterTests: XCTestCase {
     }
 
     private func createSpanContext(traceId: String, spanId: String) -> SpanContext {
-        return SpanContext.create(traceId: TraceId(fromHexString: traceId), spanId: SpanId(fromHexString: spanId), traceFlags: TraceFlags(), traceState: TraceState())
+        SpanContext.create(traceId: TraceId(fromHexString: traceId), spanId: SpanId(fromHexString: spanId), traceFlags: TraceFlags(), traceState: TraceState())
     }
 
     private func getTag(tagsList: TList<Tag>?, key: String) -> Tag? {
-        return tagsList?.first { $0.key == key }
+        tagsList?.first { $0.key == key }
     }
 
     private static func assertHasFollowsFrom(jaegerSpan: JaegerExporter.Span) {

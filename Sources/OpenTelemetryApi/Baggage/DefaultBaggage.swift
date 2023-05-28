@@ -18,19 +18,18 @@ public final class DefaultBaggage: Baggage, Equatable {
     }
 
     public static func baggageBuilder() -> BaggageBuilder {
-        return DefaultBaggageBuilder()
+        DefaultBaggageBuilder()
     }
 
     public func getEntries() -> [Entry] {
-        return Array(entries.values).compactMap { $0 }
+        Array(entries.values).compactMap { $0 }
     }
 
     public func getEntryValue(key: EntryKey) -> EntryValue? {
-        return entries[key]??.value
+        entries[key]??.value
     }
 
-    static public func == (lhs: DefaultBaggage, rhs: DefaultBaggage) -> Bool {
-        return lhs.getEntries().sorted() == rhs.getEntries().sorted()
+    public static func == (lhs: DefaultBaggage, rhs: DefaultBaggage) -> Bool {
+        lhs.getEntries().sorted() == rhs.getEntries().sorted()
     }
 }
-

@@ -9,31 +9,45 @@ import Foundation
 public class HistogramAggregator<T: SignedNumeric & Comparable>: Aggregator<T> {
     fileprivate var histogram: Histogram<T>
     fileprivate var pointCheck: Histogram<T>
-    fileprivate var boundaries: Array<T>
-    
+    fileprivate var boundaries: [T]
+
     private let lock = Lock()
-    private let defaultBoundaries: Array<T> = [5, 10, 25, 50, 75, 100, 250, 500, 750, 1_000, 2_500, 5_000, 7_500,
-                                            10_000]
-    
-    public init(explicitBoundaries: Array<T>? = nil) throws {
+    private let defaultBoundaries: [T] = [
+        5,
+        10,
+        25,
+        50,
+        75,
+        100,
+        250,
+        500,
+        750,
+        1_000,
+        2_500,
+        5_000,
+        7_500,
+        10_000
+    ]
+
+    public init(explicitBoundaries: [T]? = nil) throws {
         if let explicitBoundaries = explicitBoundaries, explicitBoundaries.count > 0 {
-          // we need to an ordered set to be able to correctly compute count for each
-          // boundary since we'll iterate on each in order.
-          self.boundaries = explicitBoundaries.sorted { $0 < $1 }
+            // we need to an ordered set to be able to correctly compute count for each
+            // boundary since we'll iterate on each in order.
+            boundaries = explicitBoundaries.sorted { $0 < $1 }
         } else {
-          self.boundaries = defaultBoundaries
+            boundaries = defaultBoundaries
         }
-        
-        self.histogram = Histogram<T>(boundaries: self.boundaries)
-        self.pointCheck = Histogram<T>(boundaries: self.boundaries)
+
+        histogram = Histogram<T>(boundaries: boundaries)
+        pointCheck = Histogram<T>(boundaries: boundaries)
     }
-    
+
     override public func update(value: T) {
         lock.withLockVoid {
             self.histogram.count += 1
             self.histogram.sum += value
-            
-            for i in 0..<self.boundaries.count {
+
+            for i in 0 ..< self.boundaries.count {
                 if value < self.boundaries[i] {
                     self.histogram.buckets.counts[i] += 1
                     return
@@ -43,7 +57,7 @@ public class HistogramAggregator<T: SignedNumeric & Comparable>: Aggregator<T> {
             self.histogram.buckets.counts[self.boundaries.count] += 1
         }
     }
-    
+
     override public func checkpoint() {
         lock.withLockVoid {
             super.checkpoint()
@@ -51,16 +65,16 @@ public class HistogramAggregator<T: SignedNumeric & Comparable>: Aggregator<T> {
             histogram = Histogram<T>(boundaries: self.boundaries)
         }
     }
-    
-    public override func toMetricData() -> MetricData {
-        return HistogramData<T>(startTimestamp: lastStart,
-                                timestamp: lastEnd,
-                                buckets: pointCheck.buckets,
-                                count: pointCheck.count,
-                                sum: pointCheck.sum)
+
+    override public func toMetricData() -> MetricData {
+        HistogramData<T>(startTimestamp: lastStart,
+                         timestamp: lastEnd,
+                         buckets: pointCheck.buckets,
+                         count: pointCheck.count,
+                         sum: pointCheck.sum)
     }
-    
-    public override func getAggregationType() -> AggregationType {
+
+    override public func getAggregationType() -> AggregationType {
         if T.self == Double.Type.self {
             return .doubleHistogram
         } else {
@@ -87,13 +101,13 @@ private struct Histogram<T> where T: SignedNumeric {
      * }
      */
     var buckets: (
-        boundaries: Array<T>,
-        counts: Array<Int>
+        boundaries: [T],
+        counts: [Int]
     )
     var sum: T
     var count: Int
-    
-    init(boundaries: Array<T>) {
+
+    init(boundaries: [T]) {
         sum = 0
         count = 0
         buckets = (

@@ -39,7 +39,7 @@ internal struct Directory {
 
     /// Returns all files of this directory.
     func files() throws -> [File] {
-        return try FileManager.default
+        try FileManager.default
             .contentsOfDirectory(at: url, includingPropertiesForKeys: [.isRegularFileKey, .canonicalPathKey])
             .map { url in File(url: url) }
     }

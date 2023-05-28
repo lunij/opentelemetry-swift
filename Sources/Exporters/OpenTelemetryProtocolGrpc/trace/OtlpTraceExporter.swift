@@ -4,21 +4,21 @@
  */
 
 import Foundation
-import Logging
 import GRPC
+import Logging
 import NIO
 import NIOHPACK
 import OpenTelemetryApi
-import OpenTelemetrySdk
 import OpenTelemetryProtocolExporterCommon
+import OpenTelemetrySdk
 
 public class OtlpTraceExporter: SpanExporter {
     let channel: GRPCChannel
     var traceClient: Opentelemetry_Proto_Collector_Trace_V1_TraceServiceNIOClient
-    let config : OtlpConfiguration
-    var callOptions : CallOptions? = nil
+    let config: OtlpConfiguration
+    var callOptions: CallOptions?
 
-    public init(channel: GRPCChannel, config: OtlpConfiguration = OtlpConfiguration(), logger: Logging.Logger = Logging.Logger(label: "io.grpc", factory: { _ in SwiftLogNoOpLogHandler() }), envVarHeaders: [(String,String)]? = EnvVarHeaders.attributes) {
+    public init(channel: GRPCChannel, config: OtlpConfiguration = OtlpConfiguration(), logger: Logging.Logger = Logging.Logger(label: "io.grpc", factory: { _ in SwiftLogNoOpLogHandler() }), envVarHeaders: [(String, String)]? = EnvVarHeaders.attributes) {
         self.channel = channel
         traceClient = Opentelemetry_Proto_Collector_Trace_V1_TraceServiceNIOClient(channel: channel)
         self.config = config
@@ -59,7 +59,7 @@ public class OtlpTraceExporter: SpanExporter {
     }
 
     public func flush() -> SpanExporterResultCode {
-        return .success
+        .success
     }
 
     public func shutdown() {

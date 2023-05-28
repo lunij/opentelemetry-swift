@@ -4,17 +4,17 @@
  */
 
 import Foundation
-import Logging
 import GRPC
+import Logging
 import NIO
 import OpenTelemetryApi
 import OpenTelemetryProtocolExporterCommon
+import XCTest
 @testable import OpenTelemetryProtocolExporterGrpc
 @testable import OpenTelemetrySdk
-import XCTest
 
 extension String: LocalizedError {
-    public var errorDescription: String? { return self }
+    public var errorDescription: String? { self }
 }
 
 class OtlpTraceExporterTests: XCTestCase {
@@ -83,7 +83,7 @@ class OtlpTraceExporterTests: XCTestCase {
     }
 
     func testConfigHeadersAreSet_whenInitCalledWithCustomConfig() throws {
-        let config: OtlpConfiguration = OtlpConfiguration(timeout: TimeInterval(10), headers: [("FOO", "BAR")])
+        let config = OtlpConfiguration(timeout: TimeInterval(10), headers: [("FOO", "BAR")])
         let exporter = OtlpTraceExporter(channel: channel, config: config)
         XCTAssertNotNil(exporter.config.headers)
         XCTAssertEqual(exporter.config.headers?[0].0, "FOO")
@@ -154,11 +154,9 @@ class OtlpTraceExporterTests: XCTestCase {
         // Start the server and print its address once it has started.
         let server = Server.insecure(group: serverGroup)
             .withServiceProviders([fakeCollector])
-            .bind(host: "localhost", port: 4317)
+            .bind(host: "localhost", port: 4_317)
 
-        server.map {
-            $0.channel.localAddress
-        }.whenSuccess { address in
+        server.map(\.channel.localAddress).whenSuccess { address in
             print("server started on port \(address!.port!)")
         }
         return server
@@ -166,7 +164,7 @@ class OtlpTraceExporterTests: XCTestCase {
 
     func startChannel() -> ClientConnection {
         let channel = ClientConnection.insecure(group: channelGroup)
-            .connect(host: "localhost", port: 4317)
+            .connect(host: "localhost", port: 4_317)
         return channel
     }
 }
@@ -174,7 +172,7 @@ class OtlpTraceExporterTests: XCTestCase {
 class FakeCollector: Opentelemetry_Proto_Collector_Trace_V1_TraceServiceProvider {
     var receivedSpans = [Opentelemetry_Proto_Trace_V1_ResourceSpans]()
     var returnedStatus = GRPCStatus.ok
-    var interceptors: Opentelemetry_Proto_Collector_Trace_V1_TraceServiceServerInterceptorFactoryProtocol? = nil
+    var interceptors: Opentelemetry_Proto_Collector_Trace_V1_TraceServiceServerInterceptorFactoryProtocol?
 
     func export(request: Opentelemetry_Proto_Collector_Trace_V1_ExportTraceServiceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Opentelemetry_Proto_Collector_Trace_V1_ExportTraceServiceResponse> {
         receivedSpans.append(contentsOf: request.resourceSpans)

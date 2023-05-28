@@ -10,11 +10,10 @@ import Foundation
 public struct InstrumentationScopeInfo: Hashable, Codable {
     public private(set) var name: String = ""
     public private(set) var version: String?
-    public private(set) var schemaUrl : String?
+    public private(set) var schemaUrl: String?
 
     ///  Creates a new empty instance of InstrumentationScopeInfo.
-    public init() {
-    }
+    public init() {}
 
     ///  Creates a new instance of InstrumentationScopeInfo.
     ///  - Parameters:

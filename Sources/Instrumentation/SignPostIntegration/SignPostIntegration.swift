@@ -6,9 +6,9 @@
 #if !os(watchOS)
 
 import Foundation
-import os
 import OpenTelemetryApi
 import OpenTelemetrySdk
+import os
 
 /// A span processor that decorates spans with the origin attribute
 @available(macOS 10.14, iOS 12.0, tvOS 12.0, *)
@@ -19,18 +19,18 @@ public class SignPostIntegration: SpanProcessor {
 
     public init() {}
 
-    public func onStart(parentContext: SpanContext?, span: ReadableSpan) {
+    public func onStart(parentContext _: SpanContext?, span: ReadableSpan) {
         let signpostID = OSSignpostID(log: osLog, object: self)
         os_signpost(.begin, log: osLog, name: "Span", signpostID: signpostID, "%{public}@", span.name)
     }
 
-    public func onEnd(span: ReadableSpan) {
+    public func onEnd(span _: ReadableSpan) {
         let signpostID = OSSignpostID(log: osLog, object: self)
         os_signpost(.end, log: osLog, name: "Span", signpostID: signpostID)
     }
 
     public func shutdown() {}
-    public func forceFlush(timeout: TimeInterval? = nil) {}
+    public func forceFlush(timeout _: TimeInterval? = nil) {}
 }
 
 #endif

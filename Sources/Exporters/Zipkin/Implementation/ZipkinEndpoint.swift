@@ -19,7 +19,7 @@ class ZipkinEndpoint: Encodable {
     }
 
     public func clone(serviceName: String) -> ZipkinEndpoint {
-        return ZipkinEndpoint(serviceName: serviceName, ipv4: ipv4, ipv6: ipv6, port: port)
+        ZipkinEndpoint(serviceName: serviceName, ipv4: ipv4, ipv6: ipv6, port: port)
     }
 
     public func write() -> [String: Any] {

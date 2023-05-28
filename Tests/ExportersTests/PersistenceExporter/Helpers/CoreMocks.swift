@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import Foundation
+@testable import PersistenceExporter
 
 // MARK: - PerformancePreset Mocks
 
@@ -36,7 +36,7 @@ struct StoragePerformanceMock: StoragePerformancePreset {
         maxObjectsInFile: 1, // write each data to new file
         maxObjectSize: .max
     )
-    
+
     static let writeAllObjectsToTheSameFile = StoragePerformanceMock(
         maxFileSize: .max,
         maxDirectorySize: .max,
@@ -65,23 +65,24 @@ struct ExportPerformanceMock: ExportPerformancePreset {
 }
 
 extension PersistencePerformancePreset {
-        
-    static func mockWith(storagePerformance: StoragePerformancePreset,
-                         synchronousWrite: Bool,
-                         exportPerformance: ExportPerformancePreset) -> PersistencePerformancePreset {
-        return PersistencePerformancePreset(maxFileSize: storagePerformance.maxFileSize,
-                                            maxDirectorySize: storagePerformance.maxDirectorySize,
-                                            maxFileAgeForWrite: storagePerformance.maxFileAgeForWrite,
-                                            minFileAgeForRead: storagePerformance.minFileAgeForRead,
-                                            maxFileAgeForRead: storagePerformance.maxFileAgeForRead,
-                                            maxObjectsInFile: storagePerformance.maxObjectsInFile,
-                                            maxObjectSize: storagePerformance.maxObjectSize,
-                                            synchronousWrite: synchronousWrite,
-                                            initialExportDelay: exportPerformance.initialExportDelay,
-                                            defaultExportDelay: exportPerformance.defaultExportDelay,
-                                            minExportDelay: exportPerformance.minExportDelay,
-                                            maxExportDelay: exportPerformance.maxExportDelay,
-                                            exportDelayChangeRate: exportPerformance.exportDelayChangeRate)
+    static func mockWith(
+        storagePerformance: StoragePerformancePreset,
+        synchronousWrite: Bool,
+        exportPerformance: ExportPerformancePreset
+    ) -> PersistencePerformancePreset {
+        PersistencePerformancePreset(maxFileSize: storagePerformance.maxFileSize,
+                                     maxDirectorySize: storagePerformance.maxDirectorySize,
+                                     maxFileAgeForWrite: storagePerformance.maxFileAgeForWrite,
+                                     minFileAgeForRead: storagePerformance.minFileAgeForRead,
+                                     maxFileAgeForRead: storagePerformance.maxFileAgeForRead,
+                                     maxObjectsInFile: storagePerformance.maxObjectsInFile,
+                                     maxObjectSize: storagePerformance.maxObjectSize,
+                                     synchronousWrite: synchronousWrite,
+                                     initialExportDelay: exportPerformance.initialExportDelay,
+                                     defaultExportDelay: exportPerformance.defaultExportDelay,
+                                     minExportDelay: exportPerformance.minExportDelay,
+                                     maxExportDelay: exportPerformance.maxExportDelay,
+                                     exportDelayChangeRate: exportPerformance.exportDelayChangeRate)
     }
 }
 
@@ -127,7 +128,7 @@ class RelativeDateProvider: DateProvider {
 struct DataExporterMock: DataExporter {
     let exportStatus: DataExportStatus
 
-    var onExport: ((Data) -> Void)? = nil
+    var onExport: ((Data) -> Void)?
 
     func export(data: Data) -> DataExportStatus {
         onExport?(data)
@@ -137,41 +138,40 @@ struct DataExporterMock: DataExporter {
 
 extension DataExportStatus {
     static func mockWith(needsRetry: Bool) -> DataExportStatus {
-        return DataExportStatus(needsRetry: needsRetry)
+        DataExportStatus(needsRetry: needsRetry)
     }
 }
 
 class FileWriterMock: FileWriter {
-    var onWrite: ((Bool, Data) -> Void)? = nil
-    
+    var onWrite: ((Bool, Data) -> Void)?
+
     func write(data: Data) {
         onWrite?(false, data)
     }
-    
+
     func writeSync(data: Data) {
         onWrite?(true, data)
     }
-    
-    var onFlush: (() -> Void)? = nil
-    
+
+    var onFlush: (() -> Void)?
+
     func flush() {
         onFlush?()
     }
 }
 
 class FileReaderMock: FileReader {
-    
     private class ReadableFileMock: ReadableFile {
         private var deleted = false
         private let data: Data
-        
+
         private(set) var name: String
-        
+
         init(name: String, data: Data) {
             self.name = name
             self.data = data
         }
-        
+
         func read() throws -> Data {
             guard deleted == false else {
                 throw ErrorMock("read failed because delete was called")
@@ -183,39 +183,40 @@ class FileReaderMock: FileReader {
             deleted = true
         }
     }
-    
+
     var files: [ReadableFile] = []
-    
+
     func addFile(name: String, data: Data) {
         files.append(ReadableFileMock(name: name, data: data))
     }
-    
+
     func readNextBatch() -> Batch? {
         if let file = files.first,
-           let fileData = try? file.read() {
+           let fileData = try? file.read()
+        {
             return Batch(data: fileData, file: file)
         }
-        
+
         return nil
     }
-    
-    func onRemainingBatches(process: (Batch) -> ()) -> Bool {
+
+    func onRemainingBatches(process: (Batch) -> Void) -> Bool {
         do {
             try files.forEach {
                 let fileData = try $0.read()
                 process(Batch(data: fileData, file: $0))
             }
-            
+
             return true
         } catch {
             return false
         }
     }
-    
+
     func markBatchAsRead(_ batch: Batch) {
         try? batch.file.delete()
         files.removeAll { file -> Bool in
-            return file.name == batch.file.name
+            file.name == batch.file.name
         }
     }
 }

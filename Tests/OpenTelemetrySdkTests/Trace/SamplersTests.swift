@@ -4,13 +4,13 @@
  */
 
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 class SamplerTests: XCTestCase {
     let spanName = "MySpanName"
     let spanKind = SpanKind.internal
-    let numSamplesTries = 1000
+    let numSamplesTries = 1_000
     let idGenerator: IdGenerator = RandomIdGenerator()
     var traceId: TraceId!
     var spanId: SpanId!
@@ -86,7 +86,8 @@ class SamplerTests: XCTestCase {
                                     name: spanName,
                                     kind: spanKind,
                                     attributes: [String: AttributeValue](),
-                                    parentLinks: parentLinks).isSampled {
+                                    parentLinks: parentLinks).isSampled
+            {
                 count += 1
             }
         }

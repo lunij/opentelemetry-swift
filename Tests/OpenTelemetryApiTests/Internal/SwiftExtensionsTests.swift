@@ -20,7 +20,7 @@ extension Date {
     }
 
     static func mockDecember15th2019At10AMUTC(addingTimeInterval timeInterval: TimeInterval = 0) -> Date {
-        return mockSpecificUTCGregorianDate(year: 2_019, month: 12, day: 15, hour: 10)
+        mockSpecificUTCGregorianDate(year: 2_019, month: 12, day: 15, hour: 10)
             .addingTimeInterval(timeInterval)
     }
 }
@@ -48,11 +48,11 @@ class TimeIntervalExtensionTests: XCTestCase {
         XCTAssertEqual(date15Dec2019.timeIntervalSince1970.toNanoseconds, 1_576_404_000_000_000_000)
 
         // As `TimeInterval` yields sub-millisecond precision this rounds up to the nearest millisecond:
-        let dateAdvanced = date15Dec2019 + 9.999_999_999
+        let dateAdvanced = date15Dec2019 + 9.999999999
         XCTAssertEqual(dateAdvanced.timeIntervalSince1970.toNanoseconds, 1_576_404_010_000_000_000)
 
         // As `TimeInterval` yields sub-millisecond precision this rounds up to the nearest millisecond:
-        let dateAgo = date15Dec2019 - 0.000_000_001
+        let dateAgo = date15Dec2019 - 0.000000001
         XCTAssertEqual(dateAgo.timeIntervalSince1970.toNanoseconds, 1_576_404_000_000_000_000)
 
         let overflownDate = Date(timeIntervalSinceReferenceDate: .greatestFiniteMagnitude)

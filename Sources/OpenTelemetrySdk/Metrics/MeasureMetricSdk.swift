@@ -24,10 +24,10 @@ internal class MeasureMetricSdk<T: SignedNumeric & Comparable>: MeasureMetric {
     }
 
     func bind(labels: [String: String]) -> BoundMeasureMetric<T> {
-        return bind(labelset: LabelSet(labels: labels))
+        bind(labelset: LabelSet(labels: labels))
     }
 
     func createMetric() -> BoundMeasureMetricSdkBase<T> {
-        return BoundMeasureMetricSdk<T>()
+        BoundMeasureMetricSdk<T>()
     }
 }

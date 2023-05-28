@@ -6,16 +6,15 @@
 import Foundation
 import OpenTelemetryApi
 import OpenTelemetrySdk
-@testable import ResourceExtension
 import XCTest
+@testable import ResourceExtension
 
 class TelemetryResourceProviderTests: XCTestCase {
-    
     func testAll() {
-        let resources =  DefaultResources().get()
+        let resources = DefaultResources().get()
         print("\(resources)")
     }
-    
+
     func testContents() {
         let mock = MockTelemetryDataSource(name: "testAgent", language: "swift", version: "1.2.3")
         let provider = TelemetryResourceProvider(source: mock)

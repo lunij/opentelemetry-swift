@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 final class MeterFactoryBaseTests: XCTestCase {
     public func testAggregatesCorrectlyWhenMultipleThreadsUpdatesInt() {
@@ -16,7 +16,7 @@ final class MeterFactoryBaseTests: XCTestCase {
         XCTAssertEqual(sum.sum, 0)
 
         DispatchQueue.concurrentPerform(iterations: 10) { _ in
-            for _ in 0 ..< 10000 {
+            for _ in 0 ..< 10_000 {
                 aggregator.update(value: 10)
             }
         }
@@ -26,9 +26,9 @@ final class MeterFactoryBaseTests: XCTestCase {
         sum = aggregator.toMetricData() as! SumData<Int>
 
         // 100000 times 10 by each thread
-        XCTAssertEqual(sum.sum, 1000000)
+        XCTAssertEqual(sum.sum, 1_000_000)
     }
-    
+
     public func testAggregatesCorrectlyWhenMultipleThreadsUpdatesDouble() {
         // create an aggregator
         let aggregator = CounterSumAggregator<Double>()
@@ -38,7 +38,7 @@ final class MeterFactoryBaseTests: XCTestCase {
         XCTAssertEqual(sum.sum, 0.0)
 
         DispatchQueue.concurrentPerform(iterations: 10) { _ in
-            for _ in 0 ..< 10000 {
+            for _ in 0 ..< 10_000 {
                 aggregator.update(value: 10.5)
             }
         }
@@ -48,6 +48,6 @@ final class MeterFactoryBaseTests: XCTestCase {
         sum = aggregator.toMetricData() as! SumData<Double>
 
         // 100000 times 10.5 by each thread
-        XCTAssertEqual(sum.sum, 1050000)
+        XCTAssertEqual(sum.sum, 1_050_000)
     }
 }

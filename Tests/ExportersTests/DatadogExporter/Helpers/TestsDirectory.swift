@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import Foundation
 import XCTest
+@testable import DatadogExporter
 
 /// Creates `Directory` pointing to unique subfolder in `/var/folders/`.
 /// Does not create the subfolder - it must be later created with `.create()`.
@@ -18,7 +18,7 @@ func obtainUniqueTemporaryDirectory() -> Directory {
 
 /// `Directory` pointing to subfolder in `/var/folders/`.
 /// The subfolder does not exist and can be created and deleted by calling `.create()` and `.delete()`.
-//let temporaryDirectory = obtainUniqueTemporaryDirectory()
+// let temporaryDirectory = obtainUniqueTemporaryDirectory()
 
 /// Extends `Directory` with set of utilities for convenient work with files in tests.
 /// Provides handy methods to create / delete files and directires.

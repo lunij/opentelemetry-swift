@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import XCTest
+@testable import PersistenceExporter
 
 class DataExportWorkerTests: XCTestCase {
     lazy var dateProvider = RelativeDateProvider(advancingBySeconds: 1)
@@ -20,12 +20,12 @@ class DataExportWorkerTests: XCTestCase {
     // MARK: - Data Exports
 
     func testItExportsAllData() {
-        let v1ExportExpectation = self.expectation(description: "V1 exported")
-        let v2ExportExpectation = self.expectation(description: "V2 exported")
-        let v3ExportExpectation = self.expectation(description: "V3 exported")
-        
+        let v1ExportExpectation = expectation(description: "V1 exported")
+        let v2ExportExpectation = expectation(description: "V2 exported")
+        let v3ExportExpectation = expectation(description: "V3 exported")
+
         var mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: false))
-        
+
         mockDataExporter.onExport = { data in
             switch data.utf8String {
             case "v1": v1ExportExpectation.fulfill()
@@ -34,13 +34,13 @@ class DataExportWorkerTests: XCTestCase {
             default: break
             }
         }
-        
+
         // Given
         let fileReader = FileReaderMock()
         fileReader.addFile(name: "1", data: "v1".utf8Data)
         fileReader.addFile(name: "2", data: "v2".utf8Data)
         fileReader.addFile(name: "3", data: "v3".utf8Data)
-                        
+
         // When
         let worker = DataExportWorker(
             fileReader: fileReader,
@@ -51,14 +51,14 @@ class DataExportWorkerTests: XCTestCase {
 
         // Then
         waitForExpectations(timeout: 1, handler: nil)
-        
+
         worker.cancelSynchronously()
 
         XCTAssertEqual(fileReader.files.count, 0)
     }
 
     func testGivenDataToExport_whenExportFinishesAndDoesNotNeedToBeRetried_thenDataIsDeleted() {
-        let startExportExpectation = self.expectation(description: "Export has started")
+        let startExportExpectation = expectation(description: "Export has started")
 
         var mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: false))
         mockDataExporter.onExport = { _ in startExportExpectation.fulfill() }
@@ -76,7 +76,7 @@ class DataExportWorkerTests: XCTestCase {
         )
 
         wait(for: [startExportExpectation], timeout: 0.5)
-        
+
         worker.cancelSynchronously()
 
         // Then
@@ -84,7 +84,7 @@ class DataExportWorkerTests: XCTestCase {
     }
 
     func testGivenDataToExport_whenExportFinishesAndNeedsToBeRetried_thenDataIsPreserved() {
-        let startExportExpectation = self.expectation(description: "Export has started")
+        let startExportExpectation = expectation(description: "Export has started")
 
         var mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: true))
         mockDataExporter.onExport = { _ in startExportExpectation.fulfill() }
@@ -123,7 +123,7 @@ class DataExportWorkerTests: XCTestCase {
         // When
         let fileReader = FileReaderMock()
         let mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: false))
-        
+
         let worker = DataExportWorker(
             fileReader: fileReader,
             dataExporter: mockDataExporter,
@@ -145,7 +145,7 @@ class DataExportWorkerTests: XCTestCase {
                 XCTFail("Wrong command is sent!")
             }
         }
-        
+
         let exportExpectation = expectation(description: "value exported")
 
         // The onExport closure is called more than once as part of test execution
@@ -156,12 +156,12 @@ class DataExportWorkerTests: XCTestCase {
         exportExpectation.assertForOverFulfill = false
 
         var mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: true))
-        mockDataExporter.onExport = { data in exportExpectation.fulfill() }
+        mockDataExporter.onExport = { _ in exportExpectation.fulfill() }
 
         // When
         let fileReader = FileReaderMock()
         fileReader.addFile(name: "file", data: "value".utf8Data)
-        
+
         let worker = DataExportWorker(
             fileReader: fileReader,
             dataExporter: mockDataExporter,
@@ -183,17 +183,17 @@ class DataExportWorkerTests: XCTestCase {
                 XCTFail("Wrong command is sent!")
             }
         }
-        
-        let exportExpectation = self.expectation(description: "value exported")
-        
+
+        let exportExpectation = expectation(description: "value exported")
+
         var mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: false))
-        
-        mockDataExporter.onExport = { data in exportExpectation.fulfill() }
+
+        mockDataExporter.onExport = { _ in exportExpectation.fulfill() }
 
         // When
         let fileReader = FileReaderMock()
         fileReader.addFile(name: "file", data: "value".utf8Data)
-                
+
         let worker = DataExportWorker(
             fileReader: fileReader,
             dataExporter: mockDataExporter,
@@ -210,12 +210,12 @@ class DataExportWorkerTests: XCTestCase {
 
     func testWhenCancelled_itPerformsNoMoreExports() {
         var mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: false))
-        
+
         mockDataExporter.onExport = { _ in XCTFail("Expected no exports after cancel") }
 
         // When
         let fileReader = FileReaderMock()
-        
+
         // Given
         let worker = DataExportWorker(
             fileReader: fileReader,
@@ -223,21 +223,21 @@ class DataExportWorkerTests: XCTestCase {
             exportCondition: { false },
             delay: MockDelay()
         )
-        
+
         worker.cancelSynchronously()
         fileReader.addFile(name: "file", data: "value".utf8Data)
 
         // Then
-        worker.queue.sync(flags: .barrier) { }
+        worker.queue.sync(flags: .barrier) {}
     }
 
     func testItFlushesAllData() {
-        let v1ExportExpectation = self.expectation(description: "V1 exported")
-        let v2ExportExpectation = self.expectation(description: "V2 exported")
-        let v3ExportExpectation = self.expectation(description: "V3 exported")
-        
+        let v1ExportExpectation = expectation(description: "V1 exported")
+        let v2ExportExpectation = expectation(description: "V2 exported")
+        let v3ExportExpectation = expectation(description: "V3 exported")
+
         var mockDataExporter = DataExporterMock(exportStatus: .mockWith(needsRetry: false))
-        
+
         mockDataExporter.onExport = { data in
             switch data.utf8String {
             case "v1": v1ExportExpectation.fulfill()
@@ -246,13 +246,13 @@ class DataExportWorkerTests: XCTestCase {
             default: break
             }
         }
-        
+
         // Given
         let fileReader = FileReaderMock()
         fileReader.addFile(name: "1", data: "v1".utf8Data)
         fileReader.addFile(name: "2", data: "v2".utf8Data)
         fileReader.addFile(name: "3", data: "v3".utf8Data)
-        
+
         // When
         let worker = DataExportWorker(
             fileReader: fileReader,

@@ -18,7 +18,7 @@ public struct W3CTraceContextPropagator: TextMapPropagator {
     private static let traceIdLength = 2 * TraceId.size
     private static let versionAndTraceIdLength = versionLength + delimiterLength + traceIdLength + delimiterLength
     private static let spanIdLength = 2 * SpanId.size
-    private static let versionAndTraceIdAndSpanIdLength =  versionAndTraceIdLength + spanIdLength + delimiterLength
+    private static let versionAndTraceIdAndSpanIdLength = versionAndTraceIdLength + spanIdLength + delimiterLength
     private static let optionsLength = 2
     private static let traceparentLengthV0 = versionAndTraceIdAndSpanIdLength + optionsLength
 
@@ -51,7 +51,8 @@ public struct W3CTraceContextPropagator: TextMapPropagator {
     public func extract<G>(carrier: [String: String], getter: G) -> SpanContext? where G: Getter {
         guard let traceparentCollection = getter.get(carrier: carrier,
                                                      key: W3CTraceContextPropagator.traceparent),
-            traceparentCollection.count <= 1 else {
+            traceparentCollection.count <= 1
+        else {
             // multiple traceparent are not allowed
             return nil
         }
@@ -78,8 +79,9 @@ public struct W3CTraceContextPropagator: TextMapPropagator {
         var bestAttempt = false
 
         guard let traceparent = traceparent,
-            !traceparent.isEmpty,
-            traceparent.count >= W3CTraceContextPropagator.traceparentLengthV0 else {
+              !traceparent.isEmpty,
+              traceparent.count >= W3CTraceContextPropagator.traceparentLengthV0
+        else {
             return nil
         }
 
@@ -146,7 +148,7 @@ public struct W3CTraceContextPropagator: TextMapPropagator {
 
     private func extractTraceState(traceStatecollection: [String]?) -> TraceState? {
         guard let traceStatecollection = traceStatecollection,
-            !traceStatecollection.isEmpty else { return nil }
+              !traceStatecollection.isEmpty else { return nil }
 
         var entries = [TraceState.Entry]()
 

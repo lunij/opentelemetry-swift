@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 private let key = EntryKey(name: "key")!
 private let value = EntryValue(string: "value")!
@@ -15,11 +15,11 @@ class TestBaggage: Baggage {
     }
 
     func getEntries() -> [Entry] {
-        return [Entry(key: key, value: value, metadata: EntryMetadata(metadata: "test"))]
+        [Entry(key: key, value: value, metadata: EntryMetadata(metadata: "test"))]
     }
 
-    func getEntryValue(key: EntryKey) -> EntryValue? {
-        return value
+    func getEntryValue(key _: EntryKey) -> EntryValue? {
+        value
     }
 }
 

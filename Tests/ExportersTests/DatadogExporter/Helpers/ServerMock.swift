@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import Foundation
 import XCTest
+@testable import DatadogExporter
 
 private let ddURLSessionUUIDHeaderField = "dd-urlsession-uuid"
 
 private class ServerMockProtocol: URLProtocol {
-    override class func canInit(with request: URLRequest) -> Bool {
-        return true
+    override class func canInit(with _: URLRequest) -> Bool {
+        true
     }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
@@ -99,17 +99,17 @@ class ServerMock {
     init(delivery: Delivery) {
         switch delivery {
         case let .success(response: response, data: data):
-            self.mockedResponse = response
-            self.mockedData = data
-            self.mockedError = nil
+            mockedResponse = response
+            mockedData = data
+            mockedError = nil
         case let .failure(error):
-            self.mockedResponse = nil
-            self.mockedData = nil
-            self.mockedError = error
+            mockedResponse = nil
+            mockedData = nil
+            mockedError = error
         }
         precondition(Thread.isMainThread, "`ServerMock` should be initialized on the main thread.")
         precondition(ServerMock.activeInstance == nil, "Only one active instance of `ServerMock` is allowed at a time.")
-        self.queue = DispatchQueue(label: "com.datadoghq.ServerMock-\(urlSessionUUID.uuidString)")
+        queue = DispatchQueue(label: "com.datadoghq.ServerMock-\(urlSessionUUID.uuidString)")
 
         ServerMock.activeInstance = self
     }
@@ -209,12 +209,12 @@ class ServerMock {
     /// Waits until given number of request callbacks is completed (in total for this instance of `ServerMock`).
     /// Passing no `timeout` will result with picking the recommended timeout for unit tests.
     /// Calling this method guarantees that no callbacks are leaked inside `URLSession`, which prevents tests flakiness.
-    func waitFor(requestsCompletion requestsCount: UInt, timeout: TimeInterval? = nil, file: StaticString = #file, line: UInt = #line) {
+    func waitFor(requestsCompletion requestsCount: UInt, timeout: TimeInterval? = nil, file _: StaticString = #file, line _: UInt = #line) {
         _ = waitAndReturnRequests(count: requestsCount, timeout: timeout)
     }
 
     /// Waits an arbitrary amount of time and asserts that no requests were sent to `ServerMock`.
-    func waitAndAssertNoRequestsSent(file: StaticString = #file, line: UInt = #line) {
+    func waitAndAssertNoRequestsSent(file _: StaticString = #file, line _: UInt = #line) {
         waitFor(requestsCompletion: 0)
     }
 

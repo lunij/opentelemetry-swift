@@ -6,8 +6,8 @@
 import Foundation
 import OpenTelemetryApi
 import OpenTelemetrySdk
-@testable import ResourceExtension
 import XCTest
+@testable import ResourceExtension
 
 class DeviceResourceProviderTests: XCTestCase {
     func testContents() {

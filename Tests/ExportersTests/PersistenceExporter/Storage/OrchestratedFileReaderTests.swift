@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import XCTest
+@testable import PersistenceExporter
 
 class OrchestratedFileReaderTests: XCTestCase {
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
@@ -39,7 +39,7 @@ class OrchestratedFileReaderTests: XCTestCase {
 
     func testItMarksBatchesAsRead() throws {
         let dateProvider = RelativeDateProvider(advancingBySeconds: 60)
-        let reader = OrchestratedFileReader(            
+        let reader = OrchestratedFileReader(
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
                 performance: StoragePerformanceMock.readAllFiles,

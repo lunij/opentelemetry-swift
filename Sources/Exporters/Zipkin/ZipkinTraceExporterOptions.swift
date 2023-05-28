@@ -10,14 +10,15 @@ public struct ZipkinTraceExporterOptions {
     let timeoutSeconds: TimeInterval
     let serviceName: String
     let useShortTraceIds: Bool
-    let additionalHeaders: [String:String]
+    let additionalHeaders: [String: String]
 
-    public init(endpoint: String = "http://localhost:9411/api/v2/spans",
-                serviceName: String = "Open Telemetry Exporter",
-                timeoutSeconds: TimeInterval = 10.0,
-                useShortTraceIds: Bool = false,
-                additionalHeaders: [String:String] = [String:String]()) {
-
+    public init(
+        endpoint: String = "http://localhost:9411/api/v2/spans",
+        serviceName: String = "Open Telemetry Exporter",
+        timeoutSeconds: TimeInterval = 10.0,
+        useShortTraceIds: Bool = false,
+        additionalHeaders: [String: String] = [String: String]()
+    ) {
         self.endpoint = endpoint
         self.serviceName = serviceName
         self.timeoutSeconds = timeoutSeconds
@@ -25,4 +26,3 @@ public struct ZipkinTraceExporterOptions {
         self.additionalHeaders = additionalHeaders
     }
 }
-

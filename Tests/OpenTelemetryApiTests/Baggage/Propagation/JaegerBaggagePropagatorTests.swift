@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class JaegerBaggagePropagatorTests: XCTestCase {
     let builder = DefaultBaggageBuilder()
@@ -22,10 +22,14 @@ class JaegerBaggagePropagatorTests: XCTestCase {
         var carrier = [String: String]()
         jaegerPropagator.inject(baggage: baggage, carrier: &carrier, setter: setter)
 
-        let expected1 = [JaegerBaggagePropagator.baggagePrefix + "nometa": "nometa-value",
-                         JaegerBaggagePropagator.baggagePrefix + "meta": "meta-value"]
-        let expected2 = [JaegerBaggagePropagator.baggagePrefix + "meta": "meta-value",
-                         JaegerBaggagePropagator.baggagePrefix + "nometa": "nometa-value"]
+        let expected1 = [
+            JaegerBaggagePropagator.baggagePrefix + "nometa": "nometa-value",
+            JaegerBaggagePropagator.baggagePrefix + "meta": "meta-value"
+        ]
+        let expected2 = [
+            JaegerBaggagePropagator.baggagePrefix + "meta": "meta-value",
+            JaegerBaggagePropagator.baggagePrefix + "nometa": "nometa-value"
+        ]
         XCTAssert(carrier == expected1 || carrier == expected2)
     }
 

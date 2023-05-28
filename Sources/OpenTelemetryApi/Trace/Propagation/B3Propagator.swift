@@ -29,7 +29,7 @@ public class B3Propagator: TextMapPropagator {
 
     /// Creates a new instance of B3Propagator. Default to use multiple headers.
     public init() {
-        self.singleHeaderInjection = false
+        singleHeaderInjection = false
     }
 
     /// Creates a new instance of B3Propagator
@@ -123,10 +123,10 @@ public class B3Propagator: TextMapPropagator {
     }
 
     private func isTraceIdValid(_ traceId: String) -> Bool {
-        return !(traceId.isEmpty || traceId.count > B3Propagator.maxTraceIdLength)
+        !(traceId.isEmpty || traceId.count > B3Propagator.maxTraceIdLength)
     }
 
     private func isSpanIdValid(_ spanId: String) -> Bool {
-        return !(spanId.isEmpty || spanId.count > B3Propagator.maxSpanIdLength)
+        !(spanId.isEmpty || spanId.count > B3Propagator.maxSpanIdLength)
     }
 }

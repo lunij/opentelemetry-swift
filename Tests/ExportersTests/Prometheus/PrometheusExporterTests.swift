@@ -5,14 +5,13 @@
 
 import Foundation
 import OpenTelemetrySdk
-@testable import PrometheusExporter
 import XCTest
+@testable import PrometheusExporter
 
 class PrometheusExporterTests: XCTestCase {
     let metricPushIntervalSec = 0.05
     let waitDuration = 0.1 + 0.1
 
-    
     func testMetricsHttpServerAsync() {
         let promOptions = PrometheusExporterOptions(url: "http://localhost:9184/metrics/")
         let promExporter = PrometheusExporter(options: promOptions)
@@ -32,14 +31,14 @@ class PrometheusExporterTests: XCTestCase {
 
         let retain_me = collectMetrics(simpleProcessor: simpleProcessor, exporter: promExporter)
         _ = retain_me // silence warning
-        usleep(useconds_t(waitDuration * 1000000))
+        usleep(useconds_t(waitDuration * 1_000_000))
         let url = URL(string: "http://localhost:9184/metrics/")!
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if error == nil, let data = data, let response = response as? HTTPURLResponse {
                 XCTAssert(response.statusCode == 200)
                 let responseText = String(decoding: data, as: UTF8.self)
                 print("Response from metric API is: \n\(responseText)")
-                self.validateResponse(responseText: responseText);
+                self.validateResponse(responseText: responseText)
                 // This is your file-variable:
                 // data
                 expec.fulfill()
@@ -62,14 +61,13 @@ class PrometheusExporterTests: XCTestCase {
     }
 
     private func collectMetrics(simpleProcessor: MetricProcessorSdk, exporter: MetricExporter) -> MeterProviderSdk {
-
         let meterProvider = MeterProviderSdk(metricProcessor: simpleProcessor, metricExporter: exporter, metricPushInterval: metricPushIntervalSec)
-        
+
         let meter = meterProvider.get(instrumentationName: "scope1")
 
         let testCounter = meter.createIntCounter(name: "testCounter")
         let testMeasure = meter.createIntMeasure(name: "testMeasure")
-        let boundaries: Array<Int> = [5, 10, 25]
+        let boundaries: [Int] = [5, 10, 25]
         let testHistogram = meter.createIntHistogram(name: "testHistogram", explicitBoundaries: boundaries, absolute: true)
         let labels1 = ["dim1": "value1", "dim2": "value1"]
         let labels2 = ["dim1": "value2", "dim2": "value2"]
@@ -96,7 +94,7 @@ class PrometheusExporterTests: XCTestCase {
     private func validateResponse(responseText: String) {
         // Validate counters.
         XCTAssert(responseText.contains("TYPE testCounter counter"))
-        XCTAssert(responseText.contains("testCounter{dim1=\"value1\",dim2=\"value1\"}") || responseText.contains("testCounter{dim2=\"value1\",dim1=\"value1\"}") )
+        XCTAssert(responseText.contains("testCounter{dim1=\"value1\",dim2=\"value1\"}") || responseText.contains("testCounter{dim2=\"value1\",dim1=\"value1\"}"))
         XCTAssert(responseText.contains("testCounter{dim1=\"value2\",dim2=\"value2\"}") || responseText.contains("testCounter{dim2=\"value2\",dim1=\"value2\"}"))
 
         // Validate measure.

@@ -15,20 +15,20 @@ class CounterMetricSdkBase<T>: CounterMetric {
         metricName = name
     }
 
-    func add(value: T, labelset: LabelSet) {
+    func add(value _: T, labelset _: LabelSet) {
         fatalError()
     }
 
-    func add(value: T, labels: [String: String]) {
+    func add(value _: T, labels _: [String: String]) {
         fatalError()
     }
 
     func bind(labelset: LabelSet) -> BoundCounterMetric<T> {
-        return bind(labelset: labelset, isShortLived: false)
+        bind(labelset: labelset, isShortLived: false)
     }
 
     func bind(labels: [String: String]) -> BoundCounterMetric<T> {
-        return bind(labelset: LabelSet(labels: labels), isShortLived: false)
+        bind(labelset: LabelSet(labels: labels), isShortLived: false)
     }
 
     internal func bind(labelset: LabelSet, isShortLived: Bool) -> BoundCounterMetric<T> {
@@ -47,7 +47,6 @@ class CounterMetricSdkBase<T>: CounterMetric {
             switch boundInstrument!.status {
             case .noPendingUpdate:
                 boundInstrument!.status = .updatePending
-                break
             case .candidateForRemoval:
                 bindUnbindLock.withLockVoid {
                     boundInstrument!.status = .updatePending
@@ -76,7 +75,7 @@ class CounterMetricSdkBase<T>: CounterMetric {
         }
     }
 
-    func createMetric(recordStatus: RecordStatus) -> BoundCounterMetricSdkBase<T> {
+    func createMetric(recordStatus _: RecordStatus) -> BoundCounterMetricSdkBase<T> {
         fatalError()
     }
 }

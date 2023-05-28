@@ -6,7 +6,7 @@
 import Foundation
 
 /// Internal utility methods for working with attribute keys, attribute values, and metric names
-public struct StringUtils {
+public enum StringUtils {
     /// Determines whether the String contains only printable characters.
     /// - Parameter string: the String to be validated.
     public static func isPrintableString(_ string: String) -> Bool {
@@ -19,9 +19,9 @@ public struct StringUtils {
     }
 
     private static func isPrintableChar(_ char: Unicode.Scalar) -> Bool {
-        return char >= UnicodeScalar(" ") && char <= UnicodeScalar("~")
+        char >= UnicodeScalar(" ") && char <= UnicodeScalar("~")
     }
-    
+
     /// Determines whether the metric name contains a valid metric name.
     /// - Parameter string: the String to be validated.
     public static func isValidMetricName(_ metricName: String) -> Bool {

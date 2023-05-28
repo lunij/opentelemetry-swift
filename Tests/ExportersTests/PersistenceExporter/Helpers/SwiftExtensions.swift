@@ -16,7 +16,7 @@ extension Optional {
 
     func unwrapOrThrow(file: StaticString = #file, line: UInt = #line) throws -> Wrapped {
         switch self {
-        case .some(let unwrappedValue):
+        case let .some(unwrappedValue):
             return unwrappedValue
         case .none:
             XCTFail("Expected value, got `nil`.", file: file, line: line)
@@ -27,7 +27,7 @@ extension Optional {
 
 extension Date {
     func secondsAgo(_ seconds: TimeInterval) -> Date {
-        return addingTimeInterval(-seconds)
+        addingTimeInterval(-seconds)
     }
 }
 

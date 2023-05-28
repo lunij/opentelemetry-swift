@@ -11,7 +11,7 @@ class SpanMock: Span {
     var name: String = ""
 
     var kind: SpanKind {
-        return .client
+        .client
     }
 
     var context = SpanContext.create(traceId: TraceId.random(), spanId: SpanId.random(), traceFlags: TraceFlags(), traceState: TraceState())
@@ -24,19 +24,19 @@ class SpanMock: Span {
         OpenTelemetry.instance.contextProvider.removeContextForSpan(self)
     }
 
-    func end(time: Date) { end() }
+    func end(time _: Date) { end() }
 
-    func updateName(name: String) {}
+    func updateName(name _: String) {}
 
-    func setAttribute(key: String, value: AttributeValue?) {}
+    func setAttribute(key _: String, value _: AttributeValue?) {}
 
-    func addEvent(name: String) {}
+    func addEvent(name _: String) {}
 
-    func addEvent(name: String, attributes: [String: AttributeValue]) {}
+    func addEvent(name _: String, attributes _: [String: AttributeValue]) {}
 
-    func addEvent(name: String, timestamp: Date) {}
+    func addEvent(name _: String, timestamp _: Date) {}
 
-    func addEvent(name: String, attributes: [String: AttributeValue], timestamp: Date) {}
+    func addEvent(name _: String, attributes _: [String: AttributeValue], timestamp _: Date) {}
 
     var description: String = "SpanMock"
 }

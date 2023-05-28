@@ -61,9 +61,9 @@ public enum AttributeValue: Equatable, CustomStringConvertible, Hashable {
     }
 }
 
-internal struct AttributeValueExplicitCodable : Codable {
+internal struct AttributeValueExplicitCodable: Codable {
     let attributeValue: AttributeValue
-    
+
     enum CodingKeys: String, CodingKey {
         case string
         case bool
@@ -74,80 +74,80 @@ internal struct AttributeValueExplicitCodable : Codable {
         case intArray
         case doubleArray
     }
-    
+
     enum AssociatedValueCodingKeys: String, CodingKey {
         case associatedValue = "_0"
     }
-    
+
     internal init(attributeValue: AttributeValue) {
         self.attributeValue = attributeValue
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-            
+
         guard container.allKeys.count == 1 else {
             let context = DecodingError.Context(
                 codingPath: container.codingPath,
-                debugDescription: "Invalid number of keys found, expected one.")
+                debugDescription: "Invalid number of keys found, expected one."
+            )
             throw DecodingError.typeMismatch(Status.self, context)
         }
 
         switch container.allKeys.first.unsafelyUnwrapped {
         case .string:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .string)
-            self.attributeValue = .string(try nestedContainer.decode(String.self, forKey: .associatedValue))
+            attributeValue = .string(try nestedContainer.decode(String.self, forKey: .associatedValue))
         case .bool:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .bool)
-            self.attributeValue = .bool(try nestedContainer.decode(Bool.self, forKey: .associatedValue))
+            attributeValue = .bool(try nestedContainer.decode(Bool.self, forKey: .associatedValue))
         case .int:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .int)
-            self.attributeValue = .int(try nestedContainer.decode(Int.self, forKey: .associatedValue))
+            attributeValue = .int(try nestedContainer.decode(Int.self, forKey: .associatedValue))
         case .double:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .double)
-            self.attributeValue = .double(try nestedContainer.decode(Double.self, forKey: .associatedValue))
+            attributeValue = .double(try nestedContainer.decode(Double.self, forKey: .associatedValue))
         case .stringArray:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .stringArray)
-            self.attributeValue = .stringArray(try nestedContainer.decode([String].self, forKey: .associatedValue))
+            attributeValue = .stringArray(try nestedContainer.decode([String].self, forKey: .associatedValue))
         case .boolArray:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .boolArray)
-            self.attributeValue = .boolArray(try nestedContainer.decode([Bool].self, forKey: .associatedValue))
+            attributeValue = .boolArray(try nestedContainer.decode([Bool].self, forKey: .associatedValue))
         case .intArray:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .intArray)
-            self.attributeValue = .intArray(try nestedContainer.decode([Int].self, forKey: .associatedValue))
+            attributeValue = .intArray(try nestedContainer.decode([Int].self, forKey: .associatedValue))
         case .doubleArray:
             let nestedContainer = try container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .doubleArray)
-            self.attributeValue = .doubleArray(try nestedContainer.decode([Double].self, forKey: .associatedValue))
+            attributeValue = .doubleArray(try nestedContainer.decode([Double].self, forKey: .associatedValue))
         }
     }
 
     public func encode(to encoder: Encoder) throws {
-        
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        switch self.attributeValue {
-        case .string(let value):
+
+        switch attributeValue {
+        case let .string(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .string)
             try nestedContainer.encode(value, forKey: .associatedValue)
-        case .bool(let value):
+        case let .bool(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .bool)
             try nestedContainer.encode(value, forKey: .associatedValue)
-        case .int(let value):
+        case let .int(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .int)
             try nestedContainer.encode(value, forKey: .associatedValue)
-        case .double(let value):
+        case let .double(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .double)
             try nestedContainer.encode(value, forKey: .associatedValue)
-        case .stringArray(let value):
+        case let .stringArray(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .stringArray)
             try nestedContainer.encode(value, forKey: .associatedValue)
-        case .boolArray(let value):
+        case let .boolArray(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .boolArray)
             try nestedContainer.encode(value, forKey: .associatedValue)
-        case .intArray(let value):
+        case let .intArray(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .intArray)
             try nestedContainer.encode(value, forKey: .associatedValue)
-        case .doubleArray(let value):
+        case let .doubleArray(value):
             var nestedContainer = container.nestedContainer(keyedBy: AssociatedValueCodingKeys.self, forKey: .doubleArray)
             try nestedContainer.encode(value, forKey: .associatedValue)
         }
@@ -157,20 +157,19 @@ internal struct AttributeValueExplicitCodable : Codable {
 #if swift(>=5.5)
 // swift 5.5 supports synthesizing Codable for enums with associated values
 // see https://github.com/apple/swift-evolution/blob/main/proposals/0295-codable-synthesis-for-enums-with-associated-values.md
-extension AttributeValue: Codable { }
+extension AttributeValue: Codable {}
 #else
 // for older swift versions use a forward compatible explicit Codable implementation
 extension AttributeValue: Codable {
-         
     public init(from decoder: Decoder) throws {
         let explicitDecoded = try AttributeValueExplicitCodable(from: decoder)
-        
+
         self = explicitDecoded.attributeValue
     }
 
     public func encode(to encoder: Encoder) throws {
         let explicitEncoded = AttributeValueExplicitCodable(attributeValue: self)
-        
+
         try explicitEncoded.encode(to: encoder)
     }
 }

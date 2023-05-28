@@ -21,7 +21,6 @@ struct ZipkinSpan: Encodable {
     var shared: Bool?
 
     init(traceId: String, parentId: String?, id: String, kind: String?, name: String, timestamp: UInt64?, duration: UInt64?, localEndpoint: ZipkinEndpoint, remoteEndpoint: ZipkinEndpoint?, annotations: [ZipkinAnnotation], tags: [String: String], debug: Bool?, shared: Bool?) {
-
         self.traceId = traceId
         self.parentId = parentId
         self.id = id

@@ -18,7 +18,7 @@ class PropagatedSpan: Span {
         OpenTelemetry.instance.contextProvider.removeContextForSpan(self)
     }
 
-    func end(time: Date) {
+    func end(time _: Date) {
         end()
     }
 
@@ -64,29 +64,29 @@ class PropagatedSpan: Span {
     }
 
     var isRecording: Bool {
-        return false
+        false
     }
 
     var status: Status {
         get {
-            return Status.ok
+            Status.ok
         }
         set {}
     }
 
     var description: String {
-        return "PropagatedSpan"
+        "PropagatedSpan"
     }
 
-    func updateName(name: String) {}
+    func updateName(name _: String) {}
 
-    func setAttribute(key: String, value: AttributeValue?) {}
+    func setAttribute(key _: String, value _: AttributeValue?) {}
 
-    func addEvent(name: String) {}
+    func addEvent(name _: String) {}
 
-    func addEvent(name: String, timestamp: Date) {}
+    func addEvent(name _: String, timestamp _: Date) {}
 
-    func addEvent(name: String, attributes: [String: AttributeValue]) {}
+    func addEvent(name _: String, attributes _: [String: AttributeValue]) {}
 
-    func addEvent(name: String, attributes: [String: AttributeValue], timestamp: Date) {}
+    func addEvent(name _: String, attributes _: [String: AttributeValue], timestamp _: Date) {}
 }

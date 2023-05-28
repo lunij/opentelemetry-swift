@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class W3BaggagePropagatorTest: XCTestCase {
     let setter = TestSetter()
@@ -15,7 +15,6 @@ class W3BaggagePropagatorTest: XCTestCase {
     override func setUp() {}
 
     override func tearDown() {}
-
 
     func testFields() {
         XCTAssertEqual(propagator.fields.count, 1)
@@ -58,8 +57,10 @@ class W3BaggagePropagatorTest: XCTestCase {
     }
 
     func testExtractFullComplexities() {
-        let result = propagator.extract(carrier: ["baggage": "key1= value1; metadata-key = value; othermetadata, " +
-                "key2 =value2 , key3 =\tvalue3 ; "], getter: getter)!
+        let result = propagator.extract(carrier: [
+            "baggage": "key1= value1; metadata-key = value; othermetadata, " +
+                "key2 =value2 , key3 =\tvalue3 ; "
+        ], getter: getter)!
         let expectedBaggage = builder.put(key: "key1", value: "value1", metadata: "metadata-key = value; othermetadata")
             .put(key: "key2", value: "value2")
             .put(key: "key3", value: "value3")

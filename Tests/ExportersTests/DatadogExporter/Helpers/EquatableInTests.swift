@@ -12,12 +12,12 @@ protocol EquatableInTests: Equatable {}
 
 extension EquatableInTests {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return equals(lhs: lhs, rhs: rhs)
+        equals(lhs: lhs, rhs: rhs)
     }
 }
 
 private func equals<T>(lhs: T, rhs: T) -> Bool {
-    return equalsAny(lhs: lhs, rhs: rhs)
+    equalsAny(lhs: lhs, rhs: rhs)
 }
 
 private func equalsAny(lhs: Any, rhs: Any) -> Bool {
@@ -67,8 +67,8 @@ private func equalsAny(lhs: Any, rhs: Any) -> Bool {
         break // other than dictionary or set, continue...
     }
 
-    let lhsChildren = lhsMirror.children.map { $0.value }
-    let rhsChildren = rhsMirror.children.map { $0.value }
+    let lhsChildren = lhsMirror.children.map(\.value)
+    let rhsChildren = rhsMirror.children.map(\.value)
 
     for (lhsChild, rhsChild) in zip(lhsChildren, rhsChildren) { // compare each child
         if !equalsAny(lhs: lhsChild, rhs: rhsChild) {

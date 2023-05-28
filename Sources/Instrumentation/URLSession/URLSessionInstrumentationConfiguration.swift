@@ -12,17 +12,18 @@ public typealias SessionTaskId = String
 public typealias HTTPStatus = Int
 
 public struct URLSessionInstrumentationConfiguration {
-    public init(shouldRecordPayload: ((URLSession) -> (Bool)?)? = nil,
-                shouldInstrument: ((URLRequest) -> (Bool)?)? = nil,
-                nameSpan: ((URLRequest) -> (String)?)? = nil,
-                spanCustomization: ((URLRequest, SpanBuilder) -> Void)? = nil,
-                shouldInjectTracingHeaders: ((URLRequest) -> (Bool)?)? = nil,
-                injectCustomHeaders: ((inout URLRequest, Span?) -> Void)? = nil,
-                createdRequest: ((URLRequest, Span) -> Void)? = nil,
-                receivedResponse: ((URLResponse, DataOrFile?, Span) -> Void)? = nil,
-                receivedError: ((Error, DataOrFile?, HTTPStatus, Span) -> Void)? = nil,
-                delegateClassesToInstrument: [AnyClass]? = nil)
-    {
+    public init(
+        shouldRecordPayload: ((URLSession) -> (Bool)?)? = nil,
+        shouldInstrument: ((URLRequest) -> (Bool)?)? = nil,
+        nameSpan: ((URLRequest) -> (String)?)? = nil,
+        spanCustomization: ((URLRequest, SpanBuilder) -> Void)? = nil,
+        shouldInjectTracingHeaders: ((URLRequest) -> (Bool)?)? = nil,
+        injectCustomHeaders: ((inout URLRequest, Span?) -> Void)? = nil,
+        createdRequest: ((URLRequest, Span) -> Void)? = nil,
+        receivedResponse: ((URLResponse, DataOrFile?, Span) -> Void)? = nil,
+        receivedError: ((Error, DataOrFile?, HTTPStatus, Span) -> Void)? = nil,
+        delegateClassesToInstrument: [AnyClass]? = nil
+    ) {
         self.shouldRecordPayload = shouldRecordPayload
         self.shouldInstrument = shouldInstrument
         self.shouldInjectTracingHeaders = shouldInjectTracingHeaders
@@ -67,7 +68,7 @@ public struct URLSessionInstrumentationConfiguration {
 
     ///  Called before the span is ended, it allows to add extra information to the Span
     public var receivedError: ((Error, DataOrFile?, HTTPStatus, Span) -> Void)?
-    
+
     ///  The array of URLSession delegate classes that will be instrumented by the library, will autodetect if nil is passed.
     public var delegateClassesToInstrument: [AnyClass]?
 }

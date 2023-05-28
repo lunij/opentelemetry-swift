@@ -1,16 +1,16 @@
 //
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
-// 
+//
 
 import Foundation
 import OpenTelemetryApi
 
 class LoggerSharedState {
-    var resource : Resource
-    var logLimits : LogLimits
-    var activeLogRecordProcessor : LogRecordProcessor
-    var clock : Clock
+    var resource: Resource
+    var logLimits: LogLimits
+    var activeLogRecordProcessor: LogRecordProcessor
+    var clock: Clock
     var hasBeenShutdown = false
     var registeredLogRecordProcessors = [LogRecordProcessor]()
 
@@ -19,16 +19,16 @@ class LoggerSharedState {
         self.logLimits = logLimits
         self.clock = clock
         if processors.count > 1 {
-            self.activeLogRecordProcessor = MultiLogRecordProcessor(logRecordProcessors: processors)
-            self.registeredLogRecordProcessors = processors
+            activeLogRecordProcessor = MultiLogRecordProcessor(logRecordProcessors: processors)
+            registeredLogRecordProcessors = processors
         } else if processors.count == 1 {
-            self.activeLogRecordProcessor = processors[0]
-            self.registeredLogRecordProcessors = processors
+            activeLogRecordProcessor = processors[0]
+            registeredLogRecordProcessors = processors
         } else {
-            self.activeLogRecordProcessor = NoopLogRecordProcessor()
+            activeLogRecordProcessor = NoopLogRecordProcessor()
         }
     }
-    
+
     func addLogRecordProcessor(_ logRecordProcessor: LogRecordProcessor) {
         registeredLogRecordProcessors.append(logRecordProcessor)
         if registeredLogRecordProcessors.count > 1 {
@@ -37,7 +37,7 @@ class LoggerSharedState {
             activeLogRecordProcessor = registeredLogRecordProcessors[0]
         }
     }
-    
+
     func stop() {
         if hasBeenShutdown {
             return
@@ -45,8 +45,8 @@ class LoggerSharedState {
         _ = activeLogRecordProcessor.shutdown()
         hasBeenShutdown = true
     }
-    
+
     func setLogLimits(limits: LogLimits) {
-        self.logLimits = limits
+        logLimits = limits
     }
 }

@@ -1,7 +1,7 @@
 //
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
-// 
+//
 
 import XCTest
 @testable import OpenTelemetrySdk
@@ -28,8 +28,8 @@ final class LogRecordBuilderSdkTests: XCTestCase {
     }
 
     func testGivenTimestampAndObservedSet_whenEmit_thenRecordHasTimestampAndObserved() {
-        let timestamp = TestUtils.dateFromNanos(1234000001234)
-        let observedTimestamp = TestUtils.dateFromNanos(1234000005678)
+        let timestamp = TestUtils.dateFromNanos(1_234_000_001_234)
+        let observedTimestamp = TestUtils.dateFromNanos(1_234_000_005_678)
 
         // Given
         let logRecordBuilder = LogRecordBuilderSdk(sharedState: sharedState, instrumentationScope: .init(), includeSpanContext: false)

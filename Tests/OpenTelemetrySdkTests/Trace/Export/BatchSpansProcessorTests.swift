@@ -4,8 +4,8 @@
  */
 
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 class BatchSpansProcessorTests: XCTestCase {
     let spanName1 = "MySpanName/1"
@@ -26,9 +26,9 @@ class BatchSpansProcessorTests: XCTestCase {
 
     @discardableResult private func createSampledEndedSpan(spanName: String) -> ReadableSpan {
         let span = TestUtils.createSpanWithSampler(tracerSdkFactory: tracerSdkFactory,
-                                                  tracer: tracer,
-                                                  spanName: spanName,
-                                                  sampler: Samplers.alwaysOn)
+                                                   tracer: tracer,
+                                                   spanName: spanName,
+                                                   sampler: Samplers.alwaysOn)
             .startSpan() as! ReadableSpan
         span.end()
         return span
@@ -36,9 +36,9 @@ class BatchSpansProcessorTests: XCTestCase {
 
     private func createNotSampledEndedSpan(spanName: String) {
         TestUtils.createSpanWithSampler(tracerSdkFactory: tracerSdkFactory,
-                                       tracer: tracer,
-                                       spanName: spanName,
-                                       sampler: Samplers.alwaysOff)
+                                        tracer: tracer,
+                                        spanName: spanName,
+                                        sampler: Samplers.alwaysOff)
             .startSpan()
             .end()
     }
@@ -72,17 +72,19 @@ class BatchSpansProcessorTests: XCTestCase {
         let span5 = createSampledEndedSpan(spanName: spanName1)
         let span6 = createSampledEndedSpan(spanName: spanName1)
         let exported = waitingSpanExporter.waitForExport()
-        XCTAssertEqual(exported, [span1.toSpanData(),
-                                  span2.toSpanData(),
-                                  span3.toSpanData(),
-                                  span4.toSpanData(),
-                                  span5.toSpanData(),
-                                  span6.toSpanData()])
+        XCTAssertEqual(exported, [
+            span1.toSpanData(),
+            span2.toSpanData(),
+            span3.toSpanData(),
+            span4.toSpanData(),
+            span5.toSpanData(),
+            span6.toSpanData()
+        ])
     }
 
     func testForceExport() {
         let waitingSpanExporter = WaitingSpanExporter(numberToWaitFor: 1)
-        let batchSpansProcessor = BatchSpanProcessor(spanExporter: waitingSpanExporter, scheduleDelay: 10, maxQueueSize: 10000, maxExportBatchSize: 2000)
+        let batchSpansProcessor = BatchSpanProcessor(spanExporter: waitingSpanExporter, scheduleDelay: 10, maxQueueSize: 10_000, maxExportBatchSize: 2_000)
         tracerSdkFactory.addSpanProcessor(batchSpansProcessor)
 
         for _ in 0 ..< 100 {
@@ -110,7 +112,7 @@ class BatchSpansProcessorTests: XCTestCase {
         let maxQueuedSpans = 8
         let waitingSpanExporter = WaitingSpanExporter(numberToWaitFor: maxQueuedSpans)
 
-        tracerSdkFactory.addSpanProcessor(BatchSpanProcessor(spanExporter: MultiSpanExporter(spanExporters: [waitingSpanExporter, blockingSpanExporter]), scheduleDelay:    maxScheduleDelay, maxQueueSize: maxQueuedSpans, maxExportBatchSize: maxQueuedSpans / 2))
+        tracerSdkFactory.addSpanProcessor(BatchSpanProcessor(spanExporter: MultiSpanExporter(spanExporters: [waitingSpanExporter, blockingSpanExporter]), scheduleDelay: maxScheduleDelay, maxQueueSize: maxQueuedSpans, maxExportBatchSize: maxQueuedSpans / 2))
 
         var spansToExport = [SpanData]()
         // Wait to block the worker thread in the BatchSampledSpansProcessor. This ensures that no items
@@ -205,7 +207,7 @@ class BlockingSpanExporter: SpanExporter {
 
     var state: State = .waitToBlock
 
-    func export(spans: [SpanData]) -> SpanExporterResultCode {
+    func export(spans _: [SpanData]) -> SpanExporterResultCode {
         cond.lock()
         while state != .unblocked {
             state = .blocked
@@ -226,7 +228,7 @@ class BlockingSpanExporter: SpanExporter {
     }
 
     func flush() -> SpanExporterResultCode {
-        return .success
+        .success
     }
 
     func shutdown() {}
@@ -272,7 +274,7 @@ class WaitingSpanExporter: SpanExporter {
     }
 
     func flush() -> SpanExporterResultCode {
-        return .success
+        .success
     }
 
     func shutdown() {

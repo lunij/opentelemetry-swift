@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import XCTest
+@testable import PersistenceExporter
 
 class DataExportDelayTests: XCTestCase {
     private let mockPerformance = ExportPerformanceMock(

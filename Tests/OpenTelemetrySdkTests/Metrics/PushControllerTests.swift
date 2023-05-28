@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 final class PushControllerTests: XCTestCase {
     fileprivate let lock = Lock()
@@ -29,19 +29,18 @@ final class PushControllerTests: XCTestCase {
         var meter1CollectCount = 0
         var meter2CollectCount = 0
         let meterSharedState = MeterSharedState(metricProcessor: testProcessor, metricPushInterval: controllerPushIntervalInSec, metricExporter: testExporter, resource: Resource())
-        
-        let meterInstrumentationScope1 = InstrumentationScopeInfo(name:"meter1")
 
-        let  testMeter1 = TestMeter(meterSharedState: meterSharedState, instrumentationScopeInfo: meterInstrumentationScope1){
+        let meterInstrumentationScope1 = InstrumentationScopeInfo(name: "meter1")
+
+        let testMeter1 = TestMeter(meterSharedState: meterSharedState, instrumentationScopeInfo: meterInstrumentationScope1) {
             self.lock.withLockVoid {
                 meter1CollectCount += 1
             }
         }
         meterProvider.meterRegistry[meterInstrumentationScope1] = testMeter1
 
-        
         let meterInstrumentationScope2 = InstrumentationScopeInfo(name: "meter2")
-        let testMeter2 = TestMeter(meterSharedState:meterSharedState, instrumentationScopeInfo: meterInstrumentationScope2) {
+        let testMeter2 = TestMeter(meterSharedState: meterSharedState, instrumentationScopeInfo: meterInstrumentationScope2) {
             self.lock.withLockVoid {
                 meter2CollectCount += 1
             }
@@ -63,7 +62,7 @@ final class PushControllerTests: XCTestCase {
         XCTAssertEqual(controller.meterSharedState.metricPushInterval, pushInterval)
     }
 
-    func validateMeterCollect(meterCollectCount: inout Int, expectedMeterCollectCount: Int, meterName: String, timeout: TimeInterval) {
+    func validateMeterCollect(meterCollectCount: inout Int, expectedMeterCollectCount: Int, meterName _: String, timeout: TimeInterval) {
         // Sleep in short intervals, so the actual test duration is not always the max wait time.
         let start = Date()
 
@@ -83,7 +82,7 @@ final class PushControllerTests: XCTestCase {
 
             let elapsed = Date().timeIntervalSince(start)
             if elapsed <= timeout {
-                usleep(1000000)
+                usleep(1_000_000)
             } else {
                 break
             }

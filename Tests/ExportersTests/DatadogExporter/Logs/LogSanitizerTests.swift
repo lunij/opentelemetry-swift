@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import XCTest
+@testable import DatadogExporter
 
 class LogSanitizerTests: XCTestCase {
     // MARK: - Attributes sanitization
@@ -24,7 +24,7 @@ class LogSanitizerTests: XCTestCase {
                     // valid attributes:
                     "attribute1": mockValue(),
                     "attribute2": mockValue(),
-                    "date": mockValue(),
+                    "date": mockValue()
                 ]
             )
         )
@@ -52,7 +52,7 @@ class LogSanitizerTests: XCTestCase {
                     "one.two.three.four.five.six.seven.eight.nine": mockValue(),
                     "one.two.three.four.five.six.seven.eight.nine.ten": mockValue(),
                     "one.two.three.four.five.six.seven.eight.nine.ten.eleven": mockValue(),
-                    "one.two.three.four.five.six.seven.eight.nine.ten.eleven.twelve": mockValue(),
+                    "one.two.three.four.five.six.seven.eight.nine.ten.eleven.twelve": mockValue()
                 ]
             )
         )
@@ -78,7 +78,7 @@ class LogSanitizerTests: XCTestCase {
             attributes: .mockWith(
                 userAttributes: [
                     "valid-name": mockValue(),
-                    "": mockValue(), // invalid name
+                    "": mockValue() // invalid name
                 ]
             )
         )
@@ -90,7 +90,7 @@ class LogSanitizerTests: XCTestCase {
     }
 
     func testWhenNumberOfUserAttributesExceedsLimit_itDropsExtraOnes() {
-        let mockAttributes = (0...1_000).map { index in ("attribute-\(index)", mockValue()) }
+        let mockAttributes = (0 ... 1_000).map { index in ("attribute-\(index)", mockValue()) }
         let log = DDLog.mockWith(
             attributes: .mockWith(
                 userAttributes: Dictionary(uniqueKeysWithValues: mockAttributes)
@@ -111,7 +111,7 @@ class LogSanitizerTests: XCTestCase {
                     DDLog.TracingAttributes.spanID: mockValue(),
 
                     // custom attribute:
-                    "attribute1": mockValue(),
+                    "attribute1": mockValue()
                 ]
             )
         )
@@ -187,7 +187,7 @@ class LogSanitizerTests: XCTestCase {
     }
 
     func testWhenNumberOfTagsExceedsLimit_itDropsExtraOnes() {
-        let mockTags = (0...1_000).map { index in "tag\(index)" }
+        let mockTags = (0 ... 1_000).map { index in "tag\(index)" }
         let log = DDLog.mockWith(
             tags: mockTags
         )
@@ -200,6 +200,6 @@ class LogSanitizerTests: XCTestCase {
     // MARK: - Private
 
     private func mockValue() -> String {
-        return .mockAny()
+        .mockAny()
     }
 }

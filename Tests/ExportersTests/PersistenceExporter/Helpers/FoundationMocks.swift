@@ -38,15 +38,15 @@ protocol AnyMockable {
 
 extension Data: AnyMockable {
     static func mockAny() -> Data {
-        return Data()
+        Data()
     }
 
     static func mockRepeating(byte: UInt8, times count: Int) -> Data {
-        return Data(repeating: byte, count: count)
+        Data(repeating: byte, count: count)
     }
 
     static func mock(ofSize size: UInt64) -> Data {
-        return mockRepeating(byte: 0x41, times: Int(size))
+        mockRepeating(byte: 0x41, times: Int(size))
     }
 }
 
@@ -70,13 +70,13 @@ extension Array where Element == Data {
 
 extension Date: AnyMockable {
     static func mockAny() -> Date {
-        return Date(timeIntervalSinceReferenceDate: 1)
+        Date(timeIntervalSinceReferenceDate: 1)
     }
 }
 
 extension TimeInterval: AnyMockable {
     static func mockAny() -> TimeInterval {
-        return 0
+        0
     }
 
     static let distantFuture = TimeInterval(integerLiteral: .max)
@@ -92,12 +92,12 @@ struct ErrorMock: Error, CustomStringConvertible {
 
 struct FailingCodableMock: Codable {
     init() {}
-    
-    init(from decoder: Decoder) throws {
+
+    init(from _: Decoder) throws {
         throw ErrorMock("Failing codable failed to decode")
     }
-    
-    func encode(to encoder: Encoder) throws {
+
+    func encode(to _: Encoder) throws {
         throw ErrorMock("Failing codable failed to encode")
     }
 }

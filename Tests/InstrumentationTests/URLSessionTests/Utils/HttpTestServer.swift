@@ -7,7 +7,7 @@ import Foundation
 import NIO
 import NIOHTTP1
 
-typealias GenericCallback = () -> ()
+typealias GenericCallback = () -> Void
 
 struct HttpTestServerConfig {
     var successCallback: GenericCallback?
@@ -23,7 +23,7 @@ internal class HttpTestServer {
 
     public init(url: URL?, config: HttpTestServerConfig?) {
         host = url?.host ?? "localhost"
-        port = url?.port ?? 33333
+        port = url?.port ?? 33_333
         self.config = config
     }
 
@@ -49,7 +49,7 @@ internal class HttpTestServer {
     }
 
     private var serverBootstrap: ServerBootstrap {
-        return ServerBootstrap(group: group)
+        ServerBootstrap(group: group)
             // Specify backlog and enable SO_REUSEADDR for the server itself
             .serverChannelOption(ChannelOptions.backlog, value: 256)
             .serverChannelOption(ChannelOptions.socketOption(.so_reuseaddr), value: 1)
@@ -81,48 +81,48 @@ internal class HttpTestServer {
             let reqPart = unwrapInboundIn(data)
 
             switch reqPart {
-                case let .head(request):
+            case let .head(request):
 
-                    if request.uri.unicodeScalars.starts(with: "/success".unicodeScalars) {
-                        let channel = context.channel
+                if request.uri.unicodeScalars.starts(with: "/success".unicodeScalars) {
+                    let channel = context.channel
 
-                        let head = HTTPResponseHead(version: request.version,
-                                                    status: .ok)
-                        let part = HTTPServerResponsePart.head(head)
-                        _ = channel.write(part)
+                    let head = HTTPResponseHead(version: request.version,
+                                                status: .ok)
+                    let part = HTTPServerResponsePart.head(head)
+                    _ = channel.write(part)
 
-                        config?.successCallback?()
+                    config?.successCallback?()
 
-                        let endpart = HTTPServerResponsePart.end(nil)
-                        _ = channel.writeAndFlush(endpart).flatMap {
-                            channel.close()
-                        }
-                        break
-                    } else if request.uri.unicodeScalars.starts(with: "/forbidden".unicodeScalars) {
-                        let channel = context.channel
-
-                        let head = HTTPResponseHead(version: request.version,
-                                                    status: .forbidden)
-                        let part = HTTPServerResponsePart.head(head)
-                        _ = channel.write(part)
-
-                        config?.errorCallback?()
-
-                        let endpart = HTTPServerResponsePart.end(nil)
-                        _ = channel.writeAndFlush(endpart).flatMap {
-                            channel.close()
-                        }
-                        break
-                    } else if request.uri.unicodeScalars.starts(with: "/error".unicodeScalars) {
-                        let channel = context.channel
-                        config?.errorCallback?()
-                        _ = channel.close()
-                        break
+                    let endpart = HTTPServerResponsePart.end(nil)
+                    _ = channel.writeAndFlush(endpart).flatMap {
+                        channel.close()
                     }
-                case .body:
                     break
-                case .end:
+                } else if request.uri.unicodeScalars.starts(with: "/forbidden".unicodeScalars) {
+                    let channel = context.channel
+
+                    let head = HTTPResponseHead(version: request.version,
+                                                status: .forbidden)
+                    let part = HTTPServerResponsePart.head(head)
+                    _ = channel.write(part)
+
+                    config?.errorCallback?()
+
+                    let endpart = HTTPServerResponsePart.end(nil)
+                    _ = channel.writeAndFlush(endpart).flatMap {
+                        channel.close()
+                    }
                     break
+                } else if request.uri.unicodeScalars.starts(with: "/error".unicodeScalars) {
+                    let channel = context.channel
+                    config?.errorCallback?()
+                    _ = channel.close()
+                    break
+                }
+            case .body:
+                break
+            case .end:
+                break
             }
         }
 

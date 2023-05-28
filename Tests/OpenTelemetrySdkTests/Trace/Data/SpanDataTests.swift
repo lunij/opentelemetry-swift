@@ -4,12 +4,12 @@
  */
 
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 class SpanDataTests: XCTestCase {
-    let startTime: Date = TestUtils.dateFromNanos(3000000000000 + 200)
-    let endTime: Date = TestUtils.dateFromNanos(3001000000000 + 255)
+    let startTime: Date = TestUtils.dateFromNanos(3_000_000_000_000 + 200)
+    let endTime: Date = TestUtils.dateFromNanos(3_001_000_000_000 + 255)
 
     func testdefaultValues() {
         let spanData = createBasicSpan()
@@ -22,50 +22,50 @@ class SpanDataTests: XCTestCase {
     }
 
     private func createBasicSpan() -> SpanData {
-        return SpanData(traceId: TraceId(),
-                        spanId: SpanId(),
-                        traceFlags: TraceFlags(),
-                        traceState: TraceState(),
-                        resource: Resource(),
-                        instrumentationScope: InstrumentationScopeInfo(),
-                        name: "spanName",
-                        kind: .server,
-                        startTime: startTime,
-                        endTime: endTime,
-                        hasRemoteParent: false)
+        SpanData(traceId: TraceId(),
+                 spanId: SpanId(),
+                 traceFlags: TraceFlags(),
+                 traceState: TraceState(),
+                 resource: Resource(),
+                 instrumentationScope: InstrumentationScopeInfo(),
+                 name: "spanName",
+                 kind: .server,
+                 startTime: startTime,
+                 endTime: endTime,
+                 hasRemoteParent: false)
     }
-    
+
     func testSpanDataCodable() {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-        
+
         var testData = createBasicSpan()
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
-        
+
         testData.settingHasEnded(false)
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
-        
+
         testData.settingAttributes(["key": AttributeValue.bool(true)])
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
-        
+
         testData.settingTotalAttributeCount(2)
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
-        
-        testData.settingEvents([SpanData.Event(name: "my_event", timestamp: Date(timeIntervalSince1970: 12347))])
+
+        testData.settingEvents([SpanData.Event(name: "my_event", timestamp: Date(timeIntervalSince1970: 12_347))])
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
-        
+
         testData.settingTotalRecordedEvents(3)
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
- 
+
         let traceId = TraceId(fromBytes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4])
         let spanId = SpanId(fromBytes: [0, 0, 0, 0, 4, 3, 2, 1])
         let spanContext = SpanContext.create(traceId: traceId, spanId: spanId, traceFlags: TraceFlags(), traceState: TraceState())
         testData.settingLinks([SpanData.Link(context: spanContext)])
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
-        
+
         testData.settingTotalRecordedLinks(2)
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
-        
+
         testData.settingStatus(.ok)
         XCTAssertEqual(testData, try decoder.decode(SpanData.self, from: try encoder.encode(testData)))
     }

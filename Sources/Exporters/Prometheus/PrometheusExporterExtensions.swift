@@ -23,7 +23,7 @@ public enum PrometheusExporterExtensions {
     static func writeMetricsCollection(exporter: PrometheusExporter) -> String {
         var output = ""
         let metrics = exporter.getAndClearMetrics()
-        let now = String(Int64((Date().timeIntervalSince1970 * 1000.0).rounded()))
+        let now = String(Int64((Date().timeIntervalSince1970 * 1_000.0).rounded()))
 
         metrics.forEach { metric in
             let prometheusMetric = PrometheusMetric(name: metric.name, description: metric.description)
@@ -54,7 +54,7 @@ public enum PrometheusExporterExtensions {
                     let histogram = metricData as! HistogramData<Int>
                     let count = histogram.count
                     let sum = histogram.sum
-                    let bucketsBoundaries = histogram.buckets.boundaries.map{Double($0)}
+                    let bucketsBoundaries = histogram.buckets.boundaries.map { Double($0) }
                     let bucketsCounts = histogram.buckets.counts
                     output += PrometheusExporterExtensions.writeHistogram(prometheusMetric: prometheusMetric, timeStamp: now, labels: labels, metricName: metric.name, sum: Double(sum), count: count, bucketsBoundaries: bucketsBoundaries, bucketsCounts: bucketsCounts)
                 case .doubleHistogram:
@@ -86,32 +86,40 @@ public enum PrometheusExporterExtensions {
             prometheusMetric.values.append(PrometheusValue(name: metricName + prometheusSummarySumPostFix, labels: [$0.key: $0.value], value: sum))
             prometheusMetric.values.append(PrometheusValue(name: metricName + prometheusSummaryCountPostFix, labels: [$0.key: $0.value], value: Double(count)))
             prometheusMetric.values.append(PrometheusValue(name: metricName,
-                                                           labels: [$0.key: $0.value,
-                                                                    prometheusSummaryQuantileLabelName: prometheusSummaryQuantileLabelValueForMin],
+                                                           labels: [
+                                                               $0.key: $0.value,
+                                                               prometheusSummaryQuantileLabelName: prometheusSummaryQuantileLabelValueForMin
+                                                           ],
                                                            value: min))
             prometheusMetric.values.append(PrometheusValue(name: metricName,
-                                                           labels: [$0.key: $0.value,
-                                                                    prometheusSummaryQuantileLabelName: prometheusSummaryQuantileLabelValueForMax],
+                                                           labels: [
+                                                               $0.key: $0.value,
+                                                               prometheusSummaryQuantileLabelName: prometheusSummaryQuantileLabelValueForMax
+                                                           ],
                                                            value: max))
         }
         return prometheusMetric.write(timeStamp: timeStamp)
     }
 
-    private static func writeHistogram(prometheusMetric: PrometheusMetric, timeStamp: String, labels: [String: String], metricName: String, sum: Double, count: Int, bucketsBoundaries: Array<Double>, bucketsCounts: Array<Int>) -> String {
+    private static func writeHistogram(prometheusMetric: PrometheusMetric, timeStamp: String, labels: [String: String], metricName: String, sum: Double, count: Int, bucketsBoundaries: [Double], bucketsCounts: [Int]) -> String {
         var prometheusMetric = prometheusMetric
         prometheusMetric.type = prometheusHistogramType
         labels.forEach {
             prometheusMetric.values.append(PrometheusValue(name: metricName + prometheusHistogramSumPostFix, labels: [$0.key: $0.value], value: sum))
             prometheusMetric.values.append(PrometheusValue(name: metricName + prometheusHistogramCountPostFix, labels: [$0.key: $0.value], value: Double(count)))
-            for i in 0..<bucketsBoundaries.count {
+            for i in 0 ..< bucketsBoundaries.count {
                 prometheusMetric.values.append(PrometheusValue(name: metricName,
-                                                               labels: [$0.key: $0.value,
-                                                                        prometheusHistogramLeLabelName: String(format:"%f", bucketsBoundaries[i])],
+                                                               labels: [
+                                                                   $0.key: $0.value,
+                                                                   prometheusHistogramLeLabelName: String(format: "%f", bucketsBoundaries[i])
+                                                               ],
                                                                value: Double(bucketsCounts[i])))
             }
             prometheusMetric.values.append(PrometheusValue(name: metricName,
-                                                           labels: [$0.key: $0.value,
-                                                                    prometheusHistogramLeLabelName: "+Inf"],
+                                                           labels: [
+                                                               $0.key: $0.value,
+                                                               prometheusHistogramLeLabelName: "+Inf"
+                                                           ],
                                                            value: Double(bucketsCounts[bucketsBoundaries.count])))
         }
         return prometheusMetric.write(timeStamp: timeStamp)

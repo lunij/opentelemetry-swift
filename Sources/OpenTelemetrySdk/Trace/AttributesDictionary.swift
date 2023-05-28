@@ -12,7 +12,7 @@ public struct AttributesDictionary {
     var attributes: [String: AttributeValue]
     var keys: [String]
     private var capacity: Int
-    private var valueLengthLimit : Int
+    private var valueLengthLimit: Int
     private var recordedAttributes: Int
 
     public init(capacity: Int, valueLengthLimit: Int = Int.max) {
@@ -43,14 +43,12 @@ public struct AttributesDictionary {
             if v.count > valueLengthLimit {
                 attributedValue = AttributeValue.string(String(v.prefix(valueLengthLimit)))
             }
-            break
         case let .stringArray(v):
             var strArr = [String]()
             v.forEach { string in
                 strArr.append(String(string.prefix(valueLengthLimit)))
             }
             attributedValue = AttributeValue.stringArray(strArr)
-            break
         default:
             break
         }

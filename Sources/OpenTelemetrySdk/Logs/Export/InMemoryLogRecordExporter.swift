@@ -5,14 +5,14 @@
 
 import Foundation
 
-public class InMemoryLogRecordExporter : LogRecordExporter {
+public class InMemoryLogRecordExporter: LogRecordExporter {
     private var finishedLogRecords = [ReadableLogRecord]()
     private var isRunning = true
 
     public func getFinishedLogRecords() -> [ReadableLogRecord] {
-        return finishedLogRecords
+        finishedLogRecords
     }
-    
+
     public func export(logRecords: [ReadableLogRecord]) -> ExportResult {
         guard isRunning else {
             return .failure

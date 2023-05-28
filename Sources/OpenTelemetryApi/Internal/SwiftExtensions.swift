@@ -24,15 +24,15 @@ public extension TimeInterval {
     }
 
     static func fromMilliseconds(_ millis: Int64) -> TimeInterval {
-        return Double(millis) / 1_000
+        Double(millis) / 1_000
     }
 
     static func fromMicroseconds(_ micros: Int64) -> TimeInterval {
-        return Double(micros) / 1_000_000
+        Double(micros) / 1_000_000
     }
 
     static func fromNanoseconds(_ nanos: Int64) -> TimeInterval {
-        return Double(nanos) / 1_000_000_000
+        Double(nanos) / 1_000_000_000
     }
 }
 

@@ -28,7 +28,7 @@ public class MaxValueAggregator<T: SignedNumeric & Comparable>: Aggregator<T> {
     }
 
     override public func toMetricData() -> MetricData {
-        return SumData<T>(startTimestamp: lastStart, timestamp: lastEnd, sum: pointCheck)
+        SumData<T>(startTimestamp: lastStart, timestamp: lastEnd, sum: pointCheck)
     }
 
     override public func getAggregationType() -> AggregationType {

@@ -31,7 +31,7 @@ public struct TraceState: Equatable, Codable {
     ///  for the key
     /// - Parameter key: key with which the specified value is to be associated
     public func get(key: String) -> String? {
-        return entries.first(where: { $0.key == key })?.value
+        entries.first(where: { $0.key == key })?.value
     }
 
     /// Adds or updates the Entry that has the given key if it is present. The new Entry will always

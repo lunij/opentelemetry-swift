@@ -28,9 +28,9 @@ let spanExporter = MultiSpanExporter(spanExporters: [otlpHttpTraceExporter, stdo
 
 let spanProcessor = SimpleSpanProcessor(spanExporter: spanExporter)
 OpenTelemetry.registerTracerProvider(tracerProvider:
-                                        TracerProviderBuilder()
-    .add(spanProcessor: spanProcessor)
-    .build()
+    TracerProviderBuilder()
+        .add(spanProcessor: spanProcessor)
+        .build()
 )
 
 let tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: instrumentationScopeName, instrumentationVersion: instrumentationScopeVersion)
@@ -44,19 +44,19 @@ func createSpans() {
     let parentSpan1 = tracer.spanBuilder(spanName: "Main").setSpanKind(spanKind: .client).startSpan()
     parentSpan1.setAttribute(key: sampleKey, value: sampleValue)
     OpenTelemetry.instance.contextProvider.setActiveSpan(parentSpan1)
-    for _ in 1...3 {
+    for _ in 1 ... 3 {
         doWork()
     }
     Thread.sleep(forTimeInterval: 0.5)
-    
+
     let parentSpan2 = tracer.spanBuilder(spanName: "Another").setSpanKind(spanKind: .client).setActive(true).startSpan()
     parentSpan2.setAttribute(key: sampleKey, value: sampleValue)
     // do more Work
-    for _ in 1...3 {
+    for _ in 1 ... 3 {
         doWork()
     }
     Thread.sleep(forTimeInterval: 0.5)
-    
+
     parentSpan2.end()
     parentSpan1.end()
 }
@@ -78,7 +78,6 @@ let meterProvider = MeterProviderSdk(metricProcessor: processor, metricExporter:
 
 OpenTelemetry.registerMeterProvider(meterProvider: meterProvider)
 
-
 var meter = meterProvider.get(instrumentationName: "otlp_example_meter'")
 var exampleCounter = meter.createIntCounter(name: "otlp_example_counter")
 var exampleMeasure = meter.createIntMeasure(name: "otlp_example_measure")
@@ -95,7 +94,7 @@ var exampleObserver = meter.createIntObserver(name: "otlp_example_observation") 
 }
 
 var labels1 = ["dim1": "value1"]
-for _ in 1...3000 {
+for _ in 1 ... 3_000 {
     exampleCounter.add(value: 1, labelset: meter.getLabelSet(labels: labels1))
     exampleMeasure.record(value: 100, labelset: meter.getLabelSet(labels: labels1))
     exampleMeasure.record(value: 500, labelset: meter.getLabelSet(labels: labels1))

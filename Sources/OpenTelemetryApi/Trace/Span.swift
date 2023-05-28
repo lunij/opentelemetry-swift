@@ -75,41 +75,41 @@ public extension Span {
     }
 
     static func == (lhs: Span, rhs: Span) -> Bool {
-        return lhs.context.spanId == rhs.context.spanId
+        lhs.context.spanId == rhs.context.spanId
     }
 }
 
 public extension Span {
     func setAttribute(key: String, value: String) {
-        return setAttribute(key: key, value: AttributeValue.string(value))
+        setAttribute(key: key, value: AttributeValue.string(value))
     }
 
     func setAttribute(key: String, value: Int) {
-        return setAttribute(key: key, value: AttributeValue.int(value))
+        setAttribute(key: key, value: AttributeValue.int(value))
     }
 
     func setAttribute(key: String, value: Double) {
-        return setAttribute(key: key, value: AttributeValue.double(value))
+        setAttribute(key: key, value: AttributeValue.double(value))
     }
 
     func setAttribute(key: String, value: Bool) {
-        return setAttribute(key: key, value: AttributeValue.bool(value))
+        setAttribute(key: key, value: AttributeValue.bool(value))
     }
 
     func setAttribute(key: SemanticAttributes, value: String) {
-        return setAttribute(key: key.rawValue, value: AttributeValue.string(value))
+        setAttribute(key: key.rawValue, value: AttributeValue.string(value))
     }
 
     func setAttribute(key: SemanticAttributes, value: Int) {
-        return setAttribute(key: key.rawValue, value: AttributeValue.int(value))
+        setAttribute(key: key.rawValue, value: AttributeValue.int(value))
     }
 
     func setAttribute(key: SemanticAttributes, value: Double) {
-        return setAttribute(key: key.rawValue, value: AttributeValue.double(value))
+        setAttribute(key: key.rawValue, value: AttributeValue.double(value))
     }
 
     func setAttribute(key: SemanticAttributes, value: Bool) {
-        return setAttribute(key: key.rawValue, value: AttributeValue.bool(value))
+        setAttribute(key: key.rawValue, value: AttributeValue.bool(value))
     }
 }
 
@@ -127,7 +127,7 @@ public extension Span {
     /// - Parameters:
     ///   - statusCode: Http status code.
     ///   - reasonPhrase: Http reason phrase.
-    func putHttpStatusCode(statusCode: Int, reasonPhrase: String) {
+    func putHttpStatusCode(statusCode: Int, reasonPhrase _: String) {
         setAttribute(key: .httpStatusCode, value: statusCode)
         var newStatus: Status
         switch statusCode {

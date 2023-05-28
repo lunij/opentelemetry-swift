@@ -12,6 +12,5 @@ open class BoundMeasureMetric<T> {
     /// Record the given value to the bound measure metric.
     /// - Parameters:
     ///   - value: the measurement to be recorded.
-    open func record(value: T) {
-    }
+    open func record(value _: T) {}
 }

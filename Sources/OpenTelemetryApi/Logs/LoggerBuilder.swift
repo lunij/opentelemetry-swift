@@ -6,7 +6,6 @@
 import Foundation
 
 public protocol LoggerBuilder {
-
     /// Set the event domain of the resulting Logger.
     /// NOTE: Event domain is required to use `Logger.eventBuilder(name: String) -> EventBuilder
     /// The event domain will be included in the event.domain attribute for every event produced

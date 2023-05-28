@@ -1,16 +1,15 @@
 //
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
-// 
+//
 
 import Foundation
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
-class ReadableLogRecordTests : XCTestCase {
+class ReadableLogRecordTests: XCTestCase {
     let processor = LogRecordProcessorMock()
-    
 
     func testLogRecord() {
         let observedTimestamp = Date()
@@ -22,13 +21,12 @@ class ReadableLogRecordTests : XCTestCase {
             .setObservedTimestamp(observedTimestamp)
             .setAttributes(["firstAttribute": AttributeValue.string("only the 'o' will be captured"), "secondAttribute": AttributeValue.string("this attribute will be dropped")])
             .emit()
-        
-            let logRecord = processor.onEmitCalledLogRecord
+
+        let logRecord = processor.onEmitCalledLogRecord
         XCTAssertEqual(logRecord?.observedTimestamp, observedTimestamp)
         XCTAssertEqual(logRecord?.body, "hello, world")
         XCTAssertEqual(logRecord?.attributes.count, 1)
         let key = logRecord?.attributes.keys.first
         XCTAssertEqual(logRecord?.attributes[key!]?.description.count, 1)
-        
     }
 }

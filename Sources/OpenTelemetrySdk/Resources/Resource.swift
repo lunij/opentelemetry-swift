@@ -17,16 +17,18 @@ public struct Resource: Equatable, Hashable, Codable {
     ///  Returns a default Resource.
     public init() {
         let executableName = ProcessInfo.processInfo.processName
-        self.init(attributes: [ResourceAttributes.serviceName.rawValue: AttributeValue.string("unknown_service:\(executableName)"),
-                               ResourceAttributes.telemetrySdkName.rawValue: AttributeValue.string("opentelemetry"),
-                               ResourceAttributes.telemetrySdkLanguage.rawValue: AttributeValue.string("swift"),
-                               ResourceAttributes.telemetrySdkVersion.rawValue: AttributeValue.string("1.0.0")]
+        self.init(attributes: [
+            ResourceAttributes.serviceName.rawValue: AttributeValue.string("unknown_service:\(executableName)"),
+            ResourceAttributes.telemetrySdkName.rawValue: AttributeValue.string("opentelemetry"),
+            ResourceAttributes.telemetrySdkLanguage.rawValue: AttributeValue.string("swift"),
+            ResourceAttributes.telemetrySdkVersion.rawValue: AttributeValue.string("1.0.0")
+        ]
         )
     }
 
     ///  Returns an empty Resource.
     static var empty: Resource {
-        return self.init(attributes: [String: AttributeValue]())
+        self.init(attributes: [String: AttributeValue]())
     }
 
     /// Returns a Resource.
@@ -67,13 +69,13 @@ public struct Resource: Equatable, Hashable, Codable {
     /// exceed 255 characters.
     /// - Parameter name: the name to be validated.
     private static func isValid(name: String) -> Bool {
-        return name.count <= maxLength && StringUtils.isPrintableString(name)
+        name.count <= maxLength && StringUtils.isPrintableString(name)
     }
 
     /// ¡Determines whether the given String is a valid printable ASCII string with a length
     /// greater than 0 and not exceed 255 characters.
     /// - Parameter name: the name to be validated.
     private static func isValidAndNotEmpty(name: String) -> Bool {
-        return !name.isEmpty && isValid(name: name)
+        !name.isEmpty && isValid(name: name)
     }
 }

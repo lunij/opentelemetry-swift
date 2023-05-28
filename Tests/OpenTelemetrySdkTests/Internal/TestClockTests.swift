@@ -8,23 +8,23 @@ import XCTest
 
 class TestClockTests: XCTestCase {
     func testSetAndGetTime() {
-        let clock = TestClock(nanos: 1234)
-        XCTAssertEqual(clock.now, TestUtils.dateFromNanos(1234))
-        clock.setTime(nanos: 9876543210)
-        XCTAssertEqual(clock.now, TestUtils.dateFromNanos(9876543210))
+        let clock = TestClock(nanos: 1_234)
+        XCTAssertEqual(clock.now, TestUtils.dateFromNanos(1_234))
+        clock.setTime(nanos: 9_876_543_210)
+        XCTAssertEqual(clock.now, TestUtils.dateFromNanos(9_876_543_210))
     }
 
     func testAdvanceMillis() {
-        let clock = TestClock(nanos: 1500000000)
-        clock.advanceMillis(2600)
-        XCTAssertEqual(clock.now, TestUtils.dateFromNanos(4100000000))
+        let clock = TestClock(nanos: 1_500_000_000)
+        clock.advanceMillis(2_600)
+        XCTAssertEqual(clock.now, TestUtils.dateFromNanos(4_100_000_000))
     }
 
     func testMeasureElapsedTime() {
-        let clock = TestClock(nanos: 10000000000)
+        let clock = TestClock(nanos: 10_000_000_000)
         let nanos1 = clock.nanoTime
-        clock.setTime(nanos: 11000000000)
+        clock.setTime(nanos: 11_000_000_000)
         let nanos2 = clock.nanoTime
-        XCTAssertEqual(nanos2 - nanos1, 1000000000)
+        XCTAssertEqual(nanos2 - nanos1, 1_000_000_000)
     }
 }

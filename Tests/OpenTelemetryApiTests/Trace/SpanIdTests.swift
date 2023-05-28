@@ -65,11 +65,11 @@ final class SpanIdTests: XCTestCase {
         XCTAssertTrue(first.description.contains("0000000000000061"))
         XCTAssertTrue(second.description.contains("ff00000000000041"))
     }
-    
+
     func testSpanId_Codable() throws {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-        
+
         XCTAssertEqual(SpanId.invalid, try decoder.decode(SpanId.self, from: try encoder.encode(SpanId.invalid)))
         XCTAssertEqual(first, try decoder.decode(SpanId.self, from: try encoder.encode(first)))
         XCTAssertEqual(second, try decoder.decode(SpanId.self, from: try encoder.encode(second)))
@@ -83,6 +83,6 @@ final class SpanIdTests: XCTestCase {
         ("testSpanId_CompareTo", testSpanId_CompareTo),
         ("testSpanId_EqualsAndHashCode", testSpanId_EqualsAndHashCode),
         ("testSpanId_ToString", testSpanId_ToString),
-        ("testSpanId_Codable", testSpanId_Codable),
+        ("testSpanId_Codable", testSpanId_Codable)
     ]
 }

@@ -18,6 +18,6 @@ internal class BoundMeasureMetricSdk<T: SignedNumeric & Comparable>: BoundMeasur
     }
 
     override func getAggregator() -> MeasureMinMaxSumCountAggregator<T> {
-        return measureAggregator
+        measureAggregator
     }
 }

@@ -5,22 +5,22 @@
 
 import Foundation
 
-public class DefaultLoggerProvider : LoggerProvider {
+public class DefaultLoggerProvider: LoggerProvider {
     public static let instance: LoggerProvider = DefaultLoggerProvider()
     fileprivate static let noopBuilderWithDomain = NoopLoggerBuilder(true)
     fileprivate static let noopBuilderNoDomain = NoopLoggerBuilder(false)
 
     public func get(instrumentationScopeName: String) -> Logger {
-        return loggerBuilder(instrumentationScopeName: instrumentationScopeName).build()
+        loggerBuilder(instrumentationScopeName: instrumentationScopeName).build()
     }
 
-    public func loggerBuilder(instrumentationScopeName: String) -> LoggerBuilder {
-        return Self.noopBuilderNoDomain
+    public func loggerBuilder(instrumentationScopeName _: String) -> LoggerBuilder {
+        Self.noopBuilderNoDomain
     }
 }
 
-fileprivate class NoopLoggerBuilder: LoggerBuilder {
-    private let hasDomain : Bool
+private class NoopLoggerBuilder: LoggerBuilder {
+    private let hasDomain: Bool
 
     fileprivate init(_ hasDomain: Bool) {
         self.hasDomain = hasDomain
@@ -33,23 +33,23 @@ fileprivate class NoopLoggerBuilder: LoggerBuilder {
         return DefaultLoggerProvider.noopBuilderWithDomain as! Self
     }
 
-    public func setSchemaUrl(_ schemaUrl: String) -> Self {
-        return self
+    public func setSchemaUrl(_: String) -> Self {
+        self
     }
 
-    public func setInstrumentationVersion(_ instrumentationVersion: String) -> Self {
-        return self
+    public func setInstrumentationVersion(_: String) -> Self {
+        self
     }
 
-    public func setIncludeTraceContext(_ includeTraceContext: Bool) -> Self {
-        return self
+    public func setIncludeTraceContext(_: Bool) -> Self {
+        self
     }
 
-    public func setAttributes(_ attributes: [String: AttributeValue]) -> Self {
-        return self
+    public func setAttributes(_: [String: AttributeValue]) -> Self {
+        self
     }
 
     public func build() -> Logger {
-        return DefaultLogger.getInstance(hasDomain)
+        DefaultLogger.getInstance(hasDomain)
     }
 }

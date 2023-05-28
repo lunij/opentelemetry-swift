@@ -48,7 +48,7 @@ sleep(10)
 
 func testTraces() {
     let spanProcessor = SimpleSpanProcessor(spanExporter: datadogExporter)
-    
+
     OpenTelemetry.registerTracerProvider(tracerProvider:
         TracerProviderBuilder()
             .add(spanProcessor: spanProcessor)
@@ -104,7 +104,7 @@ func testMetrics() {
     }
 
     var counter = 0
-    while counter < 3000 {
+    while counter < 3_000 {
         testCounter.add(value: 100, labelset: meter.getLabelSet(labels: labels1))
 
         testMeasure.record(value: 100, labelset: meter.getLabelSet(labels: labels1))

@@ -30,7 +30,7 @@ public class SpanShim: OTSpan, BaseShimProtocol {
     }
 
     public func tracer() -> OTTracer {
-        return TraceShim.instance.otTracer
+        TraceShim.instance.otTracer
     }
 
     public func setOperationName(_ operationName: String) {
@@ -103,7 +103,7 @@ public class SpanShim: OTSpan, BaseShimProtocol {
     }
 
     public func getBaggageItem(_ key: String) -> String? {
-        return spanContextTable.getBaggageItem(spanShim: self, key: key)
+        spanContextTable.getBaggageItem(spanShim: self, key: key)
     }
 
     public func finish() {
@@ -119,7 +119,7 @@ public class SpanShim: OTSpan, BaseShimProtocol {
     }
 
     static func getEventNameFrom(fields: [String: NSObject]) -> String {
-        return fields[OpenTracingEventField]?.description ?? defaultEventName
+        fields[OpenTracingEventField]?.description ?? defaultEventName
     }
 
     static func convertToAttributes(fields: [String: NSObject]) -> [String: AttributeValue] {

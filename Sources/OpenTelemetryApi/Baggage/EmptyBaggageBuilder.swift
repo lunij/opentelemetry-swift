@@ -6,24 +6,24 @@
 import Foundation
 
 class EmptyBaggageBuilder: BaggageBuilder {
-    func setParent(_ parent: Baggage?) -> Self {
-        return self
+    func setParent(_: Baggage?) -> Self {
+        self
     }
 
     func setNoParent() -> Self {
-        return self
+        self
     }
 
-    func put(key: EntryKey, value: EntryValue, metadata: EntryMetadata?) -> Self {
-        return self
+    func put(key _: EntryKey, value _: EntryValue, metadata _: EntryMetadata?) -> Self {
+        self
     }
 
-    func remove(key: EntryKey) -> Self {
-        return self
+    func remove(key _: EntryKey) -> Self {
+        self
     }
 
     func build() -> Baggage {
-        return EmptyBaggage.instance
+        EmptyBaggage.instance
     }
 
     init() {}

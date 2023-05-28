@@ -87,21 +87,21 @@ public class JaegerPropagator: TextMapPropagator {
         let flagsInt = Int(flags) ?? 0
         let traceFlags = ((flagsInt & 1) == 1) ? JaegerPropagator.sampledFlags : JaegerPropagator.notSampledFlags
         let context = SpanContext.createFromRemoteParent(traceId: TraceId(fromHexString: traceId),
-                                                  spanId: SpanId(fromHexString: spanId),
-                                                  traceFlags: traceFlags,
-                                                  traceState: TraceState())
+                                                         spanId: SpanId(fromHexString: spanId),
+                                                         traceFlags: traceFlags,
+                                                         traceState: TraceState())
         return context.isValid ? context : nil
     }
 
     private func isTraceIdValid(_ traceId: String) -> Bool {
-        return !(traceId.isEmpty || traceId.count > JaegerPropagator.maxTraceIdLength)
+        !(traceId.isEmpty || traceId.count > JaegerPropagator.maxTraceIdLength)
     }
 
     private func isSpanIdValid(_ spanId: String) -> Bool {
-        return !(spanId.isEmpty || spanId.count > JaegerPropagator.maxSpanIdLength)
+        !(spanId.isEmpty || spanId.count > JaegerPropagator.maxSpanIdLength)
     }
 
     private func isFlagValid(_ flags: String) -> Bool {
-        return !(flags.isEmpty || flags.count > JaegerPropagator.maxFlagsLength)
+        !(flags.isEmpty || flags.count > JaegerPropagator.maxFlagsLength)
     }
 }

@@ -116,18 +116,18 @@ public protocol SpanBuilder: AnyObject {
 
 public extension SpanBuilder {
     @discardableResult func setAttribute(key: String, value: String) -> Self {
-        return setAttribute(key: key, value: AttributeValue.string(value))
+        setAttribute(key: key, value: AttributeValue.string(value))
     }
 
     @discardableResult func setAttribute(key: String, value: Int) -> Self {
-        return setAttribute(key: key, value: AttributeValue.int(value))
+        setAttribute(key: key, value: AttributeValue.int(value))
     }
 
     @discardableResult func setAttribute(key: String, value: Double) -> Self {
-        return setAttribute(key: key, value: AttributeValue.double(value))
+        setAttribute(key: key, value: AttributeValue.double(value))
     }
 
     @discardableResult func setAttribute(key: String, value: Bool) -> Self {
-        return setAttribute(key: key, value: AttributeValue.bool(value))
+        setAttribute(key: key, value: AttributeValue.bool(value))
     }
 }

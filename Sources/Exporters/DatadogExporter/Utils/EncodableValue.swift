@@ -50,7 +50,7 @@ internal struct JSONStringEncodableValue: Encodable {
 
     init(_ value: Encodable, encodedUsing jsonEncoder: JSONEncoder) {
         self.jsonEncoder = jsonEncoder
-        self.encodable = EncodableValue(value)
+        encodable = EncodableValue(value)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -84,7 +84,7 @@ internal struct JSONStringEncodableValue: Encodable {
                     throw EncodingError.invalidValue(encodable.value, encodingContext)
                 }
 
-                jsonData = temporaryJsonArrayData.subdata(in: subdataStartIndex..<subdataEndIndex)
+                jsonData = temporaryJsonArrayData.subdata(in: subdataStartIndex ..< subdataEndIndex)
             }
 
             if let stringValue = String(data: jsonData, encoding: .utf8) {

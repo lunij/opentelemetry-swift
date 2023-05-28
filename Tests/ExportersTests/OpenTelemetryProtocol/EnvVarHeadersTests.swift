@@ -8,7 +8,6 @@ import OpenTelemetryProtocolExporterCommon
 import XCTest
 
 class EnvVarHeadersTests: XCTestCase {
-
     func test_attributesIsNil_whenAccessedThroughStaticProperty() throws {
         XCTAssertNil(EnvVarHeaders.attributes)
     }
@@ -46,5 +45,4 @@ class EnvVarHeadersTests: XCTestCase {
         let capturedAttributes = EnvVarHeaders.attributes(for: "key=value with whitespace")
         XCTAssertNil(capturedAttributes)
     }
-
 }

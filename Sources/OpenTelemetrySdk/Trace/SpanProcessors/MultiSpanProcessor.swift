@@ -26,11 +26,11 @@ public struct MultiSpanProcessor: SpanProcessor {
     }
 
     public var isStartRequired: Bool {
-        return spanProcessorsStart.count > 0
+        spanProcessorsStart.count > 0
     }
 
     public var isEndRequired: Bool {
-        return spanProcessorsEnd.count > 0
+        spanProcessorsEnd.count > 0
     }
 
     public func onStart(parentContext: SpanContext?, span: ReadableSpan) {

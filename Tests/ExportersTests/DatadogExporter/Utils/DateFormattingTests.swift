@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import XCTest
+@testable import DatadogExporter
 
 class DateFormattingTests: XCTestCase {
     private let date: Date = .mockDecember15th2019At10AMUTC(addingTimeInterval: 0.001)

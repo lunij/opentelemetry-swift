@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import XCTest
 @testable import OpenTelemetryApi
 @testable import OpenTelemetrySdk
-import XCTest
 
 final class CounterTests: XCTestCase {
     public func testIntCounterBoundInstrumentsStatusUpdatedCorrectlySingleThread() {
@@ -130,9 +130,9 @@ final class CounterTests: XCTestCase {
     }
 
     public func testIntCounterBoundInstrumentsStatusUpdatedCorrectlyMultiThread() throws {
-#if os(watchOS)
+        #if os(watchOS)
         throw XCTSkip("Test is flaky on watchOS")
-#endif
+        #endif
 
         let testProcessor = TestMetricProcessor()
         let meter = MeterProviderSdk(metricProcessor: testProcessor, metricExporter: NoopMetricExporter()).get(instrumentationName: "scope1") as! MeterSdk

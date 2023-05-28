@@ -18,6 +18,6 @@ class BoundCounterMetricSdk<T: SignedNumeric>: BoundCounterMetricSdkBase<T> {
     }
 
     override func getAggregator() -> CounterSumAggregator<T> {
-        return sumAggregator
+        sumAggregator
     }
 }

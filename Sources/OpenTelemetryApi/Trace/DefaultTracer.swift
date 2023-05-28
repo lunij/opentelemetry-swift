@@ -10,6 +10,6 @@ public class DefaultTracer: Tracer {
     public static var instance = DefaultTracer()
 
     public func spanBuilder(spanName: String) -> SpanBuilder {
-        return PropagatedSpanBuilder(tracer: self, spanName: spanName)
+        PropagatedSpanBuilder(tracer: self, spanName: spanName)
     }
 }

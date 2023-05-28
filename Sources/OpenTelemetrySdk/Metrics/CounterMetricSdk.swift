@@ -20,6 +20,6 @@ class CounterMetricSdk<T: SignedNumeric>: CounterMetricSdkBase<T> {
     }
 
     override func createMetric(recordStatus: RecordStatus) -> BoundCounterMetricSdkBase<T> {
-        return BoundCounterMetricSdk<T>(recordStatus: recordStatus)
+        BoundCounterMetricSdk<T>(recordStatus: recordStatus)
     }
 }

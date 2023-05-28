@@ -55,26 +55,26 @@ enum InstrumentationUtils {
     }
 
     static var usesUndocumentedAsyncAwaitMethods: Bool = {
-#if os(macOS)
+        #if os(macOS)
         let os = ProcessInfo.processInfo.operatingSystemVersion
         if os.majorVersion >= 13 {
             return true
         }
-#elseif os(watchOS)
+        #elseif os(watchOS)
         let version = WKInterfaceDevice.current().systemVersion
         if let versionNumber = Double(version),
            versionNumber >= 9.0
         {
             return true
         }
-#else
+        #else
         let version = UIDevice.current.systemVersion
         if let versionNumber = Double(version),
            versionNumber >= 16.0
         {
             return true
         }
-#endif
+        #endif
         return false
     }()
 }

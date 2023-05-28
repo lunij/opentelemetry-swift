@@ -28,6 +28,6 @@ public struct Entry: Equatable, Comparable {
     }
 
     public static func < (lhs: Entry, rhs: Entry) -> Bool {
-        return lhs.key < rhs.key
+        lhs.key < rhs.key
     }
 }

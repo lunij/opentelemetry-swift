@@ -21,7 +21,7 @@ open class LabelSet: Hashable {
     }
 
     public static func == (lhs: LabelSet, rhs: LabelSet) -> Bool {
-        return lhs.labels == rhs.labels
+        lhs.labels == rhs.labels
     }
 
     public func hash(into hasher: inout Hasher) {

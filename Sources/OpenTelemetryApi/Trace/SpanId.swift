@@ -16,7 +16,7 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
     var id: UInt64 = invalidId
 
     public static func getSize() -> Int {
-        return size;
+        size
     }
 
     /// Constructs a SpanId whose representation is specified by a long value.
@@ -31,8 +31,7 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
     }
 
     // Returns an invalid SpanId. All bytes are 0.
-    public init() {
-    }
+    public init() {}
 
     /// Generates a new random SpanId.
     public static func random() -> SpanId {
@@ -50,7 +49,7 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
     ///   - offset: the offset in the buffer where the representation of the SpanId begins.
     init(fromData data: Data, withOffset offset: Int = 0) {
         var id: UInt64 = 0
-        data.withUnsafeBytes { rawPointer -> Void in
+        data.withUnsafeBytes { rawPointer in
             id = rawPointer.load(fromByteOffset: data.startIndex + offset, as: UInt64.self).bigEndian
         }
         self.init(id: id)
@@ -60,7 +59,7 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
     /// - Parameters:
     ///   - data: the buffer from where the representation of the SpanId is copied.
     ///   - offset: the offset in the buffer where the representation of the SpanId begins.
-    public init(fromBytes bytes: Array<UInt8>, withOffset offset: Int = 0) {
+    public init(fromBytes bytes: [UInt8], withOffset offset: Int = 0) {
         self.init(fromData: Data(bytes), withOffset: offset)
     }
 
@@ -76,7 +75,7 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
     /// - Parameters:
     ///   - data: the  char array slice from where the representation of the SpanId is copied.
     ///   - offset: the offset in the buffer where the representation of the SpanId begins.
-    public init(fromBytes bytes: ArraySlice<Character>, withOffset offset: Int = 0) {
+    public init(fromBytes bytes: ArraySlice<Character>, withOffset _: Int = 0) {
         self.init(fromData: Data(String(bytes).utf8.map { UInt8($0) }))
     }
 
@@ -92,7 +91,7 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
     /// - Parameters:
     ///   - dest: the destination buffer.
     ///   - destOffset: the starting offset in the destination buffer.
-    public func copyBytesTo(dest: inout Array<UInt8>, destOffset: Int) {
+    public func copyBytesTo(dest: inout [UInt8], destOffset: Int) {
         dest.replaceSubrange(destOffset ..< destOffset + MemoryLayout<UInt64>.size, with: withUnsafeBytes(of: id.bigEndian) { Array($0) })
     }
 
@@ -113,7 +112,8 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
         let secondIndex = hex.index(firstIndex, offsetBy: 16)
 
         guard hex.count >= 16 + offset,
-            let id = UInt64(hex[firstIndex ..< secondIndex], radix: 16) else {
+              let id = UInt64(hex[firstIndex ..< secondIndex], radix: 16)
+        else {
             self.init()
             return
         }
@@ -122,30 +122,30 @@ public struct SpanId: Equatable, Comparable, Hashable, CustomStringConvertible, 
 
     ///  Returns the base16 encoding of this SpanId.
     public var hexString: String {
-        return String(format: "%016llx", id)
+        String(format: "%016llx", id)
     }
 
     ///  Returns the raw id value of this SpanId.
     public var rawValue: UInt64 {
-        return id
+        id
     }
 
     /// Returns whether the span identifier is valid. A valid span identifier is an 8-byte array with
     /// at least one non-zero byte.
     public var isValid: Bool {
-        return id != SpanId.invalidId
+        id != SpanId.invalidId
     }
 
     public var description: String {
         // return "SpanId{spanId=" + toLowerBase16() + "}";
-        return "SpanId{spanId=\(hexString)}"
+        "SpanId{spanId=\(hexString)}"
     }
 
     public static func < (lhs: SpanId, rhs: SpanId) -> Bool {
-        return lhs.id < rhs.id
+        lhs.id < rhs.id
     }
 
     public static func == (lhs: SpanId, rhs: SpanId) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }

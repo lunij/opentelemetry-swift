@@ -10,6 +10,6 @@ public class DefaultBaggageManagerProvider: BaggageManagerProvider {
     public static var instance = DefaultBaggageManagerProvider()
 
     public func create() -> BaggageManager {
-        return DefaultBaggageManager.instance
+        DefaultBaggageManager.instance
     }
 }

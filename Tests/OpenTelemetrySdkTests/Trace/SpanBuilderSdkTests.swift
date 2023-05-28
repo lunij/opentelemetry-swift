@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import XCTest
 @testable import OpenTelemetryApi
 @testable import OpenTelemetrySdk
-import XCTest
 
 import os.activity
 // Bridging Obj-C variabled defined as c-macroses. See `activity.h` header.
@@ -19,8 +19,8 @@ private let dso = UnsafeMutableRawPointer(mutating: #dsohandle)
 
 class SpanBuilderSdkTest: XCTestCase {
     let spanName = "span_name"
-    let sampledSpanContext = SpanContext.create(traceId: TraceId(idHi: 1000, idLo: 1000),
-                                                spanId: SpanId(id: 3000),
+    let sampledSpanContext = SpanContext.create(traceId: TraceId(idHi: 1_000, idLo: 1_000),
+                                                spanId: SpanId(id: 3_000),
                                                 traceFlags: TraceFlags().settingIsSampled(true),
                                                 traceState: TraceState())
     var tracerSdkFactory = TracerProviderSdk()
@@ -65,7 +65,7 @@ class SpanBuilderSdkTest: XCTestCase {
     func testSetAttribute() {
         let spanBuilder = tracerSdk.spanBuilder(spanName: spanName)
         spanBuilder.setAttribute(key: "string", value: "value")
-        spanBuilder.setAttribute(key: "long", value: 12345)
+        spanBuilder.setAttribute(key: "long", value: 12_345)
         spanBuilder.setAttribute(key: "double", value: 0.12345)
         spanBuilder.setAttribute(key: "boolean", value: true)
         spanBuilder.setAttribute(key: "stringAttribute", value: AttributeValue.string("attrvalue"))
@@ -74,7 +74,7 @@ class SpanBuilderSdkTest: XCTestCase {
         let attrs = span.toSpanData().attributes
         XCTAssertEqual(attrs.count, 5)
         XCTAssertEqual(attrs["string"], AttributeValue.string("value"))
-        XCTAssertEqual(attrs["long"], AttributeValue.int(12345))
+        XCTAssertEqual(attrs["long"], AttributeValue.int(12_345))
         XCTAssertEqual(attrs["double"], AttributeValue.double(0.12345))
         XCTAssertEqual(attrs["boolean"], AttributeValue.bool(true))
         XCTAssertEqual(attrs["stringAttribute"], AttributeValue.string("attrvalue"))
@@ -141,27 +141,28 @@ class SpanBuilderSdkTest: XCTestCase {
     func testSampler_decisionAttributes() {
         class TestSampler: Sampler {
             var decision: Decision
-            func shouldSample(parentContext: SpanContext?,
-                              traceId: TraceId,
-                              name: String,
-                              kind: SpanKind,
-                              attributes: [String: AttributeValue],
-                              parentLinks: [SpanData.Link]) -> Decision
-            {
-                return decision
+            func shouldSample(
+                parentContext _: SpanContext?,
+                traceId _: TraceId,
+                name _: String,
+                kind _: SpanKind,
+                attributes _: [String: AttributeValue],
+                parentLinks _: [SpanData.Link]
+            ) -> Decision {
+                decision
             }
 
-            var description: String { return "TestSampler" }
+            var description: String { "TestSampler" }
             init(decision: Decision) { self.decision = decision }
         }
 
         class TestDecision: Decision {
             var isSampled: Bool {
-                return true
+                true
             }
 
             var attributes: [String: AttributeValue] {
-                return [SpanBuilderSdkTest.samplerAttributeName: AttributeValue.string("bar")]
+                [SpanBuilderSdkTest.samplerAttributeName: AttributeValue.string("bar")]
             }
         }
 

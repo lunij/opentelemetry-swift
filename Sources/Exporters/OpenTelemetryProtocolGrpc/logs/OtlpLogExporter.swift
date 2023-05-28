@@ -4,24 +4,26 @@
  */
 
 import Foundation
-import Logging
 import GRPC
+import Logging
 import NIO
 import NIOHPACK
 import OpenTelemetryApi
-import OpenTelemetrySdk
 import OpenTelemetryProtocolExporterCommon
+import OpenTelemetrySdk
 
-public class OtlpLogExporter : LogRecordExporter {
-    let channel : GRPCChannel
-    var logClient : Opentelemetry_Proto_Collector_Logs_V1_LogsServiceNIOClient
-    let config : OtlpConfiguration
-    var callOptions : CallOptions? = nil
+public class OtlpLogExporter: LogRecordExporter {
+    let channel: GRPCChannel
+    var logClient: Opentelemetry_Proto_Collector_Logs_V1_LogsServiceNIOClient
+    let config: OtlpConfiguration
+    var callOptions: CallOptions?
 
-    public init(channel: GRPCChannel,
-                config: OtlpConfiguration = OtlpConfiguration(),
-                logger: Logging.Logger = Logging.Logger(label: "io.grpc", factory: { _ in SwiftLogNoOpLogHandler() }),
-                envVarHeaders: [(String, String)]? = EnvVarHeaders.attributes){
+    public init(
+        channel: GRPCChannel,
+        config: OtlpConfiguration = OtlpConfiguration(),
+        logger: Logging.Logger = Logging.Logger(label: "io.grpc", factory: { _ in SwiftLogNoOpLogHandler() }),
+        envVarHeaders: [(String, String)]? = EnvVarHeaders.attributes
+    ) {
         self.channel = channel
         logClient = Opentelemetry_Proto_Collector_Logs_V1_LogsServiceNIOClient(channel: channel)
         self.config = config
@@ -34,8 +36,7 @@ public class OtlpLogExporter : LogRecordExporter {
             var updatedHeaders = headers
             updatedHeaders.append(userAgentHeader)
             callOptions = CallOptions(customMetadata: HPACKHeaders(updatedHeaders), logger: logger)
-        }
-        else {
+        } else {
             var headers = [(String, String)]()
             headers.append(userAgentHeader)
             callOptions = CallOptions(customMetadata: HPACKHeaders(headers), logger: logger)

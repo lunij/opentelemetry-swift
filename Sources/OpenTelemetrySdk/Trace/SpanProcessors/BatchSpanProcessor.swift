@@ -17,9 +17,14 @@ import OpenTelemetryApi
 public struct BatchSpanProcessor: SpanProcessor {
     fileprivate var worker: BatchWorker
 
-    public init(spanExporter: SpanExporter, scheduleDelay: TimeInterval = 5, exportTimeout: TimeInterval = 30,
-                maxQueueSize: Int = 2048, maxExportBatchSize: Int = 512, willExportCallback: ((inout [SpanData]) -> Void)? = nil)
-    {
+    public init(
+        spanExporter: SpanExporter,
+        scheduleDelay: TimeInterval = 5,
+        exportTimeout: TimeInterval = 30,
+        maxQueueSize: Int = 2_048,
+        maxExportBatchSize: Int = 512,
+        willExportCallback: ((inout [SpanData]) -> Void)? = nil
+    ) {
         worker = BatchWorker(spanExporter: spanExporter,
                              scheduleDelay: scheduleDelay,
                              exportTimeout: exportTimeout,
@@ -32,7 +37,7 @@ public struct BatchSpanProcessor: SpanProcessor {
     public let isStartRequired = false
     public let isEndRequired = true
 
-    public func onStart(parentContext: SpanContext?, span: ReadableSpan) {}
+    public func onStart(parentContext _: SpanContext?, span _: ReadableSpan) {}
 
     public func onEnd(span: ReadableSpan) {
         if !span.context.traceFlags.sampled {

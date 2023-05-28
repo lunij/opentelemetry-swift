@@ -12,18 +12,18 @@ protocol BaseShimProtocol {
 
 extension BaseShimProtocol {
     var tracer: Tracer {
-        return telemetryInfo.tracer
+        telemetryInfo.tracer
     }
 
     var spanContextTable: SpanContextShimTable {
-        return telemetryInfo.spanContextTable
+        telemetryInfo.spanContextTable
     }
 
     var baggageManager: BaggageManager {
-        return telemetryInfo.baggageManager
+        telemetryInfo.baggageManager
     }
 
     var propagators: ContextPropagators {
-        return telemetryInfo.propagators
+        telemetryInfo.propagators
     }
 }

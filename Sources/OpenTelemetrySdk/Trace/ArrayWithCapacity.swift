@@ -24,15 +24,15 @@ public struct ArrayWithCapacity<T> {
 }
 
 extension ArrayWithCapacity: MutableCollection {
-    public var startIndex: Int { return array.startIndex }
-    public var endIndex: Int { return array.endIndex }
+    public var startIndex: Int { array.startIndex }
+    public var endIndex: Int { array.endIndex }
 
     public subscript(_ index: Int) -> T {
-        get { return array[index] }
+        get { array[index] }
         set { array[index] = newValue }
     }
 
     public func index(after i: Int) -> Int {
-        return array.index(after: i)
+        array.index(after: i)
     }
 }

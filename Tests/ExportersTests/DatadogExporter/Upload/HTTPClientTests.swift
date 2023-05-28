@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import XCTest
+@testable import DatadogExporter
 
 class HTTPClientTests: XCTestCase {
     func testWhenRequestIsDelivered_itReturnsHTTPResponse() {
@@ -14,7 +14,7 @@ class HTTPClientTests: XCTestCase {
 
         client.send(request: .mockAny()) { result in
             switch result {
-            case .success(let httpResponse):
+            case let .success(httpResponse):
                 XCTAssertEqual(httpResponse.statusCode, 200)
                 expectation.fulfill()
             case .failure:
@@ -27,9 +27,9 @@ class HTTPClientTests: XCTestCase {
     }
 
     func testWhenRequestIsNotDelivered_itReturnsHTTPRequestDeliveryError() throws {
-#if os(watchOS)
+        #if os(watchOS)
         throw XCTSkip("Implementation needs to be updated for watchOS to make this test pass")
-#endif
+        #endif
 
         let mockError = NSError(domain: "network", code: 999, userInfo: [NSLocalizedDescriptionKey: "no internet connection"])
         let server = ServerMock(delivery: .failure(error: mockError))
@@ -40,7 +40,7 @@ class HTTPClientTests: XCTestCase {
             switch result {
             case .success:
                 break
-            case .failure(let error):
+            case let .failure(error):
                 XCTAssertEqual((error as NSError).localizedDescription, "no internet connection")
                 expectation.fulfill()
             }

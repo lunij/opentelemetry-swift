@@ -18,7 +18,7 @@ public class PrometheusExporterHttpServer {
 
         let url = URL(string: exporter.options.url)
         host = url?.host ?? "localhost"
-        port = url?.port ?? 9184
+        port = url?.port ?? 9_184
     }
 
     public func start() throws {
@@ -26,7 +26,7 @@ public class PrometheusExporterHttpServer {
             let channel = try serverBootstrap.bind(host: host, port: port).wait()
             print("Listening on \(String(describing: channel.localAddress))...")
             try channel.closeFuture.wait()
-        } catch let error {
+        } catch {
             throw error
         }
     }
@@ -34,7 +34,7 @@ public class PrometheusExporterHttpServer {
     public func stop() {
         do {
             try group.syncShutdownGracefully()
-        } catch let error {
+        } catch {
             print("Error shutting down \(error.localizedDescription)")
             exit(0)
         }
@@ -42,7 +42,7 @@ public class PrometheusExporterHttpServer {
     }
 
     private var serverBootstrap: ServerBootstrap {
-        return ServerBootstrap(group: group)
+        ServerBootstrap(group: group)
             // Specify backlog and enable SO_REUSEADDR for the server itself
             .serverChannelOption(ChannelOptions.backlog, value: 256)
             .serverChannelOption(ChannelOptions.socketOption(.so_reuseaddr), value: 1)

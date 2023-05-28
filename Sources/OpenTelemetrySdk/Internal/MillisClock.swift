@@ -11,6 +11,6 @@ public class MillisClock: Clock {
     public init() {}
 
     public var now: Date {
-        return Date()
+        Date()
     }
 }

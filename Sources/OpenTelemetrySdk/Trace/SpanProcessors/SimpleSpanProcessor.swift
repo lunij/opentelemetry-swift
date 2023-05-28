@@ -17,14 +17,14 @@ public struct SimpleSpanProcessor: SpanProcessor {
     public let isStartRequired = false
     public let isEndRequired = true
 
-    public func onStart(parentContext: SpanContext?, span: ReadableSpan) {}
+    public func onStart(parentContext _: SpanContext?, span _: ReadableSpan) {}
 
     public mutating func onEnd(span: ReadableSpan) {
         if sampled, !span.context.traceFlags.sampled {
             return
         }
         let span = span.toSpanData()
-        let spanExporterAux = self.spanExporter
+        let spanExporterAux = spanExporter
         processorQueue.async {
             spanExporterAux.export(spans: [span])
         }
@@ -38,7 +38,7 @@ public struct SimpleSpanProcessor: SpanProcessor {
 
     /// Forces the processing of the remaining spans
     /// - Parameter timeout: unused in this processor
-    public func forceFlush(timeout: TimeInterval? = nil) {
+    public func forceFlush(timeout _: TimeInterval? = nil) {
         processorQueue.sync {
             _ = spanExporter.flush()
         }

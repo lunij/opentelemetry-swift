@@ -24,7 +24,7 @@ public protocol IntObserverMetric {
 public struct NoopIntObserverMetric: IntObserverMetric {
     public init() {}
 
-    public func observe(value: Int, labelset: LabelSet) {}
+    public func observe(value _: Int, labelset _: LabelSet) {}
 
-    public func observe(value: Int, labels: [String: String]) {}
+    public func observe(value _: Int, labels _: [String: String]) {}
 }

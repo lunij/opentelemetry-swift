@@ -16,23 +16,24 @@ public enum Samplers {
     /// of the specified probability.
     /// - Parameter probability: The desired probability of sampling. Must be within [0.0, 1.0].
     public static func traceIdRatio(ratio: Double) -> Sampler {
-        return TraceIdRatioBased(ratio: ratio)
+        TraceIdRatioBased(ratio: ratio)
     }
 
     /// Returns a new ParentBased Sampler. The probability of sampling a trace is equal to that
     /// of the specified probability.
     /// - Parameter probability: The desired probability of sampling. Must be within [0.0, 1.0].
-    public static func parentBased(root: Sampler,
-                                   remoteParentSampled: Sampler? = nil,
-                                   remoteParentNotSampled: Sampler? = nil,
-                                   localParentSampled: Sampler? = nil,
-                                   localParentNotSampled: Sampler? = nil) -> Sampler
-    {
-        return ParentBasedSampler(root: root,
-                                  remoteParentSampled: remoteParentSampled,
-                                  remoteParentNotSampled: remoteParentNotSampled,
-                                  localParentSampled: localParentSampled,
-                                  localParentNotSampled: localParentNotSampled)
+    public static func parentBased(
+        root: Sampler,
+        remoteParentSampled: Sampler? = nil,
+        remoteParentNotSampled: Sampler? = nil,
+        localParentSampled: Sampler? = nil,
+        localParentNotSampled: Sampler? = nil
+    ) -> Sampler {
+        ParentBasedSampler(root: root,
+                           remoteParentSampled: remoteParentSampled,
+                           remoteParentNotSampled: remoteParentNotSampled,
+                           localParentSampled: localParentSampled,
+                           localParentNotSampled: localParentNotSampled)
     }
 
     static var alwaysOnDecision: Decision = SimpleDecision(decision: true)
@@ -40,34 +41,36 @@ public enum Samplers {
 }
 
 class AlwaysOnSampler: Sampler {
-    func shouldSample(parentContext: SpanContext?,
-                      traceId: TraceId,
-                      name: String,
-                      kind: SpanKind,
-                      attributes: [String: AttributeValue],
-                      parentLinks: [SpanData.Link]) -> Decision
-    {
-        return Samplers.alwaysOnDecision
+    func shouldSample(
+        parentContext _: SpanContext?,
+        traceId _: TraceId,
+        name _: String,
+        kind _: SpanKind,
+        attributes _: [String: AttributeValue],
+        parentLinks _: [SpanData.Link]
+    ) -> Decision {
+        Samplers.alwaysOnDecision
     }
 
     var description: String {
-        return "AlwaysOnSampler"
+        "AlwaysOnSampler"
     }
 }
 
 class AlwaysOffSampler: Sampler {
-    func shouldSample(parentContext: SpanContext?,
-                      traceId: TraceId,
-                      name: String,
-                      kind: SpanKind,
-                      attributes: [String: AttributeValue],
-                      parentLinks: [SpanData.Link]) -> Decision
-    {
-        return Samplers.alwaysOffDecision
+    func shouldSample(
+        parentContext _: SpanContext?,
+        traceId _: TraceId,
+        name _: String,
+        kind _: SpanKind,
+        attributes _: [String: AttributeValue],
+        parentLinks _: [SpanData.Link]
+    ) -> Decision {
+        Samplers.alwaysOffDecision
     }
 
     var description: String {
-        return "AlwaysOffSampler"
+        "AlwaysOffSampler"
     }
 }
 
@@ -81,7 +84,7 @@ class TraceIdRatioBased: Sampler {
     var idUpperBound: UInt
 
     init(ratio: Double) {
-        self.probability = ratio
+        probability = ratio
         if ratio <= 0.0 {
             idUpperBound = UInt.min
         } else if ratio >= 1.0 {
@@ -91,13 +94,14 @@ class TraceIdRatioBased: Sampler {
         }
     }
 
-    func shouldSample(parentContext: SpanContext?,
-                      traceId: TraceId,
-                      name: String,
-                      kind: SpanKind,
-                      attributes: [String: AttributeValue],
-                      parentLinks: [SpanData.Link]) -> Decision
-    {
+    func shouldSample(
+        parentContext: SpanContext?,
+        traceId: TraceId,
+        name _: String,
+        kind _: SpanKind,
+        attributes _: [String: AttributeValue],
+        parentLinks: [SpanData.Link]
+    ) -> Decision {
         /// If the parent is sampled keep the sampling decision.
         if parentContext?.traceFlags.sampled ?? false {
             return Samplers.alwaysOnDecision
@@ -124,7 +128,7 @@ class TraceIdRatioBased: Sampler {
     }
 
     var description: String {
-        return String(format: "TraceIdRatioBased{%.6f}", probability)
+        String(format: "TraceIdRatioBased{%.6f}", probability)
     }
 }
 
@@ -137,12 +141,13 @@ class ParentBasedSampler: Sampler {
     private let localParentSampled: Sampler
     private let localParentNotSampled: Sampler
 
-    internal init(root: Sampler,
-                  remoteParentSampled: Sampler? = nil,
-                  remoteParentNotSampled: Sampler? = nil,
-                  localParentSampled: Sampler? = nil,
-                  localParentNotSampled: Sampler? = nil)
-    {
+    internal init(
+        root: Sampler,
+        remoteParentSampled: Sampler? = nil,
+        remoteParentNotSampled: Sampler? = nil,
+        localParentSampled: Sampler? = nil,
+        localParentNotSampled: Sampler? = nil
+    ) {
         self.root = root
         self.remoteParentSampled = remoteParentSampled ?? Samplers.alwaysOn
         self.remoteParentNotSampled = remoteParentNotSampled ?? Samplers.alwaysOff
@@ -152,13 +157,14 @@ class ParentBasedSampler: Sampler {
 
     /// If a parent is set, always follows the same sampling decision as the parent.
     /// Otherwise, uses the delegateSampler provided at initialization to make a decision.
-    func shouldSample(parentContext: SpanContext?,
-                      traceId: TraceId,
-                      name: String,
-                      kind: SpanKind,
-                      attributes: [String: AttributeValue],
-                      parentLinks: [SpanData.Link]) -> Decision
-    {
+    func shouldSample(
+        parentContext: SpanContext?,
+        traceId: TraceId,
+        name: String,
+        kind: SpanKind,
+        attributes: [String: AttributeValue],
+        parentLinks: [SpanData.Link]
+    ) -> Decision {
         guard let parentSpanContext = parentContext, parentSpanContext.isValid else {
             return root.shouldSample(parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks)
         }
@@ -166,19 +172,23 @@ class ParentBasedSampler: Sampler {
         if parentSpanContext.isRemote {
             return parentSpanContext.isSampled
                 ? remoteParentSampled.shouldSample(
-                    parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks)
+                    parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks
+                )
                 : remoteParentNotSampled.shouldSample(
-                    parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks)
+                    parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks
+                )
         }
         return parentSpanContext.isSampled
             ? localParentSampled.shouldSample(
-                parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks)
+                parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks
+            )
             : localParentNotSampled.shouldSample(
-                parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks)
+                parentContext: parentContext, traceId: traceId, name: name, kind: kind, attributes: attributes, parentLinks: parentLinks
+            )
     }
 
     var description: String {
-        return "ParentBasedSampler{root:\(root), remoteParentSampled:\(remoteParentSampled) remoteParentNotSampled:\(remoteParentNotSampled) localParentSampled:\(localParentSampled) localParentNotSampled:\(localParentNotSampled)}"
+        "ParentBasedSampler{root:\(root), remoteParentSampled:\(remoteParentSampled) remoteParentNotSampled:\(remoteParentNotSampled) localParentSampled:\(localParentSampled) localParentNotSampled:\(localParentNotSampled)}"
     }
 }
 
@@ -193,10 +203,10 @@ private struct SimpleDecision: Decision {
     }
 
     public var isSampled: Bool {
-        return decision
+        decision
     }
 
     public var attributes: [String: AttributeValue] {
-        return [String: AttributeValue]()
+        [String: AttributeValue]()
     }
 }

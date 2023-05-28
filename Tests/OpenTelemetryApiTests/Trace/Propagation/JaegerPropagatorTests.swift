@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class JaegerPropagatorTests: XCTestCase {
     let traceIdHexString = "000000000000004d0000000000000016"

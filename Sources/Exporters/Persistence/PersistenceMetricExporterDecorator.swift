@@ -11,9 +11,9 @@ import OpenTelemetrySdk
 public class PersistenceMetricExporterDecorator: MetricExporter {
     struct MetricDecoratedExporter: DecoratedExporter {
         typealias SignalType = Metric
-        
+
         private let metricExporter: MetricExporter
-        
+
         init(metricExporter: MetricExporter) {
             self.metricExporter = metricExporter
         }
@@ -23,26 +23,28 @@ public class PersistenceMetricExporterDecorator: MetricExporter {
             return DataExportStatus(needsRetry: result == .failureRetryable)
         }
     }
-    
+
     private let persistenceExporter: PersistenceExporterDecorator<MetricDecoratedExporter>
-    
-    public init(metricExporter: MetricExporter,
-                storageURL: URL,
-                exportCondition: @escaping () -> Bool = { true },
-                performancePreset: PersistencePerformancePreset = .default) throws
-    {
-        self.persistenceExporter =
+
+    public init(
+        metricExporter: MetricExporter,
+        storageURL: URL,
+        exportCondition: @escaping () -> Bool = { true },
+        performancePreset: PersistencePerformancePreset = .default
+    ) throws {
+        persistenceExporter =
             PersistenceExporterDecorator<MetricDecoratedExporter>(
                 decoratedExporter: MetricDecoratedExporter(metricExporter: metricExporter),
                 storageURL: storageURL,
                 exportCondition: exportCondition,
-                performancePreset: performancePreset)
+                performancePreset: performancePreset
+            )
     }
-        
-    public func export(metrics: [Metric], shouldCancel: (() -> Bool)?) -> MetricExporterResultCode {
+
+    public func export(metrics: [Metric], shouldCancel _: (() -> Bool)?) -> MetricExporterResultCode {
         do {
             try persistenceExporter.export(values: metrics)
-            
+
             return .success
         } catch {
             return .failureNotRetryable

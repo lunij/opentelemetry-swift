@@ -35,7 +35,6 @@ public protocol MetricExporter {
 /// Can be used to export to multiple backends using the same SpanProcessor} like a impleSampledSpansProcessor
 ///  or a BatchSampledSpansProcessor.
 struct MultiMetricExporter: MetricExporter {
-
     var metricExporters: [MetricExporter]
 
     init(metricExporters: [MetricExporter]) {
@@ -52,7 +51,7 @@ struct MultiMetricExporter: MetricExporter {
 }
 
 struct NoopMetricExporter: MetricExporter {
-    func export(metrics: [Metric], shouldCancel: (() -> Bool)?) -> MetricExporterResultCode {
-        return .success
+    func export(metrics _: [Metric], shouldCancel _: (() -> Bool)?) -> MetricExporterResultCode {
+        .success
     }
 }

@@ -45,7 +45,7 @@ class MeterSdk: Meter {
     }
 
     func getLabelSet(labels: [String: String]) -> LabelSet {
-        return LabelSetSdk(labels: labels)
+        LabelSetSdk(labels: labels)
     }
 
     func addMetric(name: String, type: AggregationType, data: [MetricData]) {

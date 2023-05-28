@@ -16,14 +16,14 @@ class LoggingSpan: Span {
     public init(name: String, kind: SpanKind) {
         self.name = name
         self.kind = kind
-        self.context = SpanContext.create(traceId: TraceId.random(),
-                                          spanId: SpanId.random(),
-                                          traceFlags: TraceFlags(),
-                                          traceState: TraceState())
+        context = SpanContext.create(traceId: TraceId.random(),
+                                     spanId: SpanId.random(),
+                                     traceFlags: TraceFlags(),
+                                     traceState: TraceState())
     }
 
     public var description: String {
-        return name
+        name
     }
 
     public func updateName(name: String) {

@@ -12,11 +12,11 @@ struct NoopSpanProcessor: SpanProcessor {
     let isStartRequired = false
     let isEndRequired = false
 
-    func onStart(parentContext: SpanContext?, span: ReadableSpan) {}
+    func onStart(parentContext _: SpanContext?, span _: ReadableSpan) {}
 
-    func onEnd(span: ReadableSpan) {}
+    func onEnd(span _: ReadableSpan) {}
 
     func shutdown() {}
 
-    func forceFlush(timeout: TimeInterval? = nil) {}
+    func forceFlush(timeout _: TimeInterval? = nil) {}
 }

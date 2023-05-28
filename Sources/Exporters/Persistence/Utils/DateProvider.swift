@@ -12,5 +12,5 @@ internal protocol DateProvider {
 
 internal struct SystemDateProvider: DateProvider {
     @inlinable
-    func currentDate() -> Date { return Date() }
+    func currentDate() -> Date { Date() }
 }

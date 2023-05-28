@@ -17,7 +17,7 @@ public enum Status: Equatable {
 
     /// True if this Status is OK
     public var isOk: Bool {
-        return self == .ok
+        self == .ok
     }
 
     /// True if this Status is an Error
@@ -30,23 +30,23 @@ public enum Status: Equatable {
 
     public var name: String {
         switch self {
-            case .ok:
-                return "ok"
-            case .unset:
-                return "unset"
-            case .error(description: _):
-                return "error"
+        case .ok:
+            return "ok"
+        case .unset:
+            return "unset"
+        case .error:
+            return "error"
         }
     }
 
     public var code: Int {
         switch self {
-            case .ok:
-                return 0
-            case .unset:
-                return 1
-            case .error(description: _):
-                return 2
+        case .ok:
+            return 0
+        case .unset:
+            return 1
+        case .error:
+            return 2
         }
     }
 }
@@ -61,18 +61,16 @@ extension Status: CustomStringConvertible {
     }
 }
 
-internal struct StatusExplicitCodable : Codable {
+internal struct StatusExplicitCodable: Codable {
     let status: Status
-    
+
     enum CodingKeys: String, CodingKey {
         case ok
         case unset
         case error
     }
 
-    enum EmptyCodingKeys: CodingKey {
-
-    }
+    enum EmptyCodingKeys: CodingKey {}
 
     enum ErrorCodingKeys: String, CodingKey {
         case description
@@ -81,40 +79,40 @@ internal struct StatusExplicitCodable : Codable {
     internal init(status: Status) {
         self.status = status
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         guard container.allKeys.count == 1 else {
             let context = DecodingError.Context(
                 codingPath: container.codingPath,
-                debugDescription: "Invalid number of keys found, expected one.")
+                debugDescription: "Invalid number of keys found, expected one."
+            )
             throw DecodingError.typeMismatch(Status.self, context)
         }
 
         switch container.allKeys.first.unsafelyUnwrapped {
         case .ok:
             _ = try container.nestedContainer(keyedBy: EmptyCodingKeys.self, forKey: .ok)
-            self.status = .ok
+            status = .ok
         case .unset:
             _ = try container.nestedContainer(keyedBy: EmptyCodingKeys.self, forKey: .unset)
-            self.status = .unset
+            status = .unset
         case .error:
             let nestedContainer = try container.nestedContainer(keyedBy: ErrorCodingKeys.self, forKey: .error)
-            self.status = .error(description: try nestedContainer.decode(String.self, forKey: .description))
+            status = .error(description: try nestedContainer.decode(String.self, forKey: .description))
         }
     }
 
     public func encode(to encoder: Encoder) throws {
-
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        switch self.status {
+        switch status {
         case .ok:
             _ = container.nestedContainer(keyedBy: EmptyCodingKeys.self, forKey: .ok)
         case .unset:
             _ = container.nestedContainer(keyedBy: EmptyCodingKeys.self, forKey: .unset)
-        case .error(let description):
+        case let .error(description):
             var nestedContainer = container.nestedContainer(keyedBy: ErrorCodingKeys.self, forKey: .error)
             try nestedContainer.encode(description, forKey: .description)
         }
@@ -124,21 +122,20 @@ internal struct StatusExplicitCodable : Codable {
 #if swift(>=5.5)
 // swift 5.5 supports synthesizing Codable for enums with associated values
 // see https://github.com/apple/swift-evolution/blob/main/proposals/0295-codable-synthesis-for-enums-with-associated-values.md
-extension Status: Codable { }
+extension Status: Codable {}
 #else
 // for older swift versions use a forward compatible explicit Codable implementation
 extension Status: Codable {
-
     public init(from decoder: Decoder) throws {
         let explicitDecoded = try StatusExplicitCodable(from: decoder)
-        
+
         self = explicitDecoded.status
     }
 
     public func encode(to encoder: Encoder) throws {
         let explicitEncoded = StatusExplicitCodable(status: self)
-        
+
         try explicitEncoded.encode(to: encoder)
-    }        
+    }
 }
 #endif

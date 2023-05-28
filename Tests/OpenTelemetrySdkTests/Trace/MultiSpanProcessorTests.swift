@@ -4,8 +4,8 @@
  */
 
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 class MultiSpanProcessorTest: XCTestCase {
     let spanProcessor1 = SpanProcessorMock()

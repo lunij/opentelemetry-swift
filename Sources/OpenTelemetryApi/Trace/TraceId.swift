@@ -50,7 +50,7 @@ public struct TraceId: Comparable, Hashable, CustomStringConvertible, Equatable,
     public init(fromData data: Data) {
         var idHi: UInt64 = 0
         var idLo: UInt64 = 0
-        data.withUnsafeBytes { rawPointer -> Void in
+        data.withUnsafeBytes { rawPointer in
             idHi = rawPointer.load(fromByteOffset: data.startIndex, as: UInt64.self).bigEndian
             idLo = rawPointer.load(fromByteOffset: data.startIndex + MemoryLayout<UInt64>.size, as: UInt64.self).bigEndian
         }
@@ -121,7 +121,8 @@ public struct TraceId: Comparable, Hashable, CustomStringConvertible, Equatable,
             let secondIndex = hex.index(firstIndex, offsetBy: 16)
             let thirdIndex = hex.index(secondIndex, offsetBy: 16)
             if let idHi = UInt64(hex[firstIndex ..< secondIndex], radix: 16),
-                let idLo = UInt64(hex[secondIndex ..< thirdIndex], radix: 16) {
+               let idLo = UInt64(hex[secondIndex ..< thirdIndex], radix: 16)
+            {
                 self.init(idHi: idHi, idLo: idLo)
                 return
             }
@@ -139,28 +140,28 @@ public struct TraceId: Comparable, Hashable, CustomStringConvertible, Equatable,
     /// Returns whether the TraceId is valid. A valid trace identifier is a 16-byte array with
     /// at least one non-zero byte.
     public var isValid: Bool {
-        return idHi != TraceId.invalidId || idLo != TraceId.invalidId
+        idHi != TraceId.invalidId || idLo != TraceId.invalidId
     }
 
     /// Returns the lowercase base16 encoding of this TraceId.
     public var hexString: String {
-        return String(format: "%016llx%016llx", idHi, idLo)
+        String(format: "%016llx%016llx", idHi, idLo)
     }
 
     /// Returns the lower 8 bytes of the trace-id as a long value, assuming little-endian order. This
     /// is used in ProbabilitySampler.
     public var rawHigherLong: UInt64 {
-        return idHi
+        idHi
     }
 
     /// Returns the lower 8 bytes of the trace-id as a long value, assuming little-endian order. This
     /// is used in ProbabilitySampler.
     public var rawLowerLong: UInt64 {
-        return idLo
+        idLo
     }
 
     public var description: String {
-        return "TraceId{traceId=\(hexString)}"
+        "TraceId{traceId=\(hexString)}"
     }
 
     public static func < (lhs: TraceId, rhs: TraceId) -> Bool {
@@ -174,6 +175,6 @@ public struct TraceId: Comparable, Hashable, CustomStringConvertible, Equatable,
     }
 
     public static func == (lhs: TraceId, rhs: TraceId) -> Bool {
-        return lhs.idHi == rhs.idHi && lhs.idLo == rhs.idLo
+        lhs.idHi == rhs.idHi && lhs.idLo == rhs.idLo
     }
 }

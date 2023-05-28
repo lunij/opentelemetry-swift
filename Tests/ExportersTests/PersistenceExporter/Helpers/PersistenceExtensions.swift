@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
 import Foundation
+@testable import PersistenceExporter
 
 /*
  Set of Persistence domain extensions over standard types for writting more readable tests.
@@ -14,7 +14,7 @@ import Foundation
 extension Date {
     /// Returns name of the logs file createde at this date.
     var toFileName: String {
-        return fileNameFrom(fileCreationDate: self)
+        fileNameFrom(fileCreationDate: self)
     }
 }
 

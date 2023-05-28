@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import XCTest
+@testable import DatadogExporter
 
 extension DataUploadStatus: EquatableInTests {}
 
 class DataUploaderTests: XCTestCase {
     func testWhenUploadCompletesWithSuccess_itReturnsExpectedUploadStatus() throws {
-#if os(watchOS)
+        #if os(watchOS)
         throw XCTSkip("Implementation needs to be updated for watchOS to make this test pass")
-#endif
+        #endif
         // Given
         let randomResponse: HTTPURLResponse = .mockResponseWith(statusCode: (100 ... 599).randomElement()!)
         let randomRequestIDOrNil: String? = Bool.random() ? .mockRandom() : nil
@@ -37,9 +37,9 @@ class DataUploaderTests: XCTestCase {
     }
 
     func testWhenUploadCompletesWithFailure_itReturnsExpectedUploadStatus() throws {
-#if os(watchOS)
+        #if os(watchOS)
         throw XCTSkip("Implementation needs to be updated for watchOS to make this test pass")
-#endif
+        #endif
 
         // Given
         let randomErrorDescription: String = .mockRandom()

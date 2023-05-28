@@ -89,7 +89,7 @@ public class RecordEventsReadableSpan: ReadableSpan {
 
     /// Returns the latency of the Span in seconds. If still active then returns now() - start time.
     public var latency: TimeInterval {
-        return endTime?.timeIntervalSince(startTime) ?? clock.now.timeIntervalSince(startTime)
+        endTime?.timeIntervalSince(startTime) ?? clock.now.timeIntervalSince(startTime)
     }
 
     /// The end time of the span.
@@ -107,23 +107,24 @@ public class RecordEventsReadableSpan: ReadableSpan {
     private let eventsSyncLock = Lock()
     private let attributesSyncLock = Lock()
 
-    private init(context: SpanContext,
-                 name: String,
-                 instrumentationScopeInfo: InstrumentationScopeInfo,
-                 kind: SpanKind,
-                 parentContext: SpanContext?,
-                 hasRemoteParent: Bool,
-                 spanLimits: SpanLimits,
-                 spanProcessor: SpanProcessor,
-                 clock: Clock,
-                 resource: Resource,
-                 attributes: AttributesDictionary,
-                 links: [SpanData.Link],
-                 totalRecordedLinks: Int,
-                 startTime: Date?)
-    {
+    private init(
+        context: SpanContext,
+        name: String,
+        instrumentationScopeInfo: InstrumentationScopeInfo,
+        kind: SpanKind,
+        parentContext: SpanContext?,
+        hasRemoteParent: Bool,
+        spanLimits: SpanLimits,
+        spanProcessor: SpanProcessor,
+        clock: Clock,
+        resource: Resource,
+        attributes: AttributesDictionary,
+        links: [SpanData.Link],
+        totalRecordedLinks: Int,
+        startTime: Date?
+    ) {
         self.context = context
-        self.internalName = name
+        internalName = name
         self.instrumentationScopeInfo = instrumentationScopeInfo
         self.parentContext = parentContext
         self.hasRemoteParent = hasRemoteParent
@@ -136,7 +137,7 @@ public class RecordEventsReadableSpan: ReadableSpan {
         self.resource = resource
         self.startTime = startTime ?? clock.now
         self.attributes = attributes
-        self.totalAttributeCount = attributes.count
+        totalAttributeCount = attributes.count
         events = ArrayWithCapacity<SpanData.Event>(capacity: spanLimits.eventCountLimit)
         maxNumberOfAttributes = spanLimits.attributeCountLimit
         maxNumberOfAttributesPerEvent = spanLimits.attributePerEventCountLimit
@@ -158,21 +159,22 @@ public class RecordEventsReadableSpan: ReadableSpan {
     ///   - links: the links set during span creation, may be truncated.
     ///   - totalRecordedLinks: the total number of links set (including dropped links).
     ///   - startTime: the time for the new span, if not set it will use assigned Clock time
-    public static func startSpan(context: SpanContext,
-                                 name: String,
-                                 instrumentationScopeInfo: InstrumentationScopeInfo,
-                                 kind: SpanKind,
-                                 parentContext: SpanContext?,
-                                 hasRemoteParent: Bool,
-                                 spanLimits: SpanLimits,
-                                 spanProcessor: SpanProcessor,
-                                 clock: Clock,
-                                 resource: Resource,
-                                 attributes: AttributesDictionary,
-                                 links: [SpanData.Link],
-                                 totalRecordedLinks: Int,
-                                 startTime: Date?) -> RecordEventsReadableSpan
-    {
+    public static func startSpan(
+        context: SpanContext,
+        name: String,
+        instrumentationScopeInfo: InstrumentationScopeInfo,
+        kind: SpanKind,
+        parentContext: SpanContext?,
+        hasRemoteParent: Bool,
+        spanLimits: SpanLimits,
+        spanProcessor: SpanProcessor,
+        clock: Clock,
+        resource: Resource,
+        attributes: AttributesDictionary,
+        links: [SpanData.Link],
+        totalRecordedLinks: Int,
+        startTime: Date?
+    ) -> RecordEventsReadableSpan {
         let span = RecordEventsReadableSpan(context: context,
                                             name: name,
                                             instrumentationScopeInfo: instrumentationScopeInfo,
@@ -192,26 +194,26 @@ public class RecordEventsReadableSpan: ReadableSpan {
     }
 
     public func toSpanData() -> SpanData {
-        return SpanData(traceId: context.traceId,
-                        spanId: context.spanId,
-                        traceFlags: context.traceFlags,
-                        traceState: context.traceState,
-                        parentSpanId: parentContext?.spanId,
-                        resource: resource,
-                        instrumentationScope: instrumentationScopeInfo,
-                        name: name,
-                        kind: kind,
-                        startTime: startTime,
-                        attributes: attributes.attributes,
-                        events: adaptEvents(),
-                        links: adaptLinks(),
-                        status: status,
-                        endTime: endTime ?? clock.now,
-                        hasRemoteParent: hasRemoteParent,
-                        hasEnded: hasEnded,
-                        totalRecordedEvents: getTotalRecordedEvents(),
-                        totalRecordedLinks: totalRecordedLinks,
-                        totalAttributeCount: totalAttributeCount)
+        SpanData(traceId: context.traceId,
+                 spanId: context.spanId,
+                 traceFlags: context.traceFlags,
+                 traceState: context.traceState,
+                 parentSpanId: parentContext?.spanId,
+                 resource: resource,
+                 instrumentationScope: instrumentationScopeInfo,
+                 name: name,
+                 kind: kind,
+                 startTime: startTime,
+                 attributes: attributes.attributes,
+                 events: adaptEvents(),
+                 links: adaptLinks(),
+                 status: status,
+                 endTime: endTime ?? clock.now,
+                 hasRemoteParent: hasRemoteParent,
+                 hasEnded: hasEnded,
+                 totalRecordedEvents: getTotalRecordedEvents(),
+                 totalRecordedLinks: totalRecordedLinks,
+                 totalAttributeCount: totalAttributeCount)
     }
 
     private func adaptEvents() -> [SpanData.Event] {
@@ -314,7 +316,7 @@ public class RecordEventsReadableSpan: ReadableSpan {
     }
 
     public var description: String {
-        return "RecordEventsReadableSpan{}"
+        "RecordEventsReadableSpan{}"
     }
 
     internal func getTotalRecordedEvents() -> Int {
@@ -325,6 +327,6 @@ public class RecordEventsReadableSpan: ReadableSpan {
 
     /// For testing purposes
     internal func getDroppedLinksCount() -> Int {
-        return totalRecordedLinks - links.count
+        totalRecordedLinks - links.count
     }
 }

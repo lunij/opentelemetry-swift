@@ -13,13 +13,14 @@ public class TracerProviderSdk: TracerProvider {
     internal static let emptyName = "unknown"
 
     /// Returns a new TracerProviderSdk with default Clock, IdGenerator and Resource.
-    public init(clock: Clock = MillisClock(),
-                idGenerator: IdGenerator = RandomIdGenerator(),
-                resource: Resource = EnvVarResource.get(),
-                spanLimits: SpanLimits = SpanLimits(),
-                sampler: Sampler = Samplers.parentBased(root: Samplers.alwaysOn),
-                spanProcessors: [SpanProcessor] = [])
-    {
+    public init(
+        clock: Clock = MillisClock(),
+        idGenerator: IdGenerator = RandomIdGenerator(),
+        resource: Resource = EnvVarResource.get(),
+        spanLimits: SpanLimits = SpanLimits(),
+        sampler: Sampler = Samplers.parentBased(root: Samplers.alwaysOn),
+        spanProcessors: [SpanProcessor] = []
+    ) {
         pthread_rwlock_init(&tracerLock, nil)
         sharedState = TracerSharedState(clock: clock,
                                         idGenerator: idGenerator,
@@ -67,7 +68,7 @@ public class TracerProviderSdk: TracerProvider {
 
     /// Returns the active Clock.
     public func getActiveClock() -> Clock {
-        return sharedState.clock
+        sharedState.clock
     }
 
     /// Updates the active Clock.
@@ -77,7 +78,7 @@ public class TracerProviderSdk: TracerProvider {
 
     /// Returns the active IdGenerator.
     public func getActiveIdGenerator() -> IdGenerator {
-        return sharedState.idGenerator
+        sharedState.idGenerator
     }
 
     /// Updates the active IdGenerator.
@@ -87,7 +88,7 @@ public class TracerProviderSdk: TracerProvider {
 
     /// Returns the active Resource.
     public func getActiveResource() -> Resource {
-        return sharedState.resource
+        sharedState.resource
     }
 
     /// Updates the active Resource.
@@ -97,7 +98,7 @@ public class TracerProviderSdk: TracerProvider {
 
     /// Returns the active SpanLimits.
     public func getActiveSpanLimits() -> SpanLimits {
-        return sharedState.activeSpanLimits
+        sharedState.activeSpanLimits
     }
 
     /// Updates the active SpanLimits.
@@ -107,7 +108,7 @@ public class TracerProviderSdk: TracerProvider {
 
     /// Returns the active Sampler.
     public func getActiveSampler() -> Sampler {
-        return sharedState.sampler
+        sharedState.sampler
     }
 
     /// Updates the active Sampler.

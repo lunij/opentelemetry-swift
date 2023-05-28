@@ -5,15 +5,14 @@
 
 import Foundation
 
-public class DefaultLogger : Logger {
-
+public class DefaultLogger: Logger {
     private static let instanceWithDomain = DefaultLogger(true)
     private static let instanceNoDomain = DefaultLogger(false)
     private static let noopLogRecordBuilder = NoopLogRecordBuilder()
 
-    private var hasDomain : Bool
+    private var hasDomain: Bool
 
-    private init(_ hasDomain : Bool) {
+    private init(_ hasDomain: Bool) {
         self.hasDomain = hasDomain
     }
 
@@ -25,7 +24,7 @@ public class DefaultLogger : Logger {
         }
     }
 
-    public func eventBuilder(name: String) -> EventBuilder {
+    public func eventBuilder(name _: String) -> EventBuilder {
         if !hasDomain {
             /// log error
         }
@@ -33,38 +32,34 @@ public class DefaultLogger : Logger {
     }
 
     public func logRecordBuilder() -> LogRecordBuilder {
-        return Self.noopLogRecordBuilder
+        Self.noopLogRecordBuilder
     }
 
-    private class NoopLogRecordBuilder : EventBuilder {
-        func setTimestamp(_ timestamp: Date) -> Self {
-            return self
+    private class NoopLogRecordBuilder: EventBuilder {
+        func setTimestamp(_: Date) -> Self {
+            self
         }
 
-        func setObservedTimestamp(_ observed: Date) -> Self {
-            return self
+        func setObservedTimestamp(_: Date) -> Self {
+            self
         }
 
-        func setSpanContext(_ context: SpanContext) -> Self {
-            return self
+        func setSpanContext(_: SpanContext) -> Self {
+            self
         }
 
-        func setSeverity(_ severity: Severity) -> Self {
-            return self
+        func setSeverity(_: Severity) -> Self {
+            self
         }
 
-        func setBody(_ body: String) -> Self {
-            return self
+        func setBody(_: String) -> Self {
+            self
         }
 
-        func setAttributes(_ attributes: [String: AttributeValue]) -> Self {
-            return self
+        func setAttributes(_: [String: AttributeValue]) -> Self {
+            self
         }
 
-        func emit() {
-
-        }
-
+        func emit() {}
     }
-
 }

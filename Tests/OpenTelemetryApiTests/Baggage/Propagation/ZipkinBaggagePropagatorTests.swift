@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class ZipkinBaggagePropagatorTests: XCTestCase {
     let builder = DefaultBaggageBuilder()
@@ -22,10 +22,14 @@ class ZipkinBaggagePropagatorTests: XCTestCase {
         var carrier = [String: String]()
         zipkinPropagator.inject(baggage: baggage, carrier: &carrier, setter: setter)
 
-        let expected1 = [ZipkinBaggagePropagator.baggagePrefix + "nometa": "nometa-value",
-                         ZipkinBaggagePropagator.baggagePrefix + "meta": "meta-value"]
-        let expected2 = [ZipkinBaggagePropagator.baggagePrefix + "meta": "meta-value",
-                         ZipkinBaggagePropagator.baggagePrefix + "nometa": "nometa-value"]
+        let expected1 = [
+            ZipkinBaggagePropagator.baggagePrefix + "nometa": "nometa-value",
+            ZipkinBaggagePropagator.baggagePrefix + "meta": "meta-value"
+        ]
+        let expected2 = [
+            ZipkinBaggagePropagator.baggagePrefix + "meta": "meta-value",
+            ZipkinBaggagePropagator.baggagePrefix + "nometa": "nometa-value"
+        ]
         XCTAssert(carrier == expected1 || carrier == expected2)
     }
 

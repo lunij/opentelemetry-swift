@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class B3PropagatorTests: XCTestCase {
     let traceIdHexString = "ff000000000000000000000000000041"

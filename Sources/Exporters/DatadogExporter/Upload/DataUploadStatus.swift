@@ -56,12 +56,12 @@ internal struct DataUploadStatus {
 extension DataUploadStatus {
     // MARK: - Initialization
 
-    init(httpResponse: HTTPURLResponse, ddRequestID: String?) {
+    init(httpResponse: HTTPURLResponse, ddRequestID _: String?) {
         let statusCode = HTTPResponseStatusCode(rawValue: httpResponse.statusCode) ?? .unexpected
         self.init(needsRetry: statusCode.needsRetry)
     }
 
-    init(networkError: Error) {
+    init(networkError _: Error) {
         self.init(needsRetry: true)
     }
 }

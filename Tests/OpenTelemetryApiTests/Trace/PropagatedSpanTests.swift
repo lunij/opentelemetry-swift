@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
-fileprivate func createRandomPropagatedSpan() -> PropagatedSpan {
-    return PropagatedSpan(context: SpanContext.create(traceId: TraceId.random(),
-                                                      spanId: SpanId.random(),
-                                                      traceFlags: TraceFlags(),
-                                                      traceState: TraceState()))
+private func createRandomPropagatedSpan() -> PropagatedSpan {
+    PropagatedSpan(context: SpanContext.create(traceId: TraceId.random(),
+                                               spanId: SpanId.random(),
+                                               traceFlags: TraceFlags(),
+                                               traceState: TraceState()))
 }
 
 final class PropagatedSpanTest: XCTestCase {

@@ -9,7 +9,7 @@ import OpenTelemetryApi
 
 struct TestUtils {
     static func dateFromNanos(_ nanos: UInt64) -> Date {
-        return Date(timeIntervalSince1970: Double(nanos) / 1000000000)
+        Date(timeIntervalSince1970: Double(nanos) / 1_000_000_000)
     }
 
     static func generateRandomAttributes() -> [String: AttributeValue] {
@@ -21,22 +21,22 @@ struct TestUtils {
     }
 
     static func makeBasicSpan() -> SpanData {
-        return SpanData(traceId: TraceId(),
-                        spanId: SpanId(),
-                        traceFlags: TraceFlags(),
-                        traceState: TraceState(),
-                        resource: Resource(),
-                        instrumentationScope: InstrumentationScopeInfo(),
-                        name: "spanName",
-                        kind: .server,
-                        startTime: Date(timeIntervalSince1970: 100000000000 + 100),
-                        endTime: Date(timeIntervalSince1970: 200000000000 + 200),
-                        hasRemoteParent: false,
-                        hasEnded: true)
+        SpanData(traceId: TraceId(),
+                 spanId: SpanId(),
+                 traceFlags: TraceFlags(),
+                 traceState: TraceState(),
+                 resource: Resource(),
+                 instrumentationScope: InstrumentationScopeInfo(),
+                 name: "spanName",
+                 kind: .server,
+                 startTime: Date(timeIntervalSince1970: 100_000_000_000 + 100),
+                 endTime: Date(timeIntervalSince1970: 200_000_000_000 + 200),
+                 hasRemoteParent: false,
+                 hasEnded: true)
     }
 
     static func createSpanWithSampler(tracerSdkFactory: TracerProviderSdk, tracer: Tracer, spanName: String, sampler: Sampler) -> SpanBuilder {
-        return createSpanWithSampler(tracerSdkFactory: tracerSdkFactory, tracer: tracer, spanName: spanName, sampler: sampler, attributes: [String: AttributeValue]())
+        createSpanWithSampler(tracerSdkFactory: tracerSdkFactory, tracer: tracer, spanName: spanName, sampler: sampler, attributes: [String: AttributeValue]())
     }
 
     static func createSpanWithSampler(tracerSdkFactory: TracerProviderSdk, tracer: Tracer, spanName: String, sampler: Sampler, attributes: [String: AttributeValue]) -> SpanBuilder {

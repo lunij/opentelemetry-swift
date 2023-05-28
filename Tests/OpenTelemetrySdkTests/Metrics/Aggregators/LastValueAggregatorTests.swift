@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 final class LastValueAggregatorTests: XCTestCase {
     public func testAggregatesCorrectlyInt() {
@@ -24,7 +24,7 @@ final class LastValueAggregatorTests: XCTestCase {
         sum = aggregator.toMetricData() as! SumData<Int>
         XCTAssertEqual(40, sum.sum)
     }
-    
+
     public func testAggregatesCorrectlyDouble() {
         // create an aggregator
         let aggregator = LastValueAggregator<Double>()

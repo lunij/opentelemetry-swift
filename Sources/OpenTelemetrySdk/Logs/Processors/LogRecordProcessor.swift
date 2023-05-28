@@ -6,7 +6,6 @@
 import Foundation
 
 public protocol LogRecordProcessor {
-
     /// Called when a Logger's LogRecordBuilder emits a log record
     ///
     /// - Parameter logRecord: the log record emitted
@@ -16,7 +15,7 @@ public protocol LogRecordProcessor {
     ///
     /// - returns whether the task was successful
     func forceFlush() -> ExportResult
-    
+
     /// Processes all span events that have not yet been processes anc closes used resources
     ///
     /// - returns whether the task was successful

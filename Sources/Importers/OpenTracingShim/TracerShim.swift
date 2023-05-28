@@ -25,19 +25,19 @@ public class TracerShim: OTTracer, BaseShimProtocol {
     }
 
     public func startSpan(_ operationName: String) -> OTSpan {
-        return startSpan(operationName, tags: nil)
+        startSpan(operationName, tags: nil)
     }
 
     public func startSpan(_ operationName: String, tags: [AnyHashable: Any]?) -> OTSpan {
-        return startSpan(operationName, childOf: nil, tags: tags)
+        startSpan(operationName, childOf: nil, tags: tags)
     }
 
     public func startSpan(_ operationName: String, childOf parent: OTSpanContext?) -> OTSpan {
-        return startSpan(operationName, childOf: parent, tags: nil)
+        startSpan(operationName, childOf: parent, tags: nil)
     }
 
     public func startSpan(_ operationName: String, childOf parent: OTSpanContext?, tags: [AnyHashable: Any]?) -> OTSpan {
-        return startSpan(operationName, childOf: parent, tags: tags, startTime: nil)
+        startSpan(operationName, childOf: parent, tags: tags, startTime: nil)
     }
 
     public func startSpan(_ operationName: String, childOf parent: OTSpanContext?, tags: [AnyHashable: Any]?, startTime: Date?) -> OTSpan {
@@ -67,7 +67,7 @@ public class TracerShim: OTTracer, BaseShimProtocol {
         return spanShim
     }
 
-    public func startSpan(_ operationName: String, references: [Any]?, tags: [AnyHashable: Any]?, startTime: Date?) -> OTSpan {
+    public func startSpan(_ operationName: String, references: [Any]?, tags: [AnyHashable: Any]?, startTime _: Date?) -> OTSpan {
         var parent: OTSpanContext?
         if references != nil {
             for object in references! {

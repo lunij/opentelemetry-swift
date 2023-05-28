@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import Foundation
+@testable import DatadogExporter
 
 // MARK: - Log Mocks
 
@@ -22,7 +22,7 @@ extension DDLog {
         attributes: LogAttributes = .mockAny(),
         tags: [String]? = nil
     ) -> DDLog {
-        return DDLog(
+        DDLog(
             date: date,
             status: status,
             message: message,
@@ -40,20 +40,20 @@ extension DDLog {
 
 extension DDLog.Status {
     static func mockAny() -> DDLog.Status {
-        return .info
+        .info
     }
 }
 
 extension LogAttributes: Equatable {
     static func mockAny() -> LogAttributes {
-        return mockWith()
+        mockWith()
     }
 
     static func mockWith(
         userAttributes: [String: Encodable] = [:],
         internalAttributes: [String: Encodable]? = [:]
     ) -> LogAttributes {
-        return LogAttributes(
+        LogAttributes(
             userAttributes: userAttributes,
             internalAttributes: internalAttributes
         )

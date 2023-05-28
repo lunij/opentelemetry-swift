@@ -5,9 +5,9 @@
 
 import Foundation
 import OpenTelemetryApi
-@testable import OpenTelemetryProtocolExporterCommon
 import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetryProtocolExporterCommon
 
 class CommonAdapterTests: XCTestCase {
     func testToProtoAttributeBool() {

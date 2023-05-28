@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import DatadogExporter
+@testable import OpenTelemetrySdk
 
 class DatadogExporterTests: XCTestCase {
     override func setUp() {
@@ -18,9 +18,9 @@ class DatadogExporterTests: XCTestCase {
     }
 
     func testWhenExportSpanIsCalled_thenTraceAndLogsAreUploaded() throws {
-#if os(watchOS)
+        #if os(watchOS)
         throw XCTSkip("Test is flaky on watchOS")
-#endif
+        #endif
 
         var logsSent = false
         var tracesSent = false
@@ -70,7 +70,8 @@ class DatadogExporterTests: XCTestCase {
                                                           endpoint: Endpoint.custom(
                                                               tracesURL: URL(string: "http://localhost:33333/traces")!,
                                                               logsURL: URL(string: "http://localhost:33333/logs")!,
-                                                              metricsURL: URL(string: "http://localhost:33333/metrics")!),
+                                                              metricsURL: URL(string: "http://localhost:33333/metrics")!
+                                                          ),
                                                           uploadCondition: { true })
 
         let datadogExporter = try! DatadogExporter(config: exporterConfiguration)
@@ -99,9 +100,9 @@ class DatadogExporterTests: XCTestCase {
     }
 
     func testWhenExportMetricIsCalled_thenMetricsAreUploaded() throws {
-#if os(watchOS)
+        #if os(watchOS)
         throw XCTSkip("Test is flaky on watchOS")
-#endif
+        #endif
 
         var metricsSent = false
         let expecMetrics = expectation(description: "metrics received")
@@ -133,7 +134,8 @@ class DatadogExporterTests: XCTestCase {
                                                           endpoint: Endpoint.custom(
                                                               tracesURL: URL(string: "http://localhost:33333/traces")!,
                                                               logsURL: URL(string: "http://localhost:33333/logs")!,
-                                                              metricsURL: URL(string: "http://localhost:33333/metrics")!),
+                                                              metricsURL: URL(string: "http://localhost:33333/metrics")!
+                                                          ),
                                                           uploadCondition: { true })
 
         let datadogExporter = try! DatadogExporter(config: exporterConfiguration)

@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
 import XCTest
+@testable import DatadogExporter
 
 class JSONEncoderTests: XCTestCase {
     private let jsonEncoder = JSONEncoder.default()

@@ -33,10 +33,10 @@ public struct EntryKey: Equatable, Comparable, Hashable {
     /// Determines whether the given String is a valid entry key.
     /// - Parameter value: the entry key name to be validated.
     private static func isValid(name: String) -> Bool {
-        return name.count > 0 && name.count <= maxLength && StringUtils.isPrintableString(name)
+        name.count > 0 && name.count <= maxLength && StringUtils.isPrintableString(name)
     }
 
     public static func < (lhs: EntryKey, rhs: EntryKey) -> Bool {
-        return lhs.name < rhs.name
+        lhs.name < rhs.name
     }
 }

@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetryApi
 import XCTest
+@testable import OpenTelemetryApi
 
 class ScopedBaggageTests: XCTestCase {
     let key1 = EntryKey(name: "key 1")!
@@ -57,8 +57,10 @@ class ScopedBaggageTests: XCTestCase {
         let innerBaggage = baggageManager.baggageBuilder().put(key: key2, value: value2, metadata: metadataTest).build()
         OpenTelemetry.instance.contextProvider.setActiveBaggage(innerBaggage)
         XCTAssertEqual(baggageManager.getCurrentBaggage()?.getEntries().sorted(),
-                       [Entry(key: key1, value: value1, metadata: metadataTest),
-                        Entry(key: key2, value: value2, metadata: metadataTest)].sorted())
+                       [
+                           Entry(key: key1, value: value1, metadata: metadataTest),
+                           Entry(key: key2, value: value2, metadata: metadataTest)
+                       ].sorted())
 
         XCTAssertTrue(baggageManager.getCurrentBaggage() === innerBaggage)
         OpenTelemetry.instance.contextProvider.removeContextForBaggage(innerBaggage)
@@ -78,9 +80,11 @@ class ScopedBaggageTests: XCTestCase {
         OpenTelemetry.instance.contextProvider.setActiveBaggage(baggage2)
 
         XCTAssertEqual(baggageManager.getCurrentBaggage()?.getEntries().sorted(),
-                       [Entry(key: key1, value: value1, metadata: metadataTest),
-                        Entry(key: key2, value: value4, metadata: metadataTest),
-                        Entry(key: key3, value: value3, metadata: metadataTest)].sorted())
+                       [
+                           Entry(key: key1, value: value1, metadata: metadataTest),
+                           Entry(key: key2, value: value4, metadata: metadataTest),
+                           Entry(key: key3, value: value3, metadata: metadataTest)
+                       ].sorted())
         XCTAssertTrue(baggageManager.getCurrentBaggage() === baggage2)
         OpenTelemetry.instance.contextProvider.removeContextForBaggage(baggage2)
 

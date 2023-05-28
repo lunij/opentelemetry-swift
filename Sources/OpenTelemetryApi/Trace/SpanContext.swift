@@ -38,15 +38,17 @@ public struct SpanContext: Equatable, CustomStringConvertible, Hashable, Codable
     ///   - spanId: the span identifier of the span context.
     ///   - traceFlags: he trace options for the span context.
     ///   - traceState: the trace state for the span context.
-    public static func create(traceId: TraceId,
-                              spanId: SpanId,
-                              traceFlags: TraceFlags,
-                              traceState: TraceState) -> SpanContext {
-        return SpanContext(traceId: traceId,
-                           spanId: spanId,
-                           traceFlags: traceFlags,
-                           traceState: traceState,
-                           isRemote: false)
+    public static func create(
+        traceId: TraceId,
+        spanId: SpanId,
+        traceFlags: TraceFlags,
+        traceState: TraceState
+    ) -> SpanContext {
+        SpanContext(traceId: traceId,
+                    spanId: spanId,
+                    traceFlags: traceFlags,
+                    traceState: traceState,
+                    isRemote: false)
     }
 
     /// Creates a new SpanContext that was propagated from a remote parent, with the given
@@ -56,35 +58,37 @@ public struct SpanContext: Equatable, CustomStringConvertible, Hashable, Codable
     ///   - spanId: the span identifier of the span context.
     ///   - traceFlags: he trace options for the span context.
     ///   - traceState: the trace state for the span context.
-    public static func createFromRemoteParent(traceId: TraceId,
-                                              spanId: SpanId,
-                                              traceFlags: TraceFlags,
-                                              traceState: TraceState) -> SpanContext {
-        return SpanContext(traceId: traceId,
-                           spanId: spanId,
-                           traceFlags: traceFlags,
-                           traceState: traceState,
-                           isRemote: true)
+    public static func createFromRemoteParent(
+        traceId: TraceId,
+        spanId: SpanId,
+        traceFlags: TraceFlags,
+        traceState: TraceState
+    ) -> SpanContext {
+        SpanContext(traceId: traceId,
+                    spanId: spanId,
+                    traceFlags: traceFlags,
+                    traceState: traceState,
+                    isRemote: true)
     }
 
     /// Returns true if this SpanContext is valid.
     public var isValid: Bool {
-        return traceId.isValid && spanId.isValid
+        traceId.isValid && spanId.isValid
     }
 
     public var isSampled: Bool {
-        return traceFlags.sampled
+        traceFlags.sampled
     }
 
     public static func == (lhs: SpanContext, rhs: SpanContext) -> Bool {
-        return lhs.traceId == rhs.traceId && lhs.spanId == rhs.spanId &&
+        lhs.traceId == rhs.traceId && lhs.spanId == rhs.spanId &&
             lhs.traceFlags == rhs.traceFlags && lhs.isRemote == rhs.isRemote
     }
 
     public var description: String {
-        return "SpanContext{traceId=\(traceId), spanId=\(spanId), traceFlags=\(traceFlags)}, isRemote=\(isRemote)"
+        "SpanContext{traceId=\(traceId), spanId=\(spanId), traceFlags=\(traceFlags)}, isRemote=\(isRemote)"
     }
-    
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(spanId)
     }

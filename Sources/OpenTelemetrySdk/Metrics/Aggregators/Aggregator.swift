@@ -6,20 +6,20 @@
 import Foundation
 
 public class Aggregator<T> {
-    var lastStart: Date = Date.distantFuture
-    var lastEnd: Date = Date()
+    var lastStart: Date = .distantFuture
+    var lastEnd: Date = .init()
 
-    public func update(value: T) {}
+    public func update(value _: T) {}
     public func checkpoint() {
         lastStart = lastEnd
         lastEnd = Date()
     }
 
     public func toMetricData() -> MetricData {
-        return NoopMetricData()
+        NoopMetricData()
     }
 
     public func getAggregationType() -> AggregationType {
-        return .intSum
+        .intSum
     }
 }

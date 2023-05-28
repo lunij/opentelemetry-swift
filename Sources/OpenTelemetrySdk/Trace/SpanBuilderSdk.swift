@@ -35,11 +35,12 @@ class SpanBuilderSdk: SpanBuilder {
 
     private var startTime: Date?
 
-    init(spanName: String,
-         instrumentationScopeInfo: InstrumentationScopeInfo,
-         tracerSharedState: TracerSharedState,
-         spanLimits: SpanLimits)
-    {
+    init(
+        spanName: String,
+        instrumentationScopeInfo: InstrumentationScopeInfo,
+        tracerSharedState: TracerSharedState,
+        spanLimits: SpanLimits
+    ) {
         self.spanName = spanName
         self.instrumentationScopeInfo = instrumentationScopeInfo
         self.tracerSharedState = tracerSharedState
@@ -69,11 +70,11 @@ class SpanBuilderSdk: SpanBuilder {
     }
 
     @discardableResult func addLink(spanContext: SpanContext) -> Self {
-        return addLink(SpanData.Link(context: spanContext))
+        addLink(SpanData.Link(context: spanContext))
     }
 
     @discardableResult func addLink(spanContext: SpanContext, attributes: [String: AttributeValue]) -> Self {
-        return addLink(SpanData.Link(context: spanContext, attributes: attributes))
+        addLink(SpanData.Link(context: spanContext, attributes: attributes))
     }
 
     @discardableResult func addLink(_ link: SpanData.Link) -> Self {

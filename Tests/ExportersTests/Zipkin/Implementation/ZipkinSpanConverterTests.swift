@@ -5,8 +5,8 @@
 
 import Foundation
 import OpenTelemetryApi
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 @testable import ZipkinExporter
 
 class ZipkinSpanConverterTests: XCTestCase {
@@ -26,9 +26,11 @@ class ZipkinSpanConverterTests: XCTestCase {
     }
 
     func testGenerateSpanRemoteEndpointResolutionPriority() {
-        let span = ZipkinSpanConverterTests.createTestSpan(additionalAttributes: ["http.host": "DiscardedRemoteServiceName",
-                                                                                  "net.peer.name": "RemoteServiceName",
-                                                                                  "peer.hostname": "DiscardedRemoteServiceName"])
+        let span = ZipkinSpanConverterTests.createTestSpan(additionalAttributes: [
+            "http.host": "DiscardedRemoteServiceName",
+            "net.peer.name": "RemoteServiceName",
+            "peer.hostname": "DiscardedRemoteServiceName"
+        ])
         let zipkinSpan = ZipkinConversionExtension.toZipkinSpan(otelSpan: span, defaultLocalEndpoint: defaultZipkinEndpoint)
         XCTAssertNotNil(zipkinSpan.remoteEndpoint)
         XCTAssertEqual(zipkinSpan.remoteEndpoint?.serviceName, "RemoteServiceName")
@@ -47,7 +49,7 @@ class ZipkinSpanConverterTests: XCTestCase {
         XCTAssertEqual(zipkinSpan.tags["error"], "error message")
     }
 
-    public static func createTestSpan(setAttributes: Bool = true, additionalAttributes: [String: Any]? = nil, addEvents: Bool = true, addLinks: Bool = true, status: Status = Status.ok) -> SpanData {
+    public static func createTestSpan(setAttributes _: Bool = true, additionalAttributes: [String: Any]? = nil, addEvents _: Bool = true, addLinks _: Bool = true, status: Status = Status.ok) -> SpanData {
         let startTimestamp = Date(timeIntervalSince1970: Double(Int(Date().timeIntervalSince1970))) // Round for comparison
         let endTimestamp = startTimestamp.addingTimeInterval(60)
         let eventTimestamp = startTimestamp
@@ -55,19 +57,23 @@ class ZipkinSpanConverterTests: XCTestCase {
 
         let spanId = SpanId.random()
         let parentSpanId = SpanId(fromBytes: [12, 23, 34, 45, 56, 67, 78, 89])
-        var attributes: [String: AttributeValue] = ["stringKey": AttributeValue.string("value"),
-                                                    "longKey": AttributeValue.int(1),
-                                                    "longKey2": AttributeValue.int(1),
-                                                    "doubleKey": AttributeValue.double(1.0),
-                                                    "doubleKey2": AttributeValue.double(1.0),
-                                                    "boolKey": AttributeValue.bool(true)]
+        var attributes: [String: AttributeValue] = [
+            "stringKey": AttributeValue.string("value"),
+            "longKey": AttributeValue.int(1),
+            "longKey2": AttributeValue.int(1),
+            "doubleKey": AttributeValue.double(1.0),
+            "doubleKey2": AttributeValue.double(1.0),
+            "boolKey": AttributeValue.bool(true)
+        ]
 
         additionalAttributes?.forEach {
             attributes[$0.key] = AttributeValue($0.value)
         }
 
-        let events: [SpanData.Event] = [SpanData.Event(name: "Event1", timestamp: eventTimestamp, attributes: ["key": AttributeValue.string("value")]),
-                                        SpanData.Event(name: "Event2", timestamp: eventTimestamp, attributes: ["key": AttributeValue.string("value")])]
+        let events: [SpanData.Event] = [
+            SpanData.Event(name: "Event1", timestamp: eventTimestamp, attributes: ["key": AttributeValue.string("value")]),
+            SpanData.Event(name: "Event2", timestamp: eventTimestamp, attributes: ["key": AttributeValue.string("value")])
+        ]
 
 //        let linkedSpanId = SpanId(fromHexString: "888915b6286b9c41")
 

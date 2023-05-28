@@ -13,7 +13,7 @@ class LoggingTracer: Tracer {
     var textFormat: TextMapPropagator = W3CTraceContextPropagator()
 
     func spanBuilder(spanName: String) -> SpanBuilder {
-        return LoggingSpanBuilder(tracer: self, spanName: spanName)
+        LoggingSpanBuilder(tracer: self, spanName: spanName)
     }
 
     class LoggingSpanBuilder: SpanBuilder {
@@ -28,7 +28,7 @@ class LoggingTracer: Tracer {
         }
 
         func startSpan() -> Span {
-            return LoggingSpan(name: name, kind: .client)
+            LoggingSpan(name: name, kind: .client)
         }
 
         func setParent(_ parent: Span) -> Self {
@@ -46,28 +46,28 @@ class LoggingTracer: Tracer {
             return self
         }
 
-        func addLink(spanContext: SpanContext) -> Self {
-            return self
+        func addLink(spanContext _: SpanContext) -> Self {
+            self
         }
 
-        func addLink(spanContext: SpanContext, attributes: [String: AttributeValue]) -> Self {
-            return self
+        func addLink(spanContext _: SpanContext, attributes _: [String: AttributeValue]) -> Self {
+            self
         }
 
-        func setSpanKind(spanKind: SpanKind) -> Self {
-            return self
+        func setSpanKind(spanKind _: SpanKind) -> Self {
+            self
         }
 
-        func setStartTime(time: Date) -> Self {
-            return self
+        func setStartTime(time _: Date) -> Self {
+            self
         }
 
-        func setAttribute(key: String, value: AttributeValue) -> Self {
-            return self
+        func setAttribute(key _: String, value _: AttributeValue) -> Self {
+            self
         }
 
-        func setActive(_ active: Bool) -> Self {
-            return self
+        func setActive(_: Bool) -> Self {
+            self
         }
     }
 }

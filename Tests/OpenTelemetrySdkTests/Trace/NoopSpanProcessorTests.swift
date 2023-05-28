@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import OpenTelemetrySdk
 import XCTest
+@testable import OpenTelemetrySdk
 
 class NoopSpanProcessorTest: XCTestCase {
     let readableSpan = ReadableSpanMock()

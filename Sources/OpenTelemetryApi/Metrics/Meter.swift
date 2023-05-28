@@ -34,38 +34,37 @@ public protocol Meter {
     ///   - absolute: indicates if only positive values are expected.
     /// - Returns:The measure instance.
     func createDoubleMeasure(name: String, absolute: Bool) -> AnyMeasureMetric<Double>
-    
+
     /// Creates Int Histogram with given name and boundaries.
     /// - Parameters:
     ///   - name: The name of the measure.
     ///   - explicitBoundaries: The boundary for sorting values into buckets
     ///   - absolute: indicates if only positive values are expected.
     /// - Returns:The histogram instance.
-    func createIntHistogram(name: String, explicitBoundaries: Array<Int>?, absolute: Bool) -> AnyHistogramMetric<Int>
-    
+    func createIntHistogram(name: String, explicitBoundaries: [Int]?, absolute: Bool) -> AnyHistogramMetric<Int>
+
     /// Creates Double Histogram with given name and boundaries.
     /// - Parameters:
     ///   - name: The name of the measure.
     ///   - explicitBoundaries: The boundary for sorting values into buckets
     ///   - absolute: indicates if only positive values are expected.
     /// - Returns:The histogram instance.
-    func createDoubleHistogram(name: String, explicitBoundaries: Array<Double>?, absolute: Bool) -> AnyHistogramMetric<Double>
+    func createDoubleHistogram(name: String, explicitBoundaries: [Double]?, absolute: Bool) -> AnyHistogramMetric<Double>
 
-        // Creates a double histogram given the name, boundries, counts, and start and end dates.
-        /// - Parameters:
-        ///   - name: The name of the measure.
-        func createRawDoubleHistogram(name: String) -> AnyRawHistogramMetric<Double>
-    
-        // Creates a Int histogram given the name, boundries, counts, and start and end dates.
-        /// - Parameters:
-        ///   - name: The name of the measure.
-        func createRawIntHistogram(name: String) -> AnyRawHistogramMetric<Int>
-        
-    
+    // Creates a double histogram given the name, boundries, counts, and start and end dates.
+    /// - Parameters:
+    ///   - name: The name of the measure.
+    func createRawDoubleHistogram(name: String) -> AnyRawHistogramMetric<Double>
+
+    // Creates a Int histogram given the name, boundries, counts, and start and end dates.
+    /// - Parameters:
+    ///   - name: The name of the measure.
+    func createRawIntHistogram(name: String) -> AnyRawHistogramMetric<Int>
+
     func createRawDoubleCounter(name: String) -> AnyRawCounterMetric<Double>
-    
+
     func createRawIntCounter(name: String) -> AnyRawCounterMetric<Int>
-    
+
     /// Creates Int Observer with given name.
     /// - Parameters:
     ///   - name: The name of the observer.
@@ -105,26 +104,26 @@ public protocol Meter {
 
 public extension Meter {
     func createIntCounter(name: String) -> AnyCounterMetric<Int> {
-        return createIntCounter(name: name, monotonic: true)
+        createIntCounter(name: name, monotonic: true)
     }
 
     func createDoubleCounter(name: String) -> AnyCounterMetric<Double> {
-        return createDoubleCounter(name: name, monotonic: true)
+        createDoubleCounter(name: name, monotonic: true)
     }
 
     func createIntMeasure(name: String) -> AnyMeasureMetric<Int> {
-        return createIntMeasure(name: name, absolute: true)
+        createIntMeasure(name: name, absolute: true)
     }
 
     func createDoubleMeasure(name: String) -> AnyMeasureMetric<Double> {
-        return createDoubleMeasure(name: name, absolute: true)
+        createDoubleMeasure(name: name, absolute: true)
     }
 
     func createIntObserver(name: String, callback: @escaping (IntObserverMetric) -> Void) -> IntObserverMetric {
-        return createIntObserver(name: name, absolute: true, callback: callback)
+        createIntObserver(name: name, absolute: true, callback: callback)
     }
 
     func createDoubleObserver(name: String, callback: @escaping (DoubleObserverMetric) -> Void) -> DoubleObserverMetric {
-        return createDoubleObserver(name: name, absolute: true, callback: callback)
+        createDoubleObserver(name: name, absolute: true, callback: callback)
     }
 }
