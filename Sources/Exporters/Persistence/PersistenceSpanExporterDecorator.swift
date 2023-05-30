@@ -27,25 +27,24 @@ public class PersistenceSpanExporterDecorator: SpanExporter {
     private let spanExporter: SpanExporter
     private let persistenceExporter: PersistenceExporterDecorator<SpanDecoratedExporter>
     
-    public init(spanExporter: SpanExporter,
-                storageURL: URL,
-                exportCondition: @escaping () -> Bool = { true },
-                performancePreset: PersistencePerformancePreset = .default) throws
-    {
+    public init(
+        spanExporter: SpanExporter,
+        storageURL: URL,
+        exportCondition: @escaping () -> Bool = { true },
+        performancePreset: PersistencePerformancePreset = .default
+    ) throws {
         self.spanExporter = spanExporter
-        
-        self.persistenceExporter =
-            PersistenceExporterDecorator<SpanDecoratedExporter>(
-                decoratedExporter: SpanDecoratedExporter(spanExporter: spanExporter),
-                storageURL: storageURL,
-                exportCondition: exportCondition,
-                performancePreset: performancePreset)
+        self.persistenceExporter = PersistenceExporterDecorator<SpanDecoratedExporter>(
+            decoratedExporter: SpanDecoratedExporter(spanExporter: spanExporter),
+            storageURL: storageURL,
+            exportCondition: exportCondition,
+            performancePreset: performancePreset
+        )
     }
     
     public func export(spans: [SpanData]) -> SpanExporterResultCode {
         do {
             try persistenceExporter.export(values: spans)
-            
             return .success
         } catch {
             return .failure
