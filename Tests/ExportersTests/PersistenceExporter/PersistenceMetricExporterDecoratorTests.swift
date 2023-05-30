@@ -56,19 +56,22 @@ class PersistenceMetricExporterDecoratorTests: XCTestCase {
             return .success
         })
                 
-        let persistenceMetricExporter =
-            try PersistenceMetricExporterDecorator(
-                metricExporter: mockMetricExporter,
-                storageURL: temporaryDirectory.url,
-                exportCondition: { return true },
-                performancePreset: PersistencePerformancePreset.mockWith(
-                    storagePerformance: StoragePerformanceMock.writeEachObjectToNewFileAndReadAllFiles,
-                    synchronousWrite: true,
-                    exportPerformance: ExportPerformanceMock.veryQuick))
+        let persistenceMetricExporter = try PersistenceMetricExporterDecorator(
+            metricExporter: mockMetricExporter,
+            storageURL: temporaryDirectory.url,
+            exportCondition: { return true },
+            performancePreset: PersistencePerformancePreset.mockWith(
+                storagePerformance: StoragePerformanceMock.writeEachObjectToNewFileAndReadAllFiles,
+                synchronousWrite: true,
+                exportPerformance: ExportPerformanceMock.veryQuick
+            )
+        )
 
-        let provider = MeterProviderSdk(metricProcessor: MetricProcessorSdk(),
-                              metricExporter: persistenceMetricExporter,
-                              metricPushInterval: 0.1)
+        let provider = MeterProviderSdk(
+            metricProcessor: MetricProcessorSdk(),
+            metricExporter: persistenceMetricExporter,
+            metricPushInterval: 0.1
+        )
 
         let meter = provider.get(instrumentationName: "MyMeter")
 
