@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
+@testable import FileSystem
 import XCTest
 
-class FileWriterTests: XCTestCase {
+class OrchestratedFileWriterTests: XCTestCase {
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
 
     override func setUp() {
@@ -21,42 +21,47 @@ class FileWriterTests: XCTestCase {
 
     func testItWritesDataToSingleFile() throws {
         let expectation = self.expectation(description: "write completed")
-        let writer = FileWriter(
-            dataFormat: DataFormat(prefix: "[", suffix: "]", separator: ","),
+        let writer = OrchestratedFileWriter(
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
-                performance: PerformancePreset.default,
+                performance: .lowRuntimeImpact,
                 dateProvider: SystemDateProvider()
             )
         )
 
-        writer.write(value: ["key1": "value1"])
-        writer.write(value: ["key2": "value3"])
-        writer.write(value: ["key3": "value3"])
+        var data = Data()
+        
+        var value = "value1"
+        writer.write(data: value.utf8Data)
+        data.append(value.utf8Data)
+        
+        value = "value2"
+        writer.write(data: value.utf8Data)
+        data.append(value.utf8Data)
+        
+        value = "value3"
+        writer.write(data: value.utf8Data)
+        data.append(value.utf8Data)
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation)
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(try temporaryDirectory.files().count, 1)
-        XCTAssertEqual(
-            try temporaryDirectory.files()[0].read(),
-            #"{"key1":"value1"},{"key2":"value3"},{"key3":"value3"}"# .utf8Data
-        )
+        XCTAssertEqual(try temporaryDirectory.files()[0].read(), data)
     }
 
     func testGivenErrorVerbosity_whenIndividualDataExceedsMaxWriteSize_itDropsDataAndPrintsError() throws {
         let expectation1 = self.expectation(description: "write completed")
         let expectation2 = self.expectation(description: "second write completed")
 
-        let writer = FileWriter(
-            dataFormat: .mockWith(prefix: "[", suffix: "]"),
+        let writer = OrchestratedFileWriter(
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
-                performance: StoragePerformanceMock(
+                performance: StoragePerformancePresetStub(
                     maxFileSize: .max,
                     maxDirectorySize: .max,
-                    maxFileAgeForWrite: .distantFuture,
-                    minFileAgeForRead: .mockAny(),
-                    maxFileAgeForRead: .mockAny(),
+                    maxFileAgeForWrite: .fakeDistantFuture,
+                    minFileAgeForRead: .fake(),
+                    maxFileAgeForRead: .fake(),
                     maxObjectsInFile: .max,
                     maxObjectSize: 17 // 17 bytes is enough to write {"key1":"value1"} JSON
                 ),
@@ -64,25 +69,24 @@ class FileWriterTests: XCTestCase {
             )
         )
 
-        writer.write(value: ["key1": "value1"]) // will be written
+        writer.write(data: "value1".utf8Data) // will be written
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation1)
         wait(for: [expectation1], timeout: 1)
-        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"# .utf8Data)
+        XCTAssertEqual(try temporaryDirectory.files()[0].read(), "value1".utf8Data)
 
-        writer.write(value: ["key2": "value3 that makes it exceed 17 bytes"]) // will be dropped
+        writer.write(data: "value2 that makes it exceed 17 bytes".utf8Data) // will be dropped
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation2)
         wait(for: [expectation2], timeout: 1)
-        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"# .utf8Data) // same content as before
+        XCTAssertEqual(try temporaryDirectory.files()[0].read(), "value1".utf8Data) // same content as before
     }
 
     /// NOTE: Test added after incident-4797
     /// NOTE 2: Test disabled after random failures/successes
 //    func testWhenIOExceptionsHappenRandomly_theFileIsNeverMalformed() throws {
 //        let expectation = self.expectation(description: "write completed")
-//        let writer = FileWriter(
-//            dataFormat: DataFormat(prefix: "[", suffix: "]", separator: ","),
+//        let writer = OrchestratedFileWriter(
 //            orchestrator: FilesOrchestrator(
 //                directory: temporaryDirectory,
 //                performance: StoragePerformanceMock(
@@ -98,7 +102,7 @@ class FileWriterTests: XCTestCase {
 //            )
 //        )
 //
-//        let ioInterruptionQueue = DispatchQueue(label: "com.datadohq.file-writer-random-io")
+//        let ioInterruptionQueue = DispatchQueue(label: "com.otel.persistence.file-writer-random-io")
 //
 //        func randomlyInterruptIO(for file: File?) {
 //            ioInterruptionQueue.async { try? file?.makeReadonly() }
@@ -109,15 +113,19 @@ class FileWriterTests: XCTestCase {
 //            var foo = "bar"
 //        }
 //
+//        let jsonEncoder = JSONEncoder()
+//
 //        // Write 300 of `Foo`s and interrupt writes randomly
-//        (0..<300).forEach { _ in
-//            writer.write(value: Foo())
+//        try (0..<300).forEach { _ in
+//            var fooData = try jsonEncoder.encode(Foo())
+//            fooData.append(",".utf8Data)
+//            writer.write(data: fooData)
 //            randomlyInterruptIO(for: try? temporaryDirectory.files().first)
 //        }
 //
 //        ioInterruptionQueue.sync {}
 //        waitForWritesCompletion(on: writer.queue, thenFulfill: expectation)
-//        waitForExpectations(timeout: 10, handler: nil)
+//        waitForExpectations(timeout: 7, handler: nil)
 //        XCTAssertEqual(try temporaryDirectory.files().count, 1)
 //
 //        let fileData = try temporaryDirectory.files()[0].read()

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import FileSystem
 import Foundation
 
 /// Container with dependencies common to all features (Logging, Tracing and RUM).
@@ -15,14 +16,9 @@ internal struct FeaturesCommonDependencies {
 
 internal struct FeatureStorage {
     /// Writes data to files.
-    let writer: FileWriter
+    let writer: DatadogFileWriter
     /// Reads data from files.
-    let reader: FileReader
-
-    init(writer: FileWriter, reader: FileReader) {
-        self.writer = writer
-        self.reader = reader
-    }
+    let reader: DatadogFileReader
 }
 
 internal struct FeatureUpload {

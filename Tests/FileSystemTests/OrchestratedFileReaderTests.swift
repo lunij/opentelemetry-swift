@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
+@testable import FileSystem
 import XCTest
 
 class OrchestratedFileReaderTests: XCTestCase {
@@ -23,12 +23,12 @@ class OrchestratedFileReaderTests: XCTestCase {
         let reader = OrchestratedFileReader(
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
-                performance: StoragePerformanceMock.readAllFiles,
+                performance: .readAllFiles,
                 dateProvider: SystemDateProvider()
             )
         )
         _ = try temporaryDirectory
-            .createFile(named: Date.mockAny().toFileName)
+            .createFile(named: Date.fake().toFileName)
             .append(data: "ABCD".utf8Data)
 
         XCTAssertEqual(try temporaryDirectory.files().count, 1)
@@ -42,7 +42,7 @@ class OrchestratedFileReaderTests: XCTestCase {
         let reader = OrchestratedFileReader(            
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
-                performance: StoragePerformanceMock.readAllFiles,
+                performance: .readAllFiles,
                 dateProvider: dateProvider
             )
         )
@@ -56,15 +56,15 @@ class OrchestratedFileReaderTests: XCTestCase {
         try file3.append(data: "3".utf8Data)
 
         var batch: Batch
-        batch = try reader.readNextBatch().unwrapOrThrow()
+        batch = try reader.readNextBatch().unwrap()
         XCTAssertEqual(batch.data, "1".utf8Data)
         reader.markBatchAsRead(batch)
 
-        batch = try reader.readNextBatch().unwrapOrThrow()
+        batch = try reader.readNextBatch().unwrap()
         XCTAssertEqual(batch.data, "2".utf8Data)
         reader.markBatchAsRead(batch)
 
-        batch = try reader.readNextBatch().unwrapOrThrow()
+        batch = try reader.readNextBatch().unwrap()
         XCTAssertEqual(batch.data, "3".utf8Data)
         reader.markBatchAsRead(batch)
 

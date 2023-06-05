@@ -4,6 +4,7 @@
  */
 
 @testable import DatadogExporter
+import FileSystem
 import Foundation
 
 /*

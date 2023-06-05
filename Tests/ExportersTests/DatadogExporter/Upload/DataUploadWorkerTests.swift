@@ -4,6 +4,7 @@
  */
 
 @testable import DatadogExporter
+import FileSystem
 import XCTest
 
 class DataUploadWorkerTests: XCTestCase {
@@ -15,11 +16,11 @@ class DataUploadWorkerTests: XCTestCase {
         performance: StoragePerformanceMock.writeEachObjectToNewFileAndReadAllFiles,
         dateProvider: dateProvider
     )
-    lazy var writer = FileWriter(
+    lazy var writer = DatadogFileWriter(
         dataFormat: .mockWith(prefix: "[", suffix: "]"),
         orchestrator: orchestrator
     )
-    lazy var reader = FileReader(
+    lazy var reader = DatadogFileReader(
         dataFormat: .mockWith(prefix: "[", suffix: "]"),
         orchestrator: orchestrator
     )

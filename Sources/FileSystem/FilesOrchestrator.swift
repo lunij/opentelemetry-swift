@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal class FilesOrchestrator {
+public class FilesOrchestrator {
     /// Directory where files are stored.
     private let directory: Directory
     /// Date provider.
@@ -18,7 +18,7 @@ internal class FilesOrchestrator {
     /// This should correspond with number of objects stored in file, assuming that majority of writes succeed (the difference is negligible).
     private var lastWritableFileUsesCount: Int = 0
 
-    init(
+    public init(
         directory: Directory,
         performance: StoragePerformancePreset,
         dateProvider: DateProvider
@@ -30,9 +30,9 @@ internal class FilesOrchestrator {
 
     // MARK: - `WritableFile` orchestration
 
-    func getWritableFile(writeSize: UInt64) throws -> WritableFile {
+    public func getWritableFile(writeSize: UInt64) throws -> WritableFile {
         if writeSize > performance.maxObjectSize {
-            throw ExporterError(description: "data exceeds the maximum size of \(performance.maxObjectSize) bytes.")
+            throw FileSystemError.dataExceedsMaxSizeError(dataSize: writeSize, maxSize: performance.maxObjectSize)
         }
 
         let lastWritableFileOrNil = reuseLastWritableFileIfPossible(writeSize: writeSize)
@@ -41,7 +41,7 @@ internal class FilesOrchestrator {
             lastWritableFileUsesCount += 1
             return lastWritableFile
         } else {
-            // NOTE: RUMM-610 As purging files directory is a memory-expensive operation, do it only when we know
+            // NOTE: As purging files directory is a memory-expensive operation, do it only when we know
             // that a new file will be created. With SDK's `PerformancePreset` this gives
             // the process enough time to not over-allocate internal `_FileCache` and `_NSFastEnumerationEnumerator`
             // objects, resulting with a flat allocations graph in a long term.
@@ -72,15 +72,16 @@ internal class FilesOrchestrator {
                     return lastFile
                 }
             } catch {
-                print("🔥 Failed to read previously used writable file: \(error)")
+                return nil
             }
         }
+
         return nil
     }
 
     // MARK: - `ReadableFile` orchestration
 
-    func getReadableFile(excludingFilesNamed excludedFileNames: Set<String> = []) -> ReadableFile? {
+    public func getReadableFile(excludingFilesNamed excludedFileNames: Set<String> = []) -> ReadableFile? {
         do {
             let filesWithCreationDate = try directory.files()
                 .map { (file: $0, creationDate: fileCreationDateFrom(fileName: $0.name)) }
@@ -99,27 +100,23 @@ internal class FilesOrchestrator {
 
             return fileIsOldEnough ? oldestFile : nil
         } catch {
-            print("🔥 Failed to obtain readable file: \(error)")
             return nil
         }
     }
 
-    func getAllFiles(excludingFilesNamed excludedFileNames: Set<String> = []) -> [ReadableFile]? {
+    public func getAllFiles(excludingFilesNamed excludedFileNames: Set<String> = []) -> [ReadableFile]? {
         do {
             return try directory.files()
                 .filter { excludedFileNames.contains($0.name) == false }
         } catch {
-            print("🔥 Failed to obtain readable files: \(error)")
             return nil
         }
     }
 
-    func delete(readableFile: ReadableFile) {
+    public func delete(readableFile: ReadableFile) {
         do {
             try readableFile.delete()
-        } catch {
-            print("🔥 Failed to delete file: \(error)")
-        }
+        } catch {}
     }
 
     // MARK: - Directory size management
@@ -161,7 +158,7 @@ internal class FilesOrchestrator {
 
 /// File creation date is used as file name - timestamp in milliseconds is used for date representation.
 /// This function converts file creation date into file name.
-internal func fileNameFrom(fileCreationDate: Date) -> String {
+public func fileNameFrom(fileCreationDate: Date) -> String {
     let milliseconds = fileCreationDate.timeIntervalSinceReferenceDate * 1_000
     let converted = (try? UInt64(withReportingOverflow: milliseconds)) ?? 0
     return String(converted)
@@ -169,7 +166,7 @@ internal func fileNameFrom(fileCreationDate: Date) -> String {
 
 /// File creation date is used as file name - timestamp in milliseconds is used for date representation.
 /// This function converts file name into file creation date.
-internal func fileCreationDateFrom(fileName: String) -> Date {
+public func fileCreationDateFrom(fileName: String) -> Date {
     let millisecondsSinceReferenceDate = TimeInterval(UInt64(fileName) ?? 0) / 1_000
     return Date(timeIntervalSinceReferenceDate: TimeInterval(millisecondsSinceReferenceDate))
 }
@@ -179,7 +176,7 @@ private enum FixedWidthIntegerError<T: BinaryFloatingPoint>: Error {
 }
 
 private extension FixedWidthInteger {
-    /* NOTE: RUMM-182
+    /*
      Self(:) is commonly used for conversion, however it fatalError() in case of conversion failure
      Self(exactly:) does the exact same thing internally yet it returns nil instead of fatalError()
      It is not trivial to guess if the conversion would fail or succeed, therefore we use Self(exactly:)

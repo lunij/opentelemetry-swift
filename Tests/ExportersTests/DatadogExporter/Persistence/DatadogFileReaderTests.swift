@@ -4,9 +4,10 @@
  */
 
 @testable import DatadogExporter
+import FileSystem
 import XCTest
 
-class FileReaderTests: XCTestCase {
+class DatadogFileReaderTests: XCTestCase {
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
 
     override func setUp() {
@@ -20,7 +21,7 @@ class FileReaderTests: XCTestCase {
     }
 
     func testItReadsSingleBatch() throws {
-        let reader = FileReader(
+        let reader = DatadogFileReader(
             dataFormat: .mockWith(prefix: "[", suffix: "]"),
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
@@ -40,7 +41,7 @@ class FileReaderTests: XCTestCase {
 
     func testItMarksBatchesAsRead() throws {
         let dateProvider = RelativeDateProvider(advancingBySeconds: 60)
-        let reader = FileReader(
+        let reader = DatadogFileReader(
             dataFormat: .mockWith(prefix: "[", suffix: "]"),
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import FileSystem
 import Foundation
 import OpenTelemetrySdk
 
@@ -23,12 +24,12 @@ internal class MetricsExporter {
 
         let dataFormat = DataFormat(prefix: "{ \"series\": [", suffix: "]}", separator: ",\n")
 
-        let spanFileWriter = FileWriter(
+        let spanFileWriter = DatadogFileWriter(
             dataFormat: dataFormat,
             orchestrator: filesOrchestrator
         )
 
-        let spanFileReader = FileReader(
+        let spanFileReader = DatadogFileReader(
             dataFormat: dataFormat,
             orchestrator: filesOrchestrator
         )

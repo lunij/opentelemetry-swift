@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
+@testable import FileSystem
 import XCTest
 
 class FilesOrchestratorTests: XCTestCase {
-    private let performance: PersistencePerformancePreset = .default
+    private let performance: StoragePerformancePreset = .lowRuntimeImpact
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
 
     override func setUp() {
@@ -68,7 +68,7 @@ class FilesOrchestratorTests: XCTestCase {
 
     func testGivenDefaultWriteConditions_whenFileHasNoRoomForMore_itCreatesNewFile() throws {
         let orchestrator = configureOrchestrator(using: RelativeDateProvider(advancingBySeconds: 1))
-        let chunkedData: [Data] = .mockChunksOf(
+        let chunkedData: [Data] = .fakeChunksOf(
             totalSize: performance.maxFileSize,
             maxChunkSize: performance.maxObjectSize
         )
@@ -121,12 +121,12 @@ class FilesOrchestratorTests: XCTestCase {
 
         let orchestrator = FilesOrchestrator(
             directory: temporaryDirectory,
-            performance: StoragePerformanceMock(
+            performance: StoragePerformancePresetStub(
                 maxFileSize: oneMB, // 1MB
                 maxDirectorySize: 3 * oneMB, // 3MB,
-                maxFileAgeForWrite: .distantFuture,
-                minFileAgeForRead: .mockAny(),
-                maxFileAgeForRead: .mockAny(),
+                maxFileAgeForWrite: .fakeDistantFuture,
+                minFileAgeForRead: .fake(),
+                maxFileAgeForRead: .fake(),
                 maxObjectsInFile: 1, // create new file each time
                 maxObjectSize: .max
             ),
@@ -135,15 +135,15 @@ class FilesOrchestratorTests: XCTestCase {
 
         // write 1MB to first file (1MB of directory size in total)
         let file1 = try orchestrator.getWritableFile(writeSize: oneMB)
-        try file1.append(data: .mock(ofSize: oneMB), synchronized: false)
+        try file1.append(data: .fake(ofSize: oneMB), synchronized: false)
 
         // write 1MB to second file (2MB of directory size in total)
         let file2 = try orchestrator.getWritableFile(writeSize: oneMB)
-        try file2.append(data: .mock(ofSize: oneMB), synchronized: true)
+        try file2.append(data: .fake(ofSize: oneMB), synchronized: true)
 
         // write 1MB to third file (3MB of directory size in total)
         let file3 = try orchestrator.getWritableFile(writeSize: oneMB + 1) // +1 byte to exceed the limit
-        try file3.append(data: .mock(ofSize: oneMB + 1), synchronized: false)
+        try file3.append(data: .fake(ofSize: oneMB + 1), synchronized: false)
 
         XCTAssertEqual(try temporaryDirectory.files().count, 3)
 
@@ -152,7 +152,7 @@ class FilesOrchestratorTests: XCTestCase {
         let file4 = try orchestrator.getWritableFile(writeSize: oneMB)
         XCTAssertEqual(try temporaryDirectory.files().count, 3)
         XCTAssertNil(temporaryDirectory.file(named: file1.name))
-        try file4.append(data: .mock(ofSize: oneMB + 1), synchronized: true)
+        try file4.append(data: .fake(ofSize: oneMB + 1), synchronized: true)
 
         _ = try orchestrator.getWritableFile(writeSize: oneMB)
         XCTAssertEqual(try temporaryDirectory.files().count, 3)
@@ -236,7 +236,7 @@ class FilesOrchestratorTests: XCTestCase {
 
         dateProvider.advance(bySeconds: 1 + performance.minFileAgeForRead)
 
-        let readableFile = try orchestrator.getReadableFile().unwrapOrThrow()
+        let readableFile = try orchestrator.getReadableFile().unwrap()
         XCTAssertEqual(try temporaryDirectory.files().count, 1)
         orchestrator.delete(readableFile: readableFile)
         XCTAssertEqual(try temporaryDirectory.files().count, 0)

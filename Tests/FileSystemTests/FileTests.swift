@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import DatadogExporter
+import FileSystem
 import XCTest
 
 class FileTests: XCTestCase {
@@ -64,10 +64,10 @@ class FileTests: XCTestCase {
     func testItReturnsFileSize() throws {
         let file = try temporaryDirectory.createFile(named: "file")
 
-        try file.append(data: .mock(ofSize: 5))
+        try file.append(data: .fake(ofSize: 5))
         XCTAssertEqual(try file.size(), 5)
 
-        try file.append(data: .mock(ofSize: 10))
+        try file.append(data: .fake(ofSize: 10))
         XCTAssertEqual(try file.size(), 15)
     }
 
@@ -75,14 +75,14 @@ class FileTests: XCTestCase {
         let file = try temporaryDirectory.createFile(named: "file")
         try file.delete()
 
-        XCTAssertThrowsError(try file.append(data: .mock(ofSize: 5))) { error in
+        XCTAssertThrowsError(try file.append(data: .fake(ofSize: 5))) { error in
             XCTAssertEqual((error as NSError).localizedDescription, "The file “file” doesn’t exist.")
         }
     }
 
     func testWhenIOExceptionHappens_itThrowsWhenReading() throws {
         let file = try temporaryDirectory.createFile(named: "file")
-        try file.append(data: .mock(ofSize: 5))
+        try file.append(data: .fake(ofSize: 5))
         try file.delete()
 
         XCTAssertThrowsError(try file.read()) { error in

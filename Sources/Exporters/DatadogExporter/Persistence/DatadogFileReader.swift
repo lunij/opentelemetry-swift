@@ -3,31 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import FileSystem
 import Foundation
 
-internal struct Batch {
-    /// Data read from file
-    let data: Data
-    /// File from which `data` was read.
-    let file: ReadableFile
-}
-
-internal protocol FileReader {
-    func readNextBatch() -> Batch?
-
-    func onRemainingBatches(process: (Batch) -> ()) -> Bool
-
-    func markBatchAsRead(_ batch: Batch)
-}
-
-internal final class OrchestratedFileReader: FileReader {
+internal final class DatadogFileReader: FileReader {
+    /// Data reading format.
+    private let dataFormat: DataFormat
     /// Orchestrator producing reference to readable file.
     private let orchestrator: FilesOrchestrator
-
     /// Files marked as read.
     private var filesRead: [ReadableFile] = []
 
-    init(orchestrator: FilesOrchestrator) {
+    init(dataFormat: DataFormat, orchestrator: FilesOrchestrator) {
+        self.dataFormat = dataFormat
         self.orchestrator = orchestrator
     }
 
@@ -37,8 +25,10 @@ internal final class OrchestratedFileReader: FileReader {
         if let file = orchestrator.getReadableFile(excludingFilesNamed: Set(filesRead.map { $0.name })) {
             do {
                 let fileData = try file.read()
-                return Batch(data: fileData, file: file)
+                let batchData = dataFormat.prefixData + fileData + dataFormat.suffixData
+                return Batch(data: batchData, file: file)
             } catch {
+                print("Failed to read data from file")
                 return nil
             }
         }
@@ -52,7 +42,8 @@ internal final class OrchestratedFileReader: FileReader {
         do {
             try orchestrator.getAllFiles(excludingFilesNamed: Set(filesRead.map { $0.name }))?.forEach {
                 let fileData = try $0.read()
-                process(Batch(data: fileData, file: $0))
+                let batchData = dataFormat.prefixData + fileData + dataFormat.suffixData
+                process(Batch(data: batchData, file: $0))
             }
         } catch {
             return false

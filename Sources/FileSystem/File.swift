@@ -6,7 +6,7 @@
 import Foundation
 
 /// Provides convenient interface for reading metadata and appending data to the file.
-internal protocol WritableFile {
+public protocol WritableFile {
     /// Name of this file.
     var name: String { get }
 
@@ -14,11 +14,11 @@ internal protocol WritableFile {
     func size() throws -> UInt64
 
     /// Synchronously appends given data at the end of this file.
-    func append(data: Data, synchronized: Bool ) throws
+    func append(data: Data, synchronized: Bool) throws
 }
 
 /// Provides convenient interface for reading contents and metadata of the file.
-internal protocol ReadableFile {
+public protocol ReadableFile {
     /// Name of this file.
     var name: String { get }
 
@@ -31,9 +31,9 @@ internal protocol ReadableFile {
 
 /// An immutable `struct` designed to provide optimized and thread safe interface for file manipulation.
 /// It doesn't own the file, which means the file presence is not guaranteed - the file can be deleted by OS at any time (e.g. due to memory pressure).
-internal struct File: WritableFile, ReadableFile {
-    let url: URL
-    let name: String
+public struct File: WritableFile, ReadableFile {
+    public let url: URL
+    public let name: String
 
     init(url: URL) {
         self.url = url
@@ -41,11 +41,9 @@ internal struct File: WritableFile, ReadableFile {
     }
 
     /// Appends given data at the end of this file.
-    func append(data: Data, synchronized: Bool = false) throws {
+    public func append(data: Data, synchronized: Bool = false) throws {
         let fileHandle = try FileHandle(forWritingTo: url)
 
-        // NOTE: RUMM-669
-        // https://github.com/DataDog/dd-sdk-ios/issues/214
         // https://en.wikipedia.org/wiki/Xcode#11.x_series
         // compiler version needs to have iOS 13.4+ as base SDK
         #if compiler(>=5.2)
@@ -86,11 +84,9 @@ internal struct File: WritableFile, ReadableFile {
         fileHandle.write(data)
     }
 
-    func read() throws -> Data {
+    public func read() throws -> Data {
         let fileHandle = try FileHandle(forReadingFrom: url)
 
-        // NOTE: RUMM-669
-        // https://github.com/DataDog/dd-sdk-ios/issues/214
         // https://en.wikipedia.org/wiki/Xcode#11.x_series
         // compiler version needs to have iOS 13.4+ as base SDK
         #if compiler(>=5.2)
@@ -123,12 +119,12 @@ internal struct File: WritableFile, ReadableFile {
         return data
     }
 
-    func size() throws -> UInt64 {
+    public func size() throws -> UInt64 {
         let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
         return attributes[.size] as? UInt64 ?? 0
     }
 
-    func delete() throws {
+    public func delete() throws {
         try FileManager.default.removeItem(at: url)
     }
 }

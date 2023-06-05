@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import FileSystem
 import Foundation
 import OpenTelemetrySdk
 
@@ -32,12 +33,12 @@ internal class LogsExporter {
 
         let dataFormat = DataFormat(prefix: "[", suffix: "]", separator: ",")
 
-        let logsFileWriter = FileWriter(
+        let logsFileWriter = DatadogFileWriter(
             dataFormat: dataFormat,
             orchestrator: filesOrchestrator
         )
 
-        let logsFileReader = FileReader(
+        let logsFileReader = DatadogFileReader(
             dataFormat: dataFormat,
             orchestrator: filesOrchestrator
         )

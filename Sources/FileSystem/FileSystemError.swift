@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum StorageError: Error {
+public enum FileSystemError: Error {
     case createFileError(path: URL)
     case createDirectoryError(path: URL, error: Error)
     case obtainCacheLibraryError

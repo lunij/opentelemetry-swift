@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import FileSystem
 import Foundation
 
 // a protocol for an exporter of `Data` to which a `DataExportWorker` can delegate persisted

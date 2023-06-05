@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
+@testable import DatadogExporter
+import FileSystem
 import XCTest
 
-class OrchestratedFileWriterTests: XCTestCase {
+class DatadogFileWriterTests: XCTestCase {
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
 
     override func setUp() {
@@ -21,39 +22,34 @@ class OrchestratedFileWriterTests: XCTestCase {
 
     func testItWritesDataToSingleFile() throws {
         let expectation = self.expectation(description: "write completed")
-        let writer = OrchestratedFileWriter(
+        let writer = DatadogFileWriter(
+            dataFormat: DataFormat(prefix: "[", suffix: "]", separator: ","),
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
-                performance: PersistencePerformancePreset.default,
+                performance: PerformancePreset.default,
                 dateProvider: SystemDateProvider()
             )
         )
 
-        var data = Data()
-        
-        var value = "value1"
-        writer.write(data: value.utf8Data)
-        data.append(value.utf8Data)
-        
-        value = "value2"
-        writer.write(data: value.utf8Data)
-        data.append(value.utf8Data)
-        
-        value = "value3"
-        writer.write(data: value.utf8Data)
-        data.append(value.utf8Data)
+        writer.write(value: ["key1": "value1"])
+        writer.write(value: ["key2": "value3"])
+        writer.write(value: ["key3": "value3"])
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation)
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(try temporaryDirectory.files().count, 1)
-        XCTAssertEqual(try temporaryDirectory.files()[0].read(), data)
+        XCTAssertEqual(
+            try temporaryDirectory.files()[0].read(),
+            #"{"key1":"value1"},{"key2":"value3"},{"key3":"value3"}"# .utf8Data
+        )
     }
 
     func testGivenErrorVerbosity_whenIndividualDataExceedsMaxWriteSize_itDropsDataAndPrintsError() throws {
         let expectation1 = self.expectation(description: "write completed")
         let expectation2 = self.expectation(description: "second write completed")
 
-        let writer = OrchestratedFileWriter(
+        let writer = DatadogFileWriter(
+            dataFormat: .mockWith(prefix: "[", suffix: "]"),
             orchestrator: FilesOrchestrator(
                 directory: temporaryDirectory,
                 performance: StoragePerformanceMock(
@@ -69,24 +65,25 @@ class OrchestratedFileWriterTests: XCTestCase {
             )
         )
 
-        writer.write(data: "value1".utf8Data) // will be written
+        writer.write(value: ["key1": "value1"]) // will be written
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation1)
         wait(for: [expectation1], timeout: 1)
-        XCTAssertEqual(try temporaryDirectory.files()[0].read(), "value1".utf8Data)
+        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"# .utf8Data)
 
-        writer.write(data: "value2 that makes it exceed 17 bytes".utf8Data) // will be dropped
+        writer.write(value: ["key2": "value3 that makes it exceed 17 bytes"]) // will be dropped
 
         waitForWritesCompletion(on: writer.queue, thenFulfill: expectation2)
         wait(for: [expectation2], timeout: 1)
-        XCTAssertEqual(try temporaryDirectory.files()[0].read(), "value1".utf8Data) // same content as before
+        XCTAssertEqual(try temporaryDirectory.files()[0].read(), #"{"key1":"value1"}"# .utf8Data) // same content as before
     }
 
     /// NOTE: Test added after incident-4797
     /// NOTE 2: Test disabled after random failures/successes
 //    func testWhenIOExceptionsHappenRandomly_theFileIsNeverMalformed() throws {
 //        let expectation = self.expectation(description: "write completed")
-//        let writer = OrchestratedFileWriter(
+//        let writer = FileWriter(
+//            dataFormat: DataFormat(prefix: "[", suffix: "]", separator: ","),
 //            orchestrator: FilesOrchestrator(
 //                directory: temporaryDirectory,
 //                performance: StoragePerformanceMock(
@@ -102,7 +99,7 @@ class OrchestratedFileWriterTests: XCTestCase {
 //            )
 //        )
 //
-//        let ioInterruptionQueue = DispatchQueue(label: "com.otel.persistence.file-writer-random-io")
+//        let ioInterruptionQueue = DispatchQueue(label: "com.datadohq.file-writer-random-io")
 //
 //        func randomlyInterruptIO(for file: File?) {
 //            ioInterruptionQueue.async { try? file?.makeReadonly() }
@@ -113,19 +110,15 @@ class OrchestratedFileWriterTests: XCTestCase {
 //            var foo = "bar"
 //        }
 //
-//        let jsonEncoder = JSONEncoder()
-//
 //        // Write 300 of `Foo`s and interrupt writes randomly
-//        try (0..<300).forEach { _ in
-//            var fooData = try jsonEncoder.encode(Foo())
-//            fooData.append(",".utf8Data)
-//            writer.write(data: fooData)
+//        (0..<300).forEach { _ in
+//            writer.write(value: Foo())
 //            randomlyInterruptIO(for: try? temporaryDirectory.files().first)
 //        }
 //
 //        ioInterruptionQueue.sync {}
 //        waitForWritesCompletion(on: writer.queue, thenFulfill: expectation)
-//        waitForExpectations(timeout: 7, handler: nil)
+//        waitForExpectations(timeout: 10, handler: nil)
 //        XCTAssertEqual(try temporaryDirectory.files().count, 1)
 //
 //        let fileData = try temporaryDirectory.files()[0].read()
