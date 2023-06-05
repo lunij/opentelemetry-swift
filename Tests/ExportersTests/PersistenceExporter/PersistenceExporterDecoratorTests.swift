@@ -4,6 +4,7 @@
  */
 
 @testable import PersistenceExporter
+import FileSystem
 import XCTest
 
 class PersistenceExporterDecoratorTests: XCTestCase {

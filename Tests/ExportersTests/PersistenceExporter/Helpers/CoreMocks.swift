@@ -4,6 +4,7 @@
  */
 
 @testable import PersistenceExporter
+import FileSystem
 import Foundation
 
 // MARK: - PerformancePreset Mocks
@@ -17,33 +18,13 @@ struct StoragePerformanceMock: StoragePerformancePreset {
     let maxObjectsInFile: Int
     let maxObjectSize: UInt64
 
-    static let readAllFiles = StoragePerformanceMock(
-        maxFileSize: .max,
-        maxDirectorySize: .max,
-        maxFileAgeForWrite: 0,
-        minFileAgeForRead: -1, // make all files eligible for read
-        maxFileAgeForRead: .distantFuture, // make all files eligible for read
-        maxObjectsInFile: .max,
-        maxObjectSize: .max
-    )
-
     static let writeEachObjectToNewFileAndReadAllFiles = StoragePerformanceMock(
         maxFileSize: .max,
         maxDirectorySize: .max,
         maxFileAgeForWrite: 0, // always return new file for writting
-        minFileAgeForRead: readAllFiles.minFileAgeForRead,
-        maxFileAgeForRead: readAllFiles.maxFileAgeForRead,
-        maxObjectsInFile: 1, // write each data to new file
-        maxObjectSize: .max
-    )
-    
-    static let writeAllObjectsToTheSameFile = StoragePerformanceMock(
-        maxFileSize: .max,
-        maxDirectorySize: .max,
-        maxFileAgeForWrite: .distantFuture,
         minFileAgeForRead: -1, // make all files eligible for read
-        maxFileAgeForRead: .distantFuture, // make all files eligible for read
-        maxObjectsInFile: .max,
+        maxFileAgeForRead: .fakeDistantFuture, // make all files eligible for read
+        maxObjectsInFile: 1, // write each data to new file
         maxObjectSize: .max
     )
 }
