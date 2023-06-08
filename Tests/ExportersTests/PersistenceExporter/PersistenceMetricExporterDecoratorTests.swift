@@ -24,13 +24,13 @@ class PersistenceMetricExporterDecoratorTests: XCTestCase {
         
     }
     
-    override func setUp() {
+    override func setUpWithError() throws {
         super.setUp()
-        temporaryDirectory.create()
+        try temporaryDirectory.create()
     }
 
-    override func tearDown() {
-        temporaryDirectory.delete()
+    override func tearDownWithError() throws {
+        try temporaryDirectory.delete()
         super.tearDown()
     }
     

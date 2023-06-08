@@ -25,14 +25,14 @@ class DataUploadWorkerTests: XCTestCase {
         orchestrator: orchestrator
     )
 
-    override func setUp() {
-        super.setUp()
-        temporaryDirectory.create()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        try temporaryDirectory.create()
     }
 
-    override func tearDown() {
-        temporaryDirectory.delete()
-        super.tearDown()
+    override func tearDownWithError() throws {
+        try temporaryDirectory.delete()
+        try super.tearDownWithError()
     }
 
     // MARK: - Data Uploads

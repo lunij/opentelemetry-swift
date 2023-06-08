@@ -26,7 +26,7 @@ internal class LogsExporter {
         self.configuration = config
 
         let filesOrchestrator = FilesOrchestrator(
-            directory: try Directory(withSubdirectoryPath: logsDirectory),
+            directory: try Directory.cachesDirectory().appending(path: logsDirectory).create(),
             performance: configuration.performancePreset,
             dateProvider: SystemDateProvider()
         )
