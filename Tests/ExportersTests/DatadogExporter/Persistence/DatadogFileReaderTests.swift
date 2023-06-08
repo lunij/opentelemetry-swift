@@ -10,14 +10,14 @@ import XCTest
 class DatadogFileReaderTests: XCTestCase {
     private let temporaryDirectory = obtainUniqueTemporaryDirectory()
 
-    override func setUp() {
-        super.setUp()
-        temporaryDirectory.create()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        try temporaryDirectory.create()
     }
 
-    override func tearDown() {
-        temporaryDirectory.delete()
-        super.tearDown()
+    override func tearDownWithError() throws {
+        try temporaryDirectory.delete()
+        try super.tearDownWithError()
     }
 
     func testItReadsSingleBatch() throws {

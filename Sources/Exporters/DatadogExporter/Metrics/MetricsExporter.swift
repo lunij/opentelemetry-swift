@@ -17,7 +17,7 @@ internal class MetricsExporter {
         configuration = config
 
         let filesOrchestrator = FilesOrchestrator(
-            directory: try Directory(withSubdirectoryPath: metricsDirectory),
+            directory: try Directory.cachesDirectory().appending(path: metricsDirectory).create(),
             performance: configuration.performancePreset,
             dateProvider: SystemDateProvider()
         )

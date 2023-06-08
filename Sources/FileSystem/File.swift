@@ -128,3 +128,7 @@ public struct File: WritableFile, ReadableFile {
         try FileManager.default.removeItem(at: url)
     }
 }
+
+public enum FileError: Error {
+    case fileCreationFailed(path: String)
+}

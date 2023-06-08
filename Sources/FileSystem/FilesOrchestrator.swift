@@ -32,7 +32,7 @@ public class FilesOrchestrator {
 
     public func getWritableFile(writeSize: UInt64) throws -> WritableFile {
         if writeSize > performance.maxObjectSize {
-            throw FileSystemError.dataExceedsMaxSizeError(dataSize: writeSize, maxSize: performance.maxObjectSize)
+            throw FilesOrchestratorError.dataExceedsMaxSizeError(dataSize: writeSize, maxSize: performance.maxObjectSize)
         }
 
         let lastWritableFileOrNil = reuseLastWritableFileIfPossible(writeSize: writeSize)
@@ -190,4 +190,8 @@ private extension FixedWidthInteger {
         }
         self = converted
     }
+}
+
+public enum FilesOrchestratorError: Error {
+    case dataExceedsMaxSizeError(dataSize: UInt64, maxSize: UInt64)
 }

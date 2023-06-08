@@ -17,7 +17,7 @@ internal class SpansExporter {
         self.configuration = config
 
         let filesOrchestrator = FilesOrchestrator(
-            directory: try Directory(withSubdirectoryPath: tracesDirectory),
+            directory: try Directory.cachesDirectory().appending(path: tracesDirectory).create(),
             performance: configuration.performancePreset,
             dateProvider: SystemDateProvider()
         )

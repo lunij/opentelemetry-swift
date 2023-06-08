@@ -5,24 +5,41 @@
 
 import Foundation
 
-/// An abstraction over file system directory where SDK stores its files.
-public struct Directory {
-    public let url: URL
+private let fileManager = FileManager.default
 
-    /// Creates subdirectory with given path under system caches directory.
-    public init(withSubdirectoryPath path: String) throws {
-        self.init(url: try createCachesSubdirectoryIfNotExists(subdirectoryPath: path))
-    }
+/// An abstraction over file system directory where SDK stores its files.
+public struct Directory: Equatable {
+    public let url: URL
 
     public init(url: URL) {
         self.url = url
     }
 
+    @discardableResult
+    public func create() throws -> Directory {
+        do {
+            try fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            throw DirectoryError.directoryCreationFailed(path: url.path, error: error)
+        }
+        return self
+    }
+
+    @discardableResult
+    public func delete() throws -> Directory {
+        do {
+            try fileManager.removeItem(at: url)
+        } catch {
+            throw DirectoryError.directoryDeletionFailed(path: url.path, error: error)
+        }
+        return self
+    }
+
     /// Creates file with given name.
     public func createFile(named fileName: String) throws -> File {
         let fileURL = url.appendingPathComponent(fileName, isDirectory: false)
-        guard FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil) == true else {
-            throw FileSystemError.createFileError(path: fileURL)
+        guard fileManager.createFile(atPath: fileURL.path, contents: nil, attributes: nil) == true else {
+            throw FileError.fileCreationFailed(path: fileURL.path)
         }
         return File(url: fileURL)
     }
@@ -30,7 +47,7 @@ public struct Directory {
     /// Returns file with given name.
     public func file(named fileName: String) -> File? {
         let fileURL = url.appendingPathComponent(fileName, isDirectory: false)
-        if FileManager.default.fileExists(atPath: fileURL.path) {
+        if fileManager.fileExists(atPath: fileURL.path) {
             return File(url: fileURL)
         } else {
             return nil
@@ -39,27 +56,31 @@ public struct Directory {
 
     /// Returns all files of this directory.
     public func files() throws -> [File] {
-        return try FileManager.default
+        return try fileManager
             .contentsOfDirectory(at: url, includingPropertiesForKeys: [.isRegularFileKey, .canonicalPathKey])
             .map { url in File(url: url) }
     }
+
+    public func appending(path: String) -> Directory {
+        .init(url: url.appendingPathComponent(path, isDirectory: true))
+    }
+
+    /// System's directory for storing caches
+    public static func cachesDirectory() throws -> Directory {
+        guard let url = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+            throw DirectoryError.cachesDirectoryNotFound
+        }
+        return Directory(url: url)
+    }
+
+    /// System's directory for storing temporary files and folders
+    public static var temporaryDirectory: Directory {
+        Directory(url: fileManager.temporaryDirectory)
+    }
 }
 
-/// Creates subdirectory at given path in `/Library/Caches` if it does not exist. Might throw `PersistenceError` when it's not possible.
-/// * `/Library/Caches` is exclduded from iTunes and iCloud backups by default.
-/// * System may delete data in `/Library/Cache` to free up disk space which reduces the impact on devices working under heavy space pressure.
-private func createCachesSubdirectoryIfNotExists(subdirectoryPath: String) throws -> URL {
-    guard let cachesDirectoryURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-        throw FileSystemError.obtainCacheLibraryError
-    }
-
-    let subdirectoryURL = cachesDirectoryURL.appendingPathComponent(subdirectoryPath, isDirectory: true)
-
-    do {
-        try FileManager.default.createDirectory(at: subdirectoryURL, withIntermediateDirectories: true, attributes: nil)
-    } catch {
-        throw FileSystemError.createDirectoryError(path: subdirectoryURL, error: error)
-    }
-
-    return subdirectoryURL
+public enum DirectoryError: Error {
+    case cachesDirectoryNotFound
+    case directoryCreationFailed(path: String, error: Error)
+    case directoryDeletionFailed(path: String, error: Error)
 }
