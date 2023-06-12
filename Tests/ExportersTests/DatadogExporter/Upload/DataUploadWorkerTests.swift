@@ -5,6 +5,7 @@
 
 @testable import DatadogExporter
 import FileSystem
+import FileSystemTestKit
 import XCTest
 
 class DataUploadWorkerTests: XCTestCase {

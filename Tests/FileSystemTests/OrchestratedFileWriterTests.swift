@@ -4,6 +4,7 @@
  */
 
 @testable import FileSystem
+import FileSystemTestKit
 import XCTest
 
 class OrchestratedFileWriterTests: XCTestCase {

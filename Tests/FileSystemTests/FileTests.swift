@@ -4,6 +4,7 @@
  */
 
 import FileSystem
+import FileSystemTestKit
 import XCTest
 
 class FileTests: XCTestCase {

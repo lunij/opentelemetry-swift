@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@testable import PersistenceExporter
+import FileSystemTestKit
 import OpenTelemetryApi
 import OpenTelemetrySdk
+@testable import PersistenceExporter
 import XCTest
 
 class PersistenceMetricExporterDecoratorTests: XCTestCase {

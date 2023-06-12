@@ -121,7 +121,11 @@ let package = Package(
         .target(name: "PersistenceExporter",
                 dependencies: ["OpenTelemetrySdk", "FileSystem"],
                 path: "Sources/Exporters/Persistence"),
+
         .target(name: "FileSystem"),
+        .target(name: "FileSystemTestKit", dependencies: ["FileSystem"]),
+        .testTarget(name: "FileSystemTests", dependencies: ["FileSystem", "FileSystemTestKit"]),
+
         .testTarget(name: "NetworkStatusTests",
                     dependencies: [
                         "NetworkStatus",
@@ -172,14 +176,13 @@ let package = Package(
                     path: "Tests/ExportersTests/InMemory"),
         .testTarget(name: "DatadogExporterTests",
                     dependencies: ["DatadogExporter",
+                                   "FileSystemTestKit",
                                    .product(name: "NIO", package: "swift-nio"),
                                    .product(name: "NIOHTTP1", package: "swift-nio")],
                     path: "Tests/ExportersTests/DatadogExporter"),
         .testTarget(name: "PersistenceExporterTests",
-                    dependencies: ["PersistenceExporter"],
+                    dependencies: ["PersistenceExporter", "FileSystemTestKit"],
                     path: "Tests/ExportersTests/PersistenceExporter"),
-        .testTarget(name: "FileSystemTests",
-                    dependencies: ["FileSystem"]),
         .executableTarget(
             name: "LoggingTracer",
             dependencies: ["OpenTelemetryApi"],
