@@ -57,13 +57,12 @@ internal class PersistenceExporterDecorator<T> where T: DecoratedExporter, T.Sig
 
     public convenience init(
         decoratedExporter: T,
-        storageURL: URL,
+        storageDirectory: URL,
         exportCondition: @escaping () -> Bool = { true },
         performancePreset: PersistencePerformancePreset = .default
     ) {
-        // orchestrate writes and reads over the folder given by `storageURL`
         let filesOrchestrator = FilesOrchestrator(
-            directory: Directory(url: storageURL),
+            directory: Directory(url: storageDirectory),
             performance: performancePreset,
             dateProvider: SystemDateProvider()
         )
