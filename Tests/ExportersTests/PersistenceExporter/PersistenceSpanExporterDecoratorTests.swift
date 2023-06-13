@@ -70,7 +70,7 @@ class PersistenceSpanExporterDecoratorTests: XCTestCase {
                 
         let persistenceSpanExporter = try PersistenceSpanExporterDecorator(
             spanExporter: mockSpanExporter,
-            storageURL: temporaryDirectory.url,
+            storageDirectory: temporaryDirectory.url,
             exportCondition: { true },
             performancePreset: PersistencePerformancePreset.mockWith(
                 storagePerformance: StoragePerformanceMock.writeEachObjectToNewFileAndReadAllFiles,

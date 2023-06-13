@@ -59,7 +59,7 @@ class PersistenceMetricExporterDecoratorTests: XCTestCase {
                 
         let persistenceMetricExporter = try PersistenceMetricExporterDecorator(
             metricExporter: mockMetricExporter,
-            storageURL: temporaryDirectory.url,
+            storageDirectory: temporaryDirectory.url,
             exportCondition: { return true },
             performancePreset: PersistencePerformancePreset.mockWith(
                 storagePerformance: StoragePerformanceMock.writeEachObjectToNewFileAndReadAllFiles,
