@@ -48,7 +48,7 @@ public class FilesOrchestrator {
             try purgeFilesDirectoryIfNeeded()
 
             let newFileName = fileNameFrom(fileCreationDate: dateProvider.currentDate())
-            let newFile = try directory.createFile(named: newFileName)
+            let newFile = try directory.create().createFile(named: newFileName)
             lastWritableFileName = newFile.name
             lastWritableFileUsesCount = 1
             return newFile
