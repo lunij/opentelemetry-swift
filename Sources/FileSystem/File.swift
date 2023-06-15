@@ -31,7 +31,7 @@ public protocol ReadableFile {
 
 /// An immutable `struct` designed to provide optimized and thread safe interface for file manipulation.
 /// It doesn't own the file, which means the file presence is not guaranteed - the file can be deleted by OS at any time (e.g. due to memory pressure).
-public struct File: WritableFile, ReadableFile {
+public struct File: WritableFile, ReadableFile, Equatable {
     public let url: URL
     public let name: String
 
@@ -129,6 +129,6 @@ public struct File: WritableFile, ReadableFile {
     }
 }
 
-public enum FileError: Error {
+public enum FileError: Error, Equatable {
     case fileCreationFailed(path: String)
 }
