@@ -49,7 +49,7 @@ class PersistenceSpanExporterDecoratorTests: XCTestCase {
         super.tearDown()
     }
     
-    func testWhenExportMetricIsCalled_thenSpansAreExported() throws {
+    func testWhenExportMetricIsCalled_thenSpansAreExported() {
         let spansExportExpectation = self.expectation(description: "spans exported")
         let exporterShutdownExpectation = self.expectation(description: "exporter shut down")
         
@@ -68,7 +68,7 @@ class PersistenceSpanExporterDecoratorTests: XCTestCase {
             exporterShutdownExpectation.fulfill()
         })
                 
-        let persistenceSpanExporter = try PersistenceSpanExporterDecorator(
+        let persistenceSpanExporter = PersistenceSpanExporterDecorator(
             spanExporter: mockSpanExporter,
             storageDirectory: temporaryDirectory.url,
             exportCondition: { true },

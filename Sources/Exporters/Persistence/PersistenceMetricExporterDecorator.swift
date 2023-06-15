@@ -31,7 +31,7 @@ public class PersistenceMetricExporterDecorator: MetricExporter {
         storageDirectory: URL,
         exportCondition: @escaping () -> Bool = { true },
         performancePreset: PersistencePerformancePreset = .default
-    ) throws {
+    ) {
         self.persistenceExporter = PersistenceExporterDecorator<MetricDecoratedExporter>(
             decoratedExporter: MetricDecoratedExporter(metricExporter: metricExporter),
             storageDirectory: storageDirectory,

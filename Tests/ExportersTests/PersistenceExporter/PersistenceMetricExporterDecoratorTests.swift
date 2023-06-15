@@ -35,7 +35,7 @@ class PersistenceMetricExporterDecoratorTests: XCTestCase {
         super.tearDown()
     }
     
-    func testWhenExportMetricIsCalled_thenMetricsAreExported() throws {        
+    func testWhenExportMetricIsCalled_thenMetricsAreExported() {        
         let metricsExportExpectation = self.expectation(description: "metrics exported")
         
         let mockMetricExporter = MetricExporterMock(onExport: { metrics in
@@ -57,7 +57,7 @@ class PersistenceMetricExporterDecoratorTests: XCTestCase {
             return .success
         })
                 
-        let persistenceMetricExporter = try PersistenceMetricExporterDecorator(
+        let persistenceMetricExporter = PersistenceMetricExporterDecorator(
             metricExporter: mockMetricExporter,
             storageDirectory: temporaryDirectory.url,
             exportCondition: { return true },
