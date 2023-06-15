@@ -32,7 +32,7 @@ public class PersistenceSpanExporterDecorator: SpanExporter {
         storageDirectory: URL,
         exportCondition: @escaping () -> Bool = { true },
         performancePreset: PersistencePerformancePreset = .default
-    ) throws {
+    ) {
         self.spanExporter = spanExporter
         self.persistenceExporter = PersistenceExporterDecorator<SpanDecoratedExporter>(
             decoratedExporter: SpanDecoratedExporter(spanExporter: spanExporter),
